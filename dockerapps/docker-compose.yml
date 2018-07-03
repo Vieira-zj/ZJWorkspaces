@@ -1,0 +1,51 @@
+#
+# Created by zhengjn, at 2018-06-02
+#
+version: "2"
+
+services:
+  itserver:
+    image: mybusybox
+    container_name: itserver
+    networks:
+      - front-tier
+
+  datavol:
+    image: mybusybox
+    container_name: datavol
+    volumes:
+      - ~/Workspaces/dockerapps:/home/zhengjin
+
+  mockserver:
+    image: mockserver:latest
+    container_name: mymockserver
+    expose: 
+      - "17891"
+    networks:
+      - front-tier
+
+  tomcatserver:
+    image: mytomcat:latest
+    expose: 
+      - "8080"
+    networks:
+      - front-tier
+
+  nginxserver:
+    image: mynginx:latest
+    container_name: mynginxserver
+    depends_on:
+      - datavol
+      - mockserver
+      - tomcatserver
+    ports:
+      - "8081:80"
+    volumes_from:
+      - datavol
+    networks:
+      - front-tier
+
+networks:
+  front-tier:
+    driver: bridge
+

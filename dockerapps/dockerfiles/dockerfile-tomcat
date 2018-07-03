@@ -1,0 +1,17 @@
+FROM tomcat
+
+# created at 2018-06-02
+MAINTAINER zivieira@163.com
+
+RUN mkdir /usr/local/tomcat/webapps/vueapp \
+ && mkdir -p /usr/local/tomcat/webapps/static/css \
+ && mkdir -p /usr/local/tomcat/webapps/static/js 
+
+ADD webapps/vueserver/static/index.html /usr/local/tomcat/webapps/vueapp
+ADD webapps/vueserver/static/css /usr/local/tomcat/webapps/static/css/
+ADD webapps/vueserver/static/js /usr/local/tomcat/webapps/static/js/
+
+EXPOSE "8080"
+
+CMD catalina.sh run
+

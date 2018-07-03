@@ -1,0 +1,31 @@
+Web Demo
+
+Front:
+nginx 8081
+Backend:
+mockserver docker instance => 17891
+tomcatserver1 docker instance => 8082
+tomcatserver2 docker instance => 8083
+
+
+# host config
+/etc/hosts: 127.0.0.1 helloworld.zj.com mockserver.zj.com vueserver.zj.com
+
+
+URI
+# simple static reverse proxy, helloworld
+http://helloworld.zj.com:8081
+http://helloworld.zj.com:8081/public/helloworld.html
+http://helloworld.zj.com:8081/static/pics/1.jpg
+
+# simple reverse proxy, mockserver
+http://mockserver.zj.com:8081/images/1.jpg (static => not found)
+http://mockserver.zj.com:8081/index?isFile=false&wait=1
+http://mockserver.zj.com:8081/test1?userid=xxx&username=%22xxx%22&url=url1&url=url2
+http://mockserver.zj.com:8081/post/cdnrefresh
+
+# load balance proxy, vueserver
+http://vueserver.zj.com:8081
+http://vueserver.zj.com:8081/static/index.html
+http://vueserver.zj.com:8081/vueapp
+

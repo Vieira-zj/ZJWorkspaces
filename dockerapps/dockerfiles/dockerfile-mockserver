@@ -1,0 +1,11 @@
+FROM busybox
+
+# created at 2018-06-02
+MAINTAINER zivieira@163.com 
+
+ADD mockserver /bin/
+
+EXPOSE 17891
+
+CMD ./bin/mockserver | tee /tmp/server.log
+

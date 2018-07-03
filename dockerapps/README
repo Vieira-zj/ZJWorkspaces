@@ -1,0 +1,37 @@
+Web Demo on Docker
+
+Base images:
+busybox
+tomcat
+nginx
+
+
+Front:
+nginx docker instance => 8081
+Backend:
+1 mockserver docker instance
+2 tomcatserver docker instances (vue sample)
+
+
+URI:
+# helloworld
+http://helloworld.zj.com:8081
+http://helloworld.zj.com:8081/public/helloworld.html
+http://helloworld.zj.com:8081/static/pics/1.jpg
+
+# mockserver
+http://mockserver.zj.com:8081/images/1.jpg (static => not found)
+http://mockserver.zj.com:8081/index?isFile=false&wait=1
+http://mockserver.zj.com:8081/test1?userid=xxx&username=%22xxx%22&url=url1&url=url2
+http://mockserver.zj.com:8081/post/cdnrefresh
+
+# vueserver
+http://vueserver.zj.com:8081
+http://vueserver.zj.com:8081/static/index.html
+http://vueserver.zj.com:8081/vueapp
+
+
+CLI:
+$ docker-compose -p zjwebgroup up -d --scale tomcatserver=2
+$ docker-compose -p zjwebgroup down
+
