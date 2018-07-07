@@ -9,7 +9,8 @@ services:
     image: zjtools
     container_name: datavol
     volumes:
-      - ~/Workspaces/ZJWorkspaces/dockerapps/data:/home/zhengjin/data
+      - ~/Workspaces/ZJWorkspaces/dockerapps/data/webapps:/home/zhengjin/webapps
+      - ~/Workspaces/ZJWorkspaces/dockerapps/data/redisdump:/data
     networks:
       - zj_network
 
@@ -18,7 +19,9 @@ services:
     container_name: myredis
     expose:
       - "6379"
-    network:
+    volumes_from:
+      - datavol
+    networks:
       - zj_network
 
   mockserver:
@@ -28,8 +31,8 @@ services:
       - "17891"
     depends_on:
       - redisserver
-    volumes: # load conf when run container
-      - ~/Workspaces/ZJWorkspaces/dockerapps/configs/mock_conf.json usr/local/bin/
+    volumes: # load conf
+      - ~/Workspaces/ZJWorkspaces/dockerapps/configs/mock_conf.json:/usr/local/bin/mock_conf.json
     networks:
       - zj_network
 
@@ -37,7 +40,7 @@ services:
     image: zjvue:latest
     container_name: myvue
     expose: 
-      - "8081"
+      - "8080"
     networks:
       - zj_network
 
@@ -45,16 +48,14 @@ services:
     image: zjnginx
     container_name: mynginx
     depends_on:
-      - datavol
       - mockserver
       - vueserver
-      - redisserver
     ports:
-      - "8080:80"
+      - "8081:80"
     volumes_from:
       - datavol
-    volumes: # load conf when run container
-      - ~/Workspaces/ZJWorkspaces/dockerapps/configs/nginx_conf/nginx.conf.json /etc/nginx/
+    volumes:
+      - ~/Workspaces/ZJWorkspaces/dockerapps/configs/nginx_conf/nginx.conf:/etc/nginx/nginx.conf
     networks:
       - zj_network
 

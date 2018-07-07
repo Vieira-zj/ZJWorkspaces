@@ -2557,3 +2557,59 @@
 2018/07/07 18:25:37 [error] 11214#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/1.txt" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /1.txt HTTP/1.1", host: "vueserver.zj.com:8081"
 2018/07/07 18:25:37 [error] 11214#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/1.txt" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /1.txt HTTP/1.1", host: "vueserver.zj.com:8081"
 2018/07/07 18:25:37 [error] 11214#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/1.txt" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /1.txt HTTP/1.1", host: "vueserver.zj.com:8081"
+2018/07/07 13:54:56 [notice] 5#5: using the "epoll" event method
+2018/07/07 13:54:56 [notice] 5#5: using the "epoll" event method
+2018/07/07 13:54:56 [notice] 5#5: nginx/1.15.0
+2018/07/07 13:54:56 [notice] 5#5: nginx/1.15.0
+2018/07/07 13:54:56 [notice] 5#5: built by gcc 6.3.0 20170516 (Debian 6.3.0-18+deb9u1) 
+2018/07/07 13:54:56 [notice] 5#5: built by gcc 6.3.0 20170516 (Debian 6.3.0-18+deb9u1) 
+2018/07/07 13:54:56 [notice] 5#5: OS: Linux 4.9.87-linuxkit-aufs
+2018/07/07 13:54:56 [notice] 5#5: OS: Linux 4.9.87-linuxkit-aufs
+2018/07/07 13:54:56 [notice] 5#5: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2018/07/07 13:54:56 [notice] 5#5: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2018/07/07 13:54:56 [notice] 5#5: start worker processes
+2018/07/07 13:54:56 [notice] 5#5: start worker processes
+2018/07/07 13:54:56 [notice] 5#5: start worker process 6
+2018/07/07 13:54:56 [notice] 5#5: start worker process 6
+2018/07/07 14:04:59 [notice] 5#5: using the "epoll" event method
+2018/07/07 14:04:59 [notice] 5#5: using the "epoll" event method
+2018/07/07 14:04:59 [notice] 5#5: nginx/1.15.0
+2018/07/07 14:04:59 [notice] 5#5: nginx/1.15.0
+2018/07/07 14:04:59 [notice] 5#5: built by gcc 6.3.0 20170516 (Debian 6.3.0-18+deb9u1) 
+2018/07/07 14:04:59 [notice] 5#5: built by gcc 6.3.0 20170516 (Debian 6.3.0-18+deb9u1) 
+2018/07/07 14:04:59 [notice] 5#5: OS: Linux 4.9.87-linuxkit-aufs
+2018/07/07 14:04:59 [notice] 5#5: OS: Linux 4.9.87-linuxkit-aufs
+2018/07/07 14:04:59 [notice] 5#5: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2018/07/07 14:04:59 [notice] 5#5: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2018/07/07 14:04:59 [notice] 5#5: start worker processes
+2018/07/07 14:04:59 [notice] 5#5: start worker processes
+2018/07/07 14:04:59 [notice] 5#5: start worker process 6
+2018/07/07 14:04:59 [notice] 5#5: start worker process 6
+2018/07/07 14:14:44 [notice] 6#6: using the "epoll" event method
+2018/07/07 14:14:44 [notice] 6#6: using the "epoll" event method
+2018/07/07 14:14:44 [notice] 6#6: nginx/1.15.0
+2018/07/07 14:14:44 [notice] 6#6: nginx/1.15.0
+2018/07/07 14:14:44 [notice] 6#6: built by gcc 6.3.0 20170516 (Debian 6.3.0-18+deb9u1) 
+2018/07/07 14:14:44 [notice] 6#6: built by gcc 6.3.0 20170516 (Debian 6.3.0-18+deb9u1) 
+2018/07/07 14:14:44 [notice] 6#6: OS: Linux 4.9.87-linuxkit-aufs
+2018/07/07 14:14:44 [notice] 6#6: OS: Linux 4.9.87-linuxkit-aufs
+2018/07/07 14:14:44 [notice] 6#6: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2018/07/07 14:14:44 [notice] 6#6: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2018/07/07 14:14:44 [notice] 6#6: start worker processes
+2018/07/07 14:14:44 [notice] 6#6: start worker processes
+2018/07/07 14:14:44 [notice] 6#6: start worker process 7
+2018/07/07 14:14:44 [notice] 6#6: start worker process 7
+2018/07/07 14:44:14 [notice] 5#5: using the "epoll" event method
+2018/07/07 14:44:14 [notice] 5#5: using the "epoll" event method
+2018/07/07 14:44:14 [notice] 5#5: nginx/1.15.0
+2018/07/07 14:44:14 [notice] 5#5: nginx/1.15.0
+2018/07/07 14:44:14 [notice] 5#5: built by gcc 6.3.0 20170516 (Debian 6.3.0-18+deb9u1) 
+2018/07/07 14:44:14 [notice] 5#5: built by gcc 6.3.0 20170516 (Debian 6.3.0-18+deb9u1) 
+2018/07/07 14:44:14 [notice] 5#5: OS: Linux 4.9.87-linuxkit-aufs
+2018/07/07 14:44:14 [notice] 5#5: OS: Linux 4.9.87-linuxkit-aufs
+2018/07/07 14:44:14 [notice] 5#5: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2018/07/07 14:44:14 [notice] 5#5: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2018/07/07 14:44:14 [notice] 5#5: start worker processes
+2018/07/07 14:44:14 [notice] 5#5: start worker processes
+2018/07/07 14:44:14 [notice] 5#5: start worker process 6
+2018/07/07 14:44:14 [notice] 5#5: start worker process 6

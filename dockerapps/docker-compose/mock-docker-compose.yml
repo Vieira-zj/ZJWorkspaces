@@ -1,0 +1,43 @@
+#
+# Created by zhengjn, at 2018-07-07
+# Ref: https://docs.docker.com/compose/compose-file/compose-file-v2
+#
+# mock server url:
+# curl -v "http://127.0.0.1:17891/access"
+#
+version: "2"
+
+services:
+  datavol:
+    image: zjtools
+    container_name: datavol
+    volumes:
+      - ~/Workspaces/ZJWorkspaces/dockerapps/data/redisdump:/data
+    networks:
+      - zj_network
+
+  redisserver:
+    image: zjredis
+    container_name: myredis
+    expose:
+      - "6379"
+    volumes_from:
+      - datavol
+    networks:
+      - zj_network
+
+  mockserver:
+    image: zjmock
+    container_name: mymock
+    ports:
+      - "17891:17891"
+    depends_on:
+      - redisserver
+    volumes:  # load conf when run container
+      - ~/Workspaces/ZJWorkspaces/dockerapps/configs/mock_conf.json:/usr/local/bin/mock_conf.json
+    networks:
+      - zj_network
+
+networks:
+  zj_network:
+    driver: bridge

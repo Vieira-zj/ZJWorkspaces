@@ -1,15 +1,11 @@
-Web Demo
+Web Apps on Docker
 
-Front:
-nginx 8081
-Backend:
-mockserver docker instance => 17891
-tomcatserver1 docker instance => 8082
-tomcatserver2 docker instance => 8083
-
-
-# host config
-/etc/hosts: 127.0.0.1 helloworld.zj.com mockserver.zj.com vueserver.zj.com
+Containers
+zjnginx => mynginx, 8081 => entry point
+zjtools => data volume => webapp, redis dump
+zjredis => myredis => save total access time for mock server
+zjmock => mock server => api test
+zjvue => myvue => vue demos
 
 
 URI
@@ -27,4 +23,9 @@ http://mockserver.zj.com:8081/post/cdnrefresh
 http://vueserver.zj.com:8081
 http://vueserver.zj.com:8081/vue.html // static vue
 http://vueserver.zj.com:8081/vueapp/vue.html // vue on tomcat
+
+
+CLI
+$ docker-compose -f webapp-docker-compose.yml up -d
+$ docker-compose -f webapp-docker-compose.yml down
 

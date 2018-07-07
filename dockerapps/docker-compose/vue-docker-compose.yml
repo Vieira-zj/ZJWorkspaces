@@ -1,0 +1,18 @@
+# Created by zhengjn, at 2018-06-02
+# Ref: https://docs.docker.com/compose/compose-file/compose-file-v2
+#
+# vue server url:
+# http://127.0.0.1:8080/vueapp/vue.html
+#
+version: "2"
+
+services:
+   vueserver:
+     image: tomcat:latest
+     container_name: myvue
+     volumes:
+       - ~/Workspaces/ZJWorkspaces/dockerapps/data/webapps/static/vueserver/vue.html:/usr/local/tomcat/webapps/vueapp/vue.html
+       - ~/Workspaces/ZJWorkspaces/dockerapps/data/webapps/static/vueserver/static/css:/usr/local/tomcat/webapps/static/css
+       - ~/Workspaces/ZJWorkspaces/dockerapps/data/webapps/static/vueserver/static/js:/usr/local/tomcat/webapps/static/js
+     ports:
+       - "8080:8080"
