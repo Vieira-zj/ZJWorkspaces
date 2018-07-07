@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x -e
 
-file_conf="${HOME}/Workspaces/webapps/nginx_c.conf"
+file_conf="${HOME}/Workspaces/ZJWorkspaces/webapps/nginx_c.conf"
 
 if [[ ($1 =~ "stop") ]]; then
     nginx -s stop

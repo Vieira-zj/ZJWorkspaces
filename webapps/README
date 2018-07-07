@@ -19,13 +19,12 @@ http://helloworld.zj.com:8081/public/helloworld.html
 http://helloworld.zj.com:8081/static/pics/1.jpg
 
 # simple reverse proxy, mockserver
-http://mockserver.zj.com:8081/images/1.jpg (static => not found)
-http://mockserver.zj.com:8081/index?isFile=false&wait=1
-http://mockserver.zj.com:8081/test1?userid=xxx&username=%22xxx%22&url=url1&url=url2
+http://mockserver.zj.com:8081/index?isFile=false&wait=1 // mockserver
 http://mockserver.zj.com:8081/post/cdnrefresh
+http://mockserver.zj.com:8081/images/1.jpg // static
 
 # load balance proxy, vueserver
 http://vueserver.zj.com:8081
-http://vueserver.zj.com:8081/static/index.html
-http://vueserver.zj.com:8081/vueapp
+http://vueserver.zj.com:8081/vue.html // static vue
+http://vueserver.zj.com:8081/vueapp/vue.html // vue on tomcat
 

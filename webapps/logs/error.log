@@ -2227,3 +2227,443 @@
 2018/06/20 11:36:07 [notice] 1434#0: worker process 1435 exited with code 0
 2018/06/20 11:36:07 [notice] 1434#0: exit
 2018/06/20 11:36:07 [notice] 1434#0: exit
+2018/07/07 17:41:55 [notice] 11045#0: using the "kqueue" event method
+2018/07/07 17:41:55 [notice] 11045#0: using the "kqueue" event method
+2018/07/07 17:41:55 [notice] 11045#0: nginx/1.13.10
+2018/07/07 17:41:55 [notice] 11045#0: nginx/1.13.10
+2018/07/07 17:41:55 [notice] 11045#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 17:41:55 [notice] 11045#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 17:41:55 [notice] 11045#0: OS: Darwin 17.6.0
+2018/07/07 17:41:55 [notice] 11045#0: OS: Darwin 17.6.0
+2018/07/07 17:41:55 [notice] 11045#0: hw.ncpu: 4
+2018/07/07 17:41:55 [notice] 11045#0: hw.ncpu: 4
+2018/07/07 17:41:55 [notice] 11045#0: net.inet.tcp.sendspace: 131072
+2018/07/07 17:41:55 [notice] 11045#0: net.inet.tcp.sendspace: 131072
+2018/07/07 17:41:55 [notice] 11045#0: kern.ipc.somaxconn: 128
+2018/07/07 17:41:55 [notice] 11045#0: kern.ipc.somaxconn: 128
+2018/07/07 17:41:55 [notice] 11045#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 17:41:55 [notice] 11045#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 17:41:55 [notice] 11046#0: start worker processes
+2018/07/07 17:41:55 [notice] 11046#0: start worker processes
+2018/07/07 17:41:55 [notice] 11046#0: start worker process 11047
+2018/07/07 17:41:55 [notice] 11046#0: start worker process 11047
+2018/07/07 17:42:22 [error] 11047#0: *1 "/Users/zhengjin/Workspaces/webapps/static/helloworld/index.htm" is not found (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:42:22 [error] 11047#0: *1 "/Users/zhengjin/Workspaces/webapps/static/helloworld/index.htm" is not found (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:42:22 [error] 11047#0: *1 "/Users/zhengjin/Workspaces/webapps/static/helloworld/index.htm" is not found (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:42:22 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:42:22 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:42:22 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:42:22 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "helloworld.zj.com:8081", referrer: "http://helloworld.zj.com:8081/"
+2018/07/07 17:42:22 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "helloworld.zj.com:8081", referrer: "http://helloworld.zj.com:8081/"
+2018/07/07 17:42:22 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "helloworld.zj.com:8081", referrer: "http://helloworld.zj.com:8081/"
+2018/07/07 17:42:22 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "helloworld.zj.com:8081", referrer: "http://helloworld.zj.com:8081/"
+2018/07/07 17:42:22 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "helloworld.zj.com:8081", referrer: "http://helloworld.zj.com:8081/"
+2018/07/07 17:42:22 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "helloworld.zj.com:8081", referrer: "http://helloworld.zj.com:8081/"
+2018/07/07 17:43:40 [error] 11047#0: *1 "/Users/zhengjin/Workspaces/webapps/static/helloworld/index.htm" is not found (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:43:40 [error] 11047#0: *1 "/Users/zhengjin/Workspaces/webapps/static/helloworld/index.htm" is not found (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:43:40 [error] 11047#0: *1 "/Users/zhengjin/Workspaces/webapps/static/helloworld/index.htm" is not found (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:43:40 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:43:40 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:43:40 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET / HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:43:53 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/public/helloworld.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/helloworld.html HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:43:53 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/public/helloworld.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/helloworld.html HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:43:53 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/public/helloworld.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/helloworld.html HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:43:53 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/helloworld.html HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:43:53 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/helloworld.html HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:43:53 [error] 11047#0: *1 open() "/Users/zhengjin/Workspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/helloworld.html HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:47:23 [notice] 11046#0: signal 15 (SIGTERM) received from 11073, exiting
+2018/07/07 17:47:23 [notice] 11046#0: signal 15 (SIGTERM) received from 11073, exiting
+2018/07/07 17:47:23 [notice] 11047#0: exiting
+2018/07/07 17:47:23 [notice] 11047#0: exiting
+2018/07/07 17:47:23 [notice] 11047#0: exit
+2018/07/07 17:47:23 [notice] 11046#0: signal 23 (SIGIO) received from 11047
+2018/07/07 17:47:23 [notice] 11046#0: signal 23 (SIGIO) received from 11047
+2018/07/07 17:47:23 [notice] 11046#0: signal 20 (SIGCHLD) received from 11047
+2018/07/07 17:47:23 [notice] 11046#0: signal 20 (SIGCHLD) received from 11047
+2018/07/07 17:47:23 [notice] 11046#0: worker process 11047 exited with code 0
+2018/07/07 17:47:23 [notice] 11046#0: worker process 11047 exited with code 0
+2018/07/07 17:47:23 [notice] 11046#0: exit
+2018/07/07 17:47:23 [notice] 11046#0: exit
+2018/07/07 17:47:33 [notice] 11076#0: using the "kqueue" event method
+2018/07/07 17:47:33 [notice] 11076#0: using the "kqueue" event method
+2018/07/07 17:47:33 [notice] 11076#0: nginx/1.13.10
+2018/07/07 17:47:33 [notice] 11076#0: nginx/1.13.10
+2018/07/07 17:47:33 [notice] 11076#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 17:47:33 [notice] 11076#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 17:47:33 [notice] 11076#0: OS: Darwin 17.6.0
+2018/07/07 17:47:33 [notice] 11076#0: OS: Darwin 17.6.0
+2018/07/07 17:47:33 [notice] 11076#0: hw.ncpu: 4
+2018/07/07 17:47:33 [notice] 11076#0: hw.ncpu: 4
+2018/07/07 17:47:33 [notice] 11076#0: net.inet.tcp.sendspace: 131072
+2018/07/07 17:47:33 [notice] 11076#0: net.inet.tcp.sendspace: 131072
+2018/07/07 17:47:33 [notice] 11076#0: kern.ipc.somaxconn: 128
+2018/07/07 17:47:33 [notice] 11076#0: kern.ipc.somaxconn: 128
+2018/07/07 17:47:33 [notice] 11076#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 17:47:33 [notice] 11076#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 17:47:33 [notice] 11077#0: start worker processes
+2018/07/07 17:47:33 [notice] 11077#0: start worker processes
+2018/07/07 17:47:33 [notice] 11077#0: start worker process 11078
+2018/07/07 17:47:33 [notice] 11077#0: start worker process 11078
+2018/07/07 17:50:18 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/public/1.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:50:18 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/public/1.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:50:18 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/public/1.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:51:44 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/public/1.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:51:44 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/public/1.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:51:44 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/public/1.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:51:44 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:51:44 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:51:44 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/404.html" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:52:03 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/public/1.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:52:03 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/public/1.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:52:03 [error] 11078#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/public/1.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /public/1.jpg HTTP/1.1", host: "helloworld.zj.com:8081"
+2018/07/07 17:58:34 [error] 11078#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/mockserver/images/10.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: mockserver.zj.com, request: "GET /images/10.jpg HTTP/1.1", host: "mockserver.zj.com:8081"
+2018/07/07 17:58:34 [error] 11078#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/mockserver/images/10.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: mockserver.zj.com, request: "GET /images/10.jpg HTTP/1.1", host: "mockserver.zj.com:8081"
+2018/07/07 17:58:34 [error] 11078#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/mockserver/images/10.jpg" failed (2: No such file or directory), client: 127.0.0.1, server: mockserver.zj.com, request: "GET /images/10.jpg HTTP/1.1", host: "mockserver.zj.com:8081"
+2018/07/07 18:08:11 [notice] 11077#0: signal 15 (SIGTERM) received from 11125, exiting
+2018/07/07 18:08:11 [notice] 11077#0: signal 15 (SIGTERM) received from 11125, exiting
+2018/07/07 18:08:11 [notice] 11078#0: exiting
+2018/07/07 18:08:11 [notice] 11078#0: exiting
+2018/07/07 18:08:11 [notice] 11078#0: exit
+2018/07/07 18:08:11 [notice] 11077#0: signal 23 (SIGIO) received from 11078
+2018/07/07 18:08:11 [notice] 11077#0: signal 23 (SIGIO) received from 11078
+2018/07/07 18:08:11 [notice] 11077#0: signal 20 (SIGCHLD) received from 11078
+2018/07/07 18:08:11 [notice] 11077#0: signal 20 (SIGCHLD) received from 11078
+2018/07/07 18:08:11 [notice] 11077#0: worker process 11078 exited with code 0
+2018/07/07 18:08:11 [notice] 11077#0: worker process 11078 exited with code 0
+2018/07/07 18:08:11 [notice] 11077#0: exit
+2018/07/07 18:08:11 [notice] 11077#0: exit
+2018/07/07 18:08:16 [notice] 11128#0: using the "kqueue" event method
+2018/07/07 18:08:16 [notice] 11128#0: using the "kqueue" event method
+2018/07/07 18:08:16 [notice] 11128#0: nginx/1.13.10
+2018/07/07 18:08:16 [notice] 11128#0: nginx/1.13.10
+2018/07/07 18:08:16 [notice] 11128#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 18:08:16 [notice] 11128#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 18:08:16 [notice] 11128#0: OS: Darwin 17.6.0
+2018/07/07 18:08:16 [notice] 11128#0: OS: Darwin 17.6.0
+2018/07/07 18:08:16 [notice] 11128#0: hw.ncpu: 4
+2018/07/07 18:08:16 [notice] 11128#0: hw.ncpu: 4
+2018/07/07 18:08:16 [notice] 11128#0: net.inet.tcp.sendspace: 131072
+2018/07/07 18:08:16 [notice] 11128#0: net.inet.tcp.sendspace: 131072
+2018/07/07 18:08:16 [notice] 11128#0: kern.ipc.somaxconn: 128
+2018/07/07 18:08:16 [notice] 11128#0: kern.ipc.somaxconn: 128
+2018/07/07 18:08:16 [notice] 11128#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 18:08:16 [notice] 11128#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 18:08:16 [notice] 11129#0: start worker processes
+2018/07/07 18:08:16 [notice] 11129#0: start worker processes
+2018/07/07 18:08:16 [notice] 11129#0: start worker process 11130
+2018/07/07 18:08:16 [notice] 11129#0: start worker process 11130
+2018/07/07 18:08:28 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/"
+2018/07/07 18:08:28 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/"
+2018/07/07 18:08:28 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/"
+2018/07/07 18:08:37 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:37 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/"
+2018/07/07 18:08:47 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:47 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:47 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:47 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:47 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:47 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:47 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:47 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:47 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:47 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:47 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:47 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:08:50 [error] 11130#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:09:04 [error] 11130#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:40 [notice] 11129#0: signal 15 (SIGTERM) received from 11156, exiting
+2018/07/07 18:13:40 [notice] 11129#0: signal 15 (SIGTERM) received from 11156, exiting
+2018/07/07 18:13:40 [notice] 11130#0: exiting
+2018/07/07 18:13:40 [notice] 11130#0: exiting
+2018/07/07 18:13:40 [notice] 11129#0: signal 23 (SIGIO) received from 11130
+2018/07/07 18:13:40 [notice] 11129#0: signal 23 (SIGIO) received from 11130
+2018/07/07 18:13:40 [notice] 11130#0: exit
+2018/07/07 18:13:40 [notice] 11129#0: signal 20 (SIGCHLD) received from 11130
+2018/07/07 18:13:40 [notice] 11129#0: signal 20 (SIGCHLD) received from 11130
+2018/07/07 18:13:40 [notice] 11129#0: worker process 11130 exited with code 0
+2018/07/07 18:13:40 [notice] 11129#0: worker process 11130 exited with code 0
+2018/07/07 18:13:40 [notice] 11129#0: exit
+2018/07/07 18:13:40 [notice] 11129#0: exit
+2018/07/07 18:13:48 [notice] 11159#0: using the "kqueue" event method
+2018/07/07 18:13:48 [notice] 11159#0: using the "kqueue" event method
+2018/07/07 18:13:48 [notice] 11159#0: nginx/1.13.10
+2018/07/07 18:13:48 [notice] 11159#0: nginx/1.13.10
+2018/07/07 18:13:48 [notice] 11159#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 18:13:48 [notice] 11159#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 18:13:48 [notice] 11159#0: OS: Darwin 17.6.0
+2018/07/07 18:13:48 [notice] 11159#0: OS: Darwin 17.6.0
+2018/07/07 18:13:48 [notice] 11159#0: hw.ncpu: 4
+2018/07/07 18:13:48 [notice] 11159#0: hw.ncpu: 4
+2018/07/07 18:13:48 [notice] 11159#0: net.inet.tcp.sendspace: 131072
+2018/07/07 18:13:48 [notice] 11159#0: net.inet.tcp.sendspace: 131072
+2018/07/07 18:13:48 [notice] 11159#0: kern.ipc.somaxconn: 128
+2018/07/07 18:13:48 [notice] 11159#0: kern.ipc.somaxconn: 128
+2018/07/07 18:13:48 [notice] 11159#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 18:13:48 [notice] 11159#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 18:13:48 [notice] 11160#0: start worker processes
+2018/07/07 18:13:48 [notice] 11160#0: start worker processes
+2018/07/07 18:13:48 [notice] 11160#0: start worker process 11161
+2018/07/07 18:13:48 [notice] 11160#0: start worker process 11161
+2018/07/07 18:13:52 [error] 11161#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:52 [error] 11161#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:52 [error] 11161#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:52 [error] 11161#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:52 [error] 11161#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:52 [error] 11161#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:52 [error] 11161#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:52 [error] 11161#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:52 [error] 11161#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:52 [error] 11161#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:52 [error] 11161#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:13:52 [error] 11161#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:14:03 [error] 11161#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:15:03 [info] 11161#0: *4 client timed out (60: Operation timed out) while waiting for request, client: 127.0.0.1, server: 0.0.0.0:8081
+2018/07/07 18:16:58 [notice] 11160#0: signal 15 (SIGTERM) received from 11170, exiting
+2018/07/07 18:16:58 [notice] 11160#0: signal 15 (SIGTERM) received from 11170, exiting
+2018/07/07 18:16:58 [notice] 11161#0: exiting
+2018/07/07 18:16:58 [notice] 11160#0: signal 23 (SIGIO) received from 11161
+2018/07/07 18:16:58 [notice] 11160#0: signal 23 (SIGIO) received from 11161
+2018/07/07 18:16:58 [notice] 11161#0: exiting
+2018/07/07 18:16:58 [notice] 11161#0: exit
+2018/07/07 18:16:58 [notice] 11160#0: signal 20 (SIGCHLD) received from 11161
+2018/07/07 18:16:58 [notice] 11160#0: signal 20 (SIGCHLD) received from 11161
+2018/07/07 18:16:58 [notice] 11160#0: worker process 11161 exited with code 0
+2018/07/07 18:16:58 [notice] 11160#0: worker process 11161 exited with code 0
+2018/07/07 18:16:58 [notice] 11160#0: exit
+2018/07/07 18:16:58 [notice] 11160#0: exit
+2018/07/07 18:18:20 [notice] 11182#0: using the "kqueue" event method
+2018/07/07 18:18:20 [notice] 11182#0: using the "kqueue" event method
+2018/07/07 18:18:20 [notice] 11182#0: nginx/1.13.10
+2018/07/07 18:18:20 [notice] 11182#0: nginx/1.13.10
+2018/07/07 18:18:20 [notice] 11182#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 18:18:20 [notice] 11182#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 18:18:20 [notice] 11182#0: OS: Darwin 17.6.0
+2018/07/07 18:18:20 [notice] 11182#0: OS: Darwin 17.6.0
+2018/07/07 18:18:20 [notice] 11182#0: hw.ncpu: 4
+2018/07/07 18:18:20 [notice] 11182#0: hw.ncpu: 4
+2018/07/07 18:18:20 [notice] 11182#0: net.inet.tcp.sendspace: 131072
+2018/07/07 18:18:20 [notice] 11182#0: net.inet.tcp.sendspace: 131072
+2018/07/07 18:18:20 [notice] 11182#0: kern.ipc.somaxconn: 128
+2018/07/07 18:18:20 [notice] 11182#0: kern.ipc.somaxconn: 128
+2018/07/07 18:18:20 [notice] 11182#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 18:18:20 [notice] 11182#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 18:18:20 [notice] 11183#0: start worker processes
+2018/07/07 18:18:20 [notice] 11183#0: start worker processes
+2018/07/07 18:18:20 [notice] 11183#0: start worker process 11184
+2018/07/07 18:18:20 [notice] 11183#0: start worker process 11184
+2018/07/07 18:18:39 [error] 11184#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:39 [error] 11184#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:39 [error] 11184#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:39 [error] 11184#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:39 [error] 11184#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:39 [error] 11184#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:39 [error] 11184#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:39 [error] 11184#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:39 [error] 11184#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:39 [error] 11184#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:39 [error] 11184#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:39 [error] 11184#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/css/app.9cca21ef90a64a4bcbb93f01ea6ac5bf.css HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *3 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/manifest.5d551065de7dcd667996.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/manifest.5d551065de7dcd667996.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/vendor.d17a0be06bcb73ccedaf.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/vendor.d17a0be06bcb73ccedaf.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:18:54 [error] 11184#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/static/js/app.e7d0a2e8034002d6fa2d.js" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /static/js/app.e7d0a2e8034002d6fa2d.js HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/vue/index.html"
+2018/07/07 18:21:48 [notice] 11183#0: signal 15 (SIGTERM) received from 11207, exiting
+2018/07/07 18:21:48 [notice] 11183#0: signal 15 (SIGTERM) received from 11207, exiting
+2018/07/07 18:21:48 [notice] 11184#0: exiting
+2018/07/07 18:21:48 [notice] 11183#0: signal 23 (SIGIO) received from 11184
+2018/07/07 18:21:48 [notice] 11183#0: signal 23 (SIGIO) received from 11184
+2018/07/07 18:21:48 [notice] 11184#0: exiting
+2018/07/07 18:21:48 [notice] 11184#0: exit
+2018/07/07 18:21:48 [notice] 11183#0: signal 20 (SIGCHLD) received from 11184
+2018/07/07 18:21:48 [notice] 11183#0: signal 20 (SIGCHLD) received from 11184
+2018/07/07 18:21:48 [notice] 11183#0: worker process 11184 exited with code 0
+2018/07/07 18:21:48 [notice] 11183#0: worker process 11184 exited with code 0
+2018/07/07 18:21:48 [notice] 11183#0: exit
+2018/07/07 18:21:48 [notice] 11183#0: exit
+2018/07/07 18:22:34 [notice] 11212#0: using the "kqueue" event method
+2018/07/07 18:22:34 [notice] 11212#0: using the "kqueue" event method
+2018/07/07 18:22:34 [notice] 11212#0: nginx/1.13.10
+2018/07/07 18:22:34 [notice] 11212#0: nginx/1.13.10
+2018/07/07 18:22:34 [notice] 11212#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 18:22:34 [notice] 11212#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 18:22:34 [notice] 11212#0: OS: Darwin 17.6.0
+2018/07/07 18:22:34 [notice] 11212#0: OS: Darwin 17.6.0
+2018/07/07 18:22:34 [notice] 11212#0: hw.ncpu: 4
+2018/07/07 18:22:34 [notice] 11212#0: hw.ncpu: 4
+2018/07/07 18:22:34 [notice] 11212#0: net.inet.tcp.sendspace: 131072
+2018/07/07 18:22:34 [notice] 11212#0: net.inet.tcp.sendspace: 131072
+2018/07/07 18:22:34 [notice] 11212#0: kern.ipc.somaxconn: 128
+2018/07/07 18:22:34 [notice] 11212#0: kern.ipc.somaxconn: 128
+2018/07/07 18:22:34 [notice] 11212#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 18:22:34 [notice] 11212#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/07 18:22:34 [notice] 11213#0: start worker processes
+2018/07/07 18:22:34 [notice] 11213#0: start worker processes
+2018/07/07 18:22:34 [notice] 11213#0: start worker process 11214
+2018/07/07 18:22:34 [notice] 11213#0: start worker process 11214
+2018/07/07 18:25:37 [error] 11214#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/1.txt" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /1.txt HTTP/1.1", host: "vueserver.zj.com:8081"
+2018/07/07 18:25:37 [error] 11214#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/1.txt" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /1.txt HTTP/1.1", host: "vueserver.zj.com:8081"
+2018/07/07 18:25:37 [error] 11214#0: *4 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/1.txt" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /1.txt HTTP/1.1", host: "vueserver.zj.com:8081"
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [notice] 11344#0: try again to bind() after 500ms
+2018/07/07 18:59:14 [notice] 11344#0: try again to bind() after 500ms
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [notice] 11344#0: try again to bind() after 500ms
+2018/07/07 18:59:14 [notice] 11344#0: try again to bind() after 500ms
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [notice] 11344#0: try again to bind() after 500ms
+2018/07/07 18:59:14 [notice] 11344#0: try again to bind() after 500ms
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [notice] 11344#0: try again to bind() after 500ms
+2018/07/07 18:59:14 [notice] 11344#0: try again to bind() after 500ms
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [emerg] 11344#0: bind() to 0.0.0.0:8081 failed (48: Address already in use)
+2018/07/07 18:59:14 [notice] 11344#0: try again to bind() after 500ms
+2018/07/07 18:59:14 [notice] 11344#0: try again to bind() after 500ms
+2018/07/07 18:59:14 [emerg] 11344#0: still could not bind()
+2018/07/07 18:59:14 [emerg] 11344#0: still could not bind()
+2018/07/07 18:59:14 [emerg] 11344#0: still could not bind()
+2018/07/07 19:00:10 [notice] 11213#0: signal 15 (SIGTERM) received from 11350, exiting
+2018/07/07 19:00:10 [notice] 11213#0: signal 15 (SIGTERM) received from 11350, exiting
+2018/07/07 19:00:10 [notice] 11214#0: exiting
+2018/07/07 19:00:10 [notice] 11214#0: exiting
+2018/07/07 19:00:10 [notice] 11213#0: signal 23 (SIGIO) received from 11214
+2018/07/07 19:00:10 [notice] 11213#0: signal 23 (SIGIO) received from 11214
+2018/07/07 19:00:10 [notice] 11214#0: exit
+2018/07/07 19:00:10 [notice] 11213#0: signal 20 (SIGCHLD) received from 11214
+2018/07/07 19:00:10 [notice] 11213#0: signal 20 (SIGCHLD) received from 11214
+2018/07/07 19:00:10 [notice] 11213#0: worker process 11214 exited with code 0
+2018/07/07 19:00:10 [notice] 11213#0: worker process 11214 exited with code 0
+2018/07/07 19:00:10 [notice] 11213#0: exit
+2018/07/07 19:00:10 [notice] 11213#0: exit
+2018/07/07 19:00:14 [notice] 11353#0: using the "kqueue" event method
+2018/07/07 19:00:14 [notice] 11353#0: using the "kqueue" event method
+2018/07/07 19:00:14 [notice] 11353#0: nginx/1.13.10
+2018/07/07 19:00:14 [notice] 11353#0: nginx/1.13.10
+2018/07/07 19:00:14 [notice] 11353#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 19:00:14 [notice] 11353#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 19:00:14 [notice] 11353#0: OS: Darwin 17.6.0
+2018/07/07 19:00:14 [notice] 11353#0: OS: Darwin 17.6.0
+2018/07/07 19:00:14 [notice] 11353#0: hw.ncpu: 4
+2018/07/07 19:00:14 [notice] 11353#0: hw.ncpu: 4
+2018/07/07 19:00:14 [notice] 11353#0: net.inet.tcp.sendspace: 131072
+2018/07/07 19:00:14 [notice] 11353#0: net.inet.tcp.sendspace: 131072
+2018/07/07 19:00:14 [notice] 11353#0: kern.ipc.somaxconn: 128
+2018/07/07 19:00:14 [notice] 11353#0: kern.ipc.somaxconn: 128
+2018/07/07 19:00:14 [notice] 11353#0: getrlimit(RLIMIT_NOFILE): 7168:9223372036854775807
+2018/07/07 19:00:14 [notice] 11353#0: getrlimit(RLIMIT_NOFILE): 7168:9223372036854775807
+2018/07/07 19:00:14 [notice] 11354#0: start worker processes
+2018/07/07 19:00:14 [notice] 11354#0: start worker processes
+2018/07/07 19:00:14 [notice] 11354#0: start worker process 11355
+2018/07/07 19:00:14 [notice] 11354#0: start worker process 11355
+2018/07/07 19:02:58 [notice] 11354#0: signal 15 (SIGTERM) received from 11362, exiting
+2018/07/07 19:02:58 [notice] 11354#0: signal 15 (SIGTERM) received from 11362, exiting
+2018/07/07 19:02:58 [notice] 11354#0: signal 23 (SIGIO) received from 11355
+2018/07/07 19:02:58 [notice] 11354#0: signal 23 (SIGIO) received from 11355
+2018/07/07 19:02:58 [notice] 11355#0: exiting
+2018/07/07 19:02:58 [notice] 11355#0: exiting
+2018/07/07 19:02:58 [notice] 11355#0: exit
+2018/07/07 19:02:58 [notice] 11354#0: signal 20 (SIGCHLD) received from 11355
+2018/07/07 19:02:58 [notice] 11354#0: signal 20 (SIGCHLD) received from 11355
+2018/07/07 19:02:58 [notice] 11354#0: worker process 11355 exited with code 0
+2018/07/07 19:02:58 [notice] 11354#0: worker process 11355 exited with code 0
+2018/07/07 19:02:58 [notice] 11354#0: exit
+2018/07/07 19:02:58 [notice] 11354#0: exit
+2018/07/07 19:03:01 [notice] 11365#0: using the "kqueue" event method
+2018/07/07 19:03:01 [notice] 11365#0: using the "kqueue" event method
+2018/07/07 19:03:01 [notice] 11365#0: nginx/1.13.10
+2018/07/07 19:03:01 [notice] 11365#0: nginx/1.13.10
+2018/07/07 19:03:01 [notice] 11365#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 19:03:01 [notice] 11365#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/07 19:03:01 [notice] 11365#0: OS: Darwin 17.6.0
+2018/07/07 19:03:01 [notice] 11365#0: OS: Darwin 17.6.0
+2018/07/07 19:03:01 [notice] 11365#0: hw.ncpu: 4
+2018/07/07 19:03:01 [notice] 11365#0: hw.ncpu: 4
+2018/07/07 19:03:01 [notice] 11365#0: net.inet.tcp.sendspace: 131072
+2018/07/07 19:03:01 [notice] 11365#0: net.inet.tcp.sendspace: 131072
+2018/07/07 19:03:01 [notice] 11365#0: kern.ipc.somaxconn: 128
+2018/07/07 19:03:01 [notice] 11365#0: kern.ipc.somaxconn: 128
+2018/07/07 19:03:01 [notice] 11365#0: getrlimit(RLIMIT_NOFILE): 7168:9223372036854775807
+2018/07/07 19:03:01 [notice] 11365#0: getrlimit(RLIMIT_NOFILE): 7168:9223372036854775807
+2018/07/07 19:03:01 [notice] 11366#0: start worker processes
+2018/07/07 19:03:01 [notice] 11366#0: start worker processes
+2018/07/07 19:03:01 [notice] 11366#0: start worker process 11367
+2018/07/07 19:03:01 [notice] 11366#0: start worker process 11367
+2018/07/07 19:03:21 [error] 11367#0: *1 "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/server/index.htm" is not found (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /server/ HTTP/1.1", host: "vueserver.zj.com:8081"
+2018/07/07 19:03:21 [error] 11367#0: *1 "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/server/index.htm" is not found (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /server/ HTTP/1.1", host: "vueserver.zj.com:8081"
+2018/07/07 19:03:21 [error] 11367#0: *1 "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/server/index.htm" is not found (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /server/ HTTP/1.1", host: "vueserver.zj.com:8081"
+2018/07/07 19:07:35 [notice] 11366#0: signal 15 (SIGTERM) received from 11378, exiting
+2018/07/07 19:07:35 [notice] 11366#0: signal 15 (SIGTERM) received from 11378, exiting
+2018/07/07 19:07:35 [notice] 11367#0: exiting
+2018/07/07 19:07:35 [notice] 11367#0: exiting
+2018/07/07 19:07:35 [notice] 11366#0: signal 23 (SIGIO) received from 11367
+2018/07/07 19:07:35 [notice] 11366#0: signal 23 (SIGIO) received from 11367
+2018/07/07 19:07:35 [notice] 11367#0: exit
+2018/07/07 19:07:35 [notice] 11366#0: signal 20 (SIGCHLD) received from 11367
+2018/07/07 19:07:35 [notice] 11366#0: signal 20 (SIGCHLD) received from 11367
+2018/07/07 19:07:35 [notice] 11366#0: worker process 11367 exited with code 0
+2018/07/07 19:07:35 [notice] 11366#0: worker process 11367 exited with code 0
+2018/07/07 19:07:35 [notice] 11366#0: exit
+2018/07/07 19:07:35 [notice] 11366#0: exit

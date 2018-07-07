@@ -1,51 +1,63 @@
 #
 # Created by zhengjn, at 2018-06-02
+# Ref: https://docs.docker.com/compose/compose-file/compose-file-v2
 #
 version: "2"
 
 services:
-  itserver:
-    image: mybusybox
-    container_name: itserver
-    networks:
-      - front-tier
-
   datavol:
-    image: mybusybox
+    image: zjtools
     container_name: datavol
     volumes:
-      - ~/Workspaces/dockerapps:/home/zhengjin
+      - ~/Workspaces/ZJWorkspaces/dockerapps/data:/home/zhengjin/data
+    networks:
+      - zj_network
+
+  redisserver:
+    image: zjredis
+    container_name: myredis
+    expose:
+      - "6379"
+    network:
+      - zj_network
 
   mockserver:
-    image: mockserver:latest
-    container_name: mymockserver
+    image: zjmock
+    container_name: mymock
     expose: 
       - "17891"
+    depends_on:
+      - redisserver
+    volumes: # load conf when run container
+      - ~/Workspaces/ZJWorkspaces/dockerapps/configs/mock_conf.json usr/local/bin/
     networks:
-      - front-tier
+      - zj_network
 
-  tomcatserver:
-    image: mytomcat:latest
+  vueserver:
+    image: zjvue:latest
+    container_name: myvue
     expose: 
-      - "8080"
+      - "8081"
     networks:
-      - front-tier
+      - zj_network
 
   nginxserver:
-    image: mynginx:latest
-    container_name: mynginxserver
+    image: zjnginx
+    container_name: mynginx
     depends_on:
       - datavol
       - mockserver
-      - tomcatserver
+      - vueserver
+      - redisserver
     ports:
-      - "8081:80"
+      - "8080:80"
     volumes_from:
       - datavol
+    volumes: # load conf when run container
+      - ~/Workspaces/ZJWorkspaces/dockerapps/configs/nginx_conf/nginx.conf.json /etc/nginx/
     networks:
-      - front-tier
+      - zj_network
 
 networks:
-  front-tier:
+  zj_network:
     driver: bridge
-
