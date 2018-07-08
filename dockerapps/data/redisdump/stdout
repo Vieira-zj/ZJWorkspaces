@@ -1066,3 +1066,180 @@
 1:M 08 Jul 02:16:45.269 * DB saved on disk
 1:M 08 Jul 02:16:45.270 * Removing the pid file.
 1:M 08 Jul 02:16:45.271 # Redis is now ready to exit, bye bye...
+1:C 08 Jul 04:06:24.199 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 08 Jul 04:06:24.202 # Redis version=4.0.10, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 08 Jul 04:06:24.204 # Configuration loaded
+1:M 08 Jul 04:06:24.207 * Running mode=standalone, port=6379.
+1:M 08 Jul 04:06:24.208 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+1:M 08 Jul 04:06:24.210 # Server initialized
+1:M 08 Jul 04:06:24.212 # WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This will create latency and memory usage issues with Redis. To fix this issue run the command 'echo never > /sys/kernel/mm/transparent_hugepage/enabled' as root, and add it to your /etc/rc.local in order to retain the setting after a reboot. Redis must be restarted after THP is disabled.
+1:M 08 Jul 04:06:24.217 * DB loaded from append only file: 0.003 seconds
+1:M 08 Jul 04:06:24.219 * Ready to accept connections
+1:M 08 Jul 04:06:24.220 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:06:24.222 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:06:29.341 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:06:29.344 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:06:34.433 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:06:34.436 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:06:39.536 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:06:39.539 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:06:44.666 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:06:44.668 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:06:49.788 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:06:49.789 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:06:54.924 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:06:54.926 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:00.047 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:00.050 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:05.201 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:05.203 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:10.345 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:10.348 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:15.442 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:15.445 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:20.565 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:20.567 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:25.680 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:25.681 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:30.809 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:30.811 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:35.941 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:35.943 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:41.054 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:41.056 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:46.169 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:46.171 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:51.288 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:51.299 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:07:56.412 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:07:56.414 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:01.531 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:01.533 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:06.659 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:06.661 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:11.785 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:11.788 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:16.908 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:16.910 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:22.016 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:22.027 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:27.156 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:27.158 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:32.292 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:32.294 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:37.432 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:37.434 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:42.547 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:42.555 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:47.688 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:47.691 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:52.810 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:52.812 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:08:57.935 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:08:57.937 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:03.069 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:03.071 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:08.212 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:08.214 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:13.353 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:13.355 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:18.505 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:18.507 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:23.647 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:23.649 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:28.784 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:28.786 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:33.904 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:33.907 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:39.039 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:39.041 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:44.190 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:44.202 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:49.316 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:49.318 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:54.433 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:54.435 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:09:59.572 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:09:59.574 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:10:04.700 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:10:04.702 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:10:09.864 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:10:09.866 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:10:15.010 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:10:15.012 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:10:20.145 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:10:20.148 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:10:25.288 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:10:25.290 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:10:30.443 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:10:30.445 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:10:35.595 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:10:35.598 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:10:40.749 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:10:40.753 - 0 clients connected (0 slaves), 786648 bytes in use
+1:M 08 Jul 04:10:44.870 - Accepted 10.255.0.2:52984
+1:M 08 Jul 04:10:44.892 - Client closed connection
+1:M 08 Jul 04:10:45.864 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:10:45.866 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:10:46.382 - Accepted 10.255.0.2:52986
+1:M 08 Jul 04:10:46.386 - Client closed connection
+1:M 08 Jul 04:10:50.999 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:10:51.001 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:10:56.160 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:10:56.162 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:01.285 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:01.288 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:06.416 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:06.419 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:11.560 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:11.562 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:16.697 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:16.699 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:21.826 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:21.828 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:25.112 * 10 changes in 300 seconds. Saving...
+1:M 08 Jul 04:11:25.115 * Background saving started by pid 14
+14:C 08 Jul 04:11:25.120 * DB saved on disk
+14:C 08 Jul 04:11:25.122 * RDB: 0 MB of memory used by copy-on-write
+1:M 08 Jul 04:11:25.223 * Background saving terminated with success
+1:M 08 Jul 04:11:26.964 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:26.967 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:32.086 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:32.088 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:37.232 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:37.235 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:42.355 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:42.357 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:47.497 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:47.510 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:52.629 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:52.631 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:11:57.772 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:11:57.776 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:12:02.881 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:12:02.883 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:12:07.993 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:12:07.995 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:12:13.122 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:12:13.129 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:12:18.245 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:12:18.247 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:12:23.355 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:12:23.357 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:12:28.483 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:12:28.485 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:12:33.614 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:12:33.616 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:12:38.752 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:12:38.755 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:12:43.878 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:12:43.880 - 0 clients connected (0 slaves), 785776 bytes in use
+1:M 08 Jul 04:12:49.230 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+1:M 08 Jul 04:12:49.232 - 0 clients connected (0 slaves), 785776 bytes in use
+1:signal-handler (1531023169) Received SIGTERM scheduling shutdown...
+1:M 08 Jul 04:12:49.853 # User requested shutdown...
+1:M 08 Jul 04:12:49.856 * Calling fsync() on the AOF file.
+1:M 08 Jul 04:12:49.858 * Saving the final RDB snapshot before exiting.
+1:M 08 Jul 04:12:49.862 * DB saved on disk
+1:M 08 Jul 04:12:49.864 * Removing the pid file.
+1:M 08 Jul 04:12:49.865 # Redis is now ready to exit, bye bye...

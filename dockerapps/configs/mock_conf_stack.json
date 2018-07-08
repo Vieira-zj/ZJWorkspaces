@@ -1,0 +1,6 @@
+{
+  "desc": "mock server config file, create at 2018.7.7",
+  "server": {
+    "redis": "192.168.65.3:6379"
+  }
+}

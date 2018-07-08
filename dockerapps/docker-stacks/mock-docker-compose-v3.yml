@@ -1,0 +1,52 @@
+#
+# Created at 20180708, by ZhengJin
+#
+# Ref: https://docs.docker.com/compose/compose-file/ 
+#
+version: "3"
+
+services:
+  redisserver:
+    image: zjredis
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+    depends_on:
+      - datavol
+    volumes:
+      - "~/Workspaces/ZJWorkspaces/dockerapps/data/redisdump:/data" 
+    ports:
+      - "6379:6379"
+    networks:
+      - zjwebnet
+
+  mockserver:
+    image: zjmock:latest
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+    depends_on:
+      - redisserver
+    ports:
+      - "17891:17891"
+    volumes:
+      - "~/Workspaces/ZJWorkspaces/dockerapps/configs/mock_conf_stack.json:/usr/local/bin/mock_conf.json"
+    networks:
+      - zjwebnet
+
+volumes:
+  datavol:
+
+networks:
+  zjwebnet:
