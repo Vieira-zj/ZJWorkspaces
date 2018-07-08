@@ -2667,3 +2667,75 @@
 2018/07/07 19:07:35 [notice] 11366#0: worker process 11367 exited with code 0
 2018/07/07 19:07:35 [notice] 11366#0: exit
 2018/07/07 19:07:35 [notice] 11366#0: exit
+2018/07/08 09:59:12 [notice] 663#0: using the "kqueue" event method
+2018/07/08 09:59:12 [notice] 663#0: using the "kqueue" event method
+2018/07/08 09:59:12 [notice] 663#0: nginx/1.13.10
+2018/07/08 09:59:12 [notice] 663#0: nginx/1.13.10
+2018/07/08 09:59:12 [notice] 663#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/08 09:59:12 [notice] 663#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/08 09:59:12 [notice] 663#0: OS: Darwin 17.6.0
+2018/07/08 09:59:12 [notice] 663#0: OS: Darwin 17.6.0
+2018/07/08 09:59:12 [notice] 663#0: hw.ncpu: 4
+2018/07/08 09:59:12 [notice] 663#0: hw.ncpu: 4
+2018/07/08 09:59:12 [notice] 663#0: net.inet.tcp.sendspace: 131072
+2018/07/08 09:59:12 [notice] 663#0: net.inet.tcp.sendspace: 131072
+2018/07/08 09:59:12 [notice] 663#0: kern.ipc.somaxconn: 128
+2018/07/08 09:59:12 [notice] 663#0: kern.ipc.somaxconn: 128
+2018/07/08 09:59:12 [notice] 663#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/08 09:59:12 [notice] 663#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/08 09:59:12 [notice] 664#0: start worker processes
+2018/07/08 09:59:12 [notice] 664#0: start worker processes
+2018/07/08 09:59:12 [notice] 664#0: start worker process 665
+2018/07/08 09:59:12 [notice] 664#0: start worker process 665
+2018/07/08 09:59:37 [error] 665#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "helloworld.zj.com:8081", referrer: "http://helloworld.zj.com:8081/"
+2018/07/08 09:59:37 [error] 665#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "helloworld.zj.com:8081", referrer: "http://helloworld.zj.com:8081/"
+2018/07/08 09:59:37 [error] 665#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "helloworld.zj.com:8081", referrer: "http://helloworld.zj.com:8081/"
+2018/07/08 10:04:27 [notice] 664#0: signal 15 (SIGTERM) received from 676, exiting
+2018/07/08 10:04:27 [notice] 664#0: signal 15 (SIGTERM) received from 676, exiting
+2018/07/08 10:04:27 [notice] 665#0: exiting
+2018/07/08 10:04:27 [notice] 665#0: exiting
+2018/07/08 10:04:27 [notice] 664#0: signal 23 (SIGIO) received from 665
+2018/07/08 10:04:27 [notice] 664#0: signal 23 (SIGIO) received from 665
+2018/07/08 10:04:27 [notice] 665#0: exit
+2018/07/08 10:04:27 [notice] 664#0: signal 20 (SIGCHLD) received from 665
+2018/07/08 10:04:27 [notice] 664#0: signal 20 (SIGCHLD) received from 665
+2018/07/08 10:04:27 [notice] 664#0: worker process 665 exited with code 0
+2018/07/08 10:04:27 [notice] 664#0: worker process 665 exited with code 0
+2018/07/08 10:04:27 [notice] 664#0: exit
+2018/07/08 10:04:27 [notice] 664#0: exit
+2018/07/08 10:04:31 [notice] 679#0: using the "kqueue" event method
+2018/07/08 10:04:31 [notice] 679#0: using the "kqueue" event method
+2018/07/08 10:04:31 [notice] 679#0: nginx/1.13.10
+2018/07/08 10:04:31 [notice] 679#0: nginx/1.13.10
+2018/07/08 10:04:31 [notice] 679#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/08 10:04:31 [notice] 679#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/08 10:04:31 [notice] 679#0: OS: Darwin 17.6.0
+2018/07/08 10:04:31 [notice] 679#0: OS: Darwin 17.6.0
+2018/07/08 10:04:31 [notice] 679#0: hw.ncpu: 4
+2018/07/08 10:04:31 [notice] 679#0: hw.ncpu: 4
+2018/07/08 10:04:31 [notice] 679#0: net.inet.tcp.sendspace: 131072
+2018/07/08 10:04:31 [notice] 679#0: net.inet.tcp.sendspace: 131072
+2018/07/08 10:04:31 [notice] 679#0: kern.ipc.somaxconn: 128
+2018/07/08 10:04:31 [notice] 679#0: kern.ipc.somaxconn: 128
+2018/07/08 10:04:31 [notice] 679#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/08 10:04:31 [notice] 679#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/08 10:04:31 [notice] 680#0: start worker processes
+2018/07/08 10:04:31 [notice] 680#0: start worker processes
+2018/07/08 10:04:31 [notice] 680#0: start worker process 681
+2018/07/08 10:04:31 [notice] 680#0: start worker process 681
+2018/07/08 10:09:49 [error] 681#0: *5 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/"
+2018/07/08 10:09:49 [error] 681#0: *5 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/"
+2018/07/08 10:09:49 [error] 681#0: *5 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/vueserver/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: vueserver.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "vueserver.zj.com:8081", referrer: "http://vueserver.zj.com:8081/"
+2018/07/08 10:13:33 [notice] 680#0: signal 15 (SIGTERM) received from 734, exiting
+2018/07/08 10:13:33 [notice] 680#0: signal 15 (SIGTERM) received from 734, exiting
+2018/07/08 10:13:33 [notice] 681#0: exiting
+2018/07/08 10:13:33 [notice] 681#0: exiting
+2018/07/08 10:13:33 [notice] 680#0: signal 23 (SIGIO) received from 681
+2018/07/08 10:13:33 [notice] 680#0: signal 23 (SIGIO) received from 681
+2018/07/08 10:13:33 [notice] 681#0: exit
+2018/07/08 10:13:33 [notice] 680#0: signal 20 (SIGCHLD) received from 681
+2018/07/08 10:13:33 [notice] 680#0: signal 20 (SIGCHLD) received from 681
+2018/07/08 10:13:33 [notice] 680#0: worker process 681 exited with code 0
+2018/07/08 10:13:33 [notice] 680#0: worker process 681 exited with code 0
+2018/07/08 10:13:33 [notice] 680#0: exit
+2018/07/08 10:13:33 [notice] 680#0: exit
