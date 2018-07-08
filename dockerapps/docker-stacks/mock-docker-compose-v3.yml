@@ -13,8 +13,6 @@ services:
       replicas: 1
       placement:
         constraints: [node.role == manager]
-    depends_on:
-      - datavol
     volumes:
       - "~/Workspaces/ZJWorkspaces/dockerapps/data/redisdump:/data" 
     ports:
@@ -47,6 +45,7 @@ services:
 
 volumes:
   datavol:
+  # TODO:
 
 networks:
   zjwebnet:
