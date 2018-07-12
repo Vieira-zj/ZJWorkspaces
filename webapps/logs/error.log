@@ -2739,3 +2739,42 @@
 2018/07/08 10:13:33 [notice] 680#0: worker process 681 exited with code 0
 2018/07/08 10:13:33 [notice] 680#0: exit
 2018/07/08 10:13:33 [notice] 680#0: exit
+2018/07/12 22:46:18 [notice] 6182#0: using the "kqueue" event method
+2018/07/12 22:46:18 [notice] 6182#0: using the "kqueue" event method
+2018/07/12 22:46:18 [notice] 6182#0: nginx/1.13.10
+2018/07/12 22:46:18 [notice] 6182#0: nginx/1.13.10
+2018/07/12 22:46:18 [notice] 6182#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/12 22:46:18 [notice] 6182#0: built by clang 9.0.0 (clang-900.0.39.2)
+2018/07/12 22:46:18 [notice] 6182#0: OS: Darwin 17.6.0
+2018/07/12 22:46:18 [notice] 6182#0: OS: Darwin 17.6.0
+2018/07/12 22:46:18 [notice] 6182#0: hw.ncpu: 4
+2018/07/12 22:46:18 [notice] 6182#0: hw.ncpu: 4
+2018/07/12 22:46:18 [notice] 6182#0: net.inet.tcp.sendspace: 131072
+2018/07/12 22:46:18 [notice] 6182#0: net.inet.tcp.sendspace: 131072
+2018/07/12 22:46:18 [notice] 6182#0: kern.ipc.somaxconn: 128
+2018/07/12 22:46:18 [notice] 6182#0: kern.ipc.somaxconn: 128
+2018/07/12 22:46:18 [notice] 6182#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/12 22:46:18 [notice] 6182#0: getrlimit(RLIMIT_NOFILE): 4864:9223372036854775807
+2018/07/12 22:46:18 [notice] 6183#0: start worker processes
+2018/07/12 22:46:18 [notice] 6183#0: start worker processes
+2018/07/12 22:46:18 [notice] 6183#0: start worker process 6184
+2018/07/12 22:46:18 [notice] 6183#0: start worker process 6184
+2018/07/12 22:46:53 [error] 6184#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "t1.helloworld.zj.com:8081", referrer: "http://t1.helloworld.zj.com:8081/"
+2018/07/12 22:46:53 [error] 6184#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "t1.helloworld.zj.com:8081", referrer: "http://t1.helloworld.zj.com:8081/"
+2018/07/12 22:46:53 [error] 6184#0: *1 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "t1.helloworld.zj.com:8081", referrer: "http://t1.helloworld.zj.com:8081/"
+2018/07/12 22:47:12 [error] 6184#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "t2.helloworld.zj.com:8081", referrer: "http://t2.helloworld.zj.com:8081/"
+2018/07/12 22:47:12 [error] 6184#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "t2.helloworld.zj.com:8081", referrer: "http://t2.helloworld.zj.com:8081/"
+2018/07/12 22:47:12 [error] 6184#0: *2 open() "/Users/zhengjin/Workspaces/ZJWorkspaces/webapps/static/helloworld/favicon.ico" failed (2: No such file or directory), client: 127.0.0.1, server: helloworld.zj.com, request: "GET /favicon.ico HTTP/1.1", host: "t2.helloworld.zj.com:8081", referrer: "http://t2.helloworld.zj.com:8081/"
+2018/07/12 22:49:29 [notice] 6183#0: signal 15 (SIGTERM) received from 6223, exiting
+2018/07/12 22:49:29 [notice] 6183#0: signal 15 (SIGTERM) received from 6223, exiting
+2018/07/12 22:49:29 [notice] 6184#0: exiting
+2018/07/12 22:49:29 [notice] 6184#0: exiting
+2018/07/12 22:49:29 [notice] 6183#0: signal 23 (SIGIO) received from 6184
+2018/07/12 22:49:29 [notice] 6183#0: signal 23 (SIGIO) received from 6184
+2018/07/12 22:49:29 [notice] 6184#0: exit
+2018/07/12 22:49:29 [notice] 6183#0: signal 20 (SIGCHLD) received from 6184
+2018/07/12 22:49:29 [notice] 6183#0: signal 20 (SIGCHLD) received from 6184
+2018/07/12 22:49:29 [notice] 6183#0: worker process 6184 exited with code 0
+2018/07/12 22:49:29 [notice] 6183#0: worker process 6184 exited with code 0
+2018/07/12 22:49:29 [notice] 6183#0: exit
+2018/07/12 22:49:29 [notice] 6183#0: exit

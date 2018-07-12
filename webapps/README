@@ -14,7 +14,8 @@ tomcatserver2 docker instance => 8083
 
 URI
 # simple static reverse proxy, helloworld
-http://helloworld.zj.com:8081
+http://t1.helloworld.zj.com:8081
+http://t2.helloworld.zj.com:8081
 http://helloworld.zj.com:8081/public/helloworld.html
 http://helloworld.zj.com:8081/static/pics/1.jpg
 
