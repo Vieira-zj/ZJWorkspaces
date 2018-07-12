@@ -1,0 +1,37 @@
+#
+# Created by zhengjn, at 2018-06-02
+# Ref: https://docs.docker.com/compose/compose-file/compose-file-v2
+#
+# redis master-slave demo
+#
+version: "2"
+
+services:
+  redis-master:
+    image: redis:latest
+    container_name: my-redis-master
+    volumes:
+      - "~/Workspaces/ZJWorkspaces/dockerapps/configs/redis.conf:/usr/local/etc/redis/redis.conf"
+      - "~/Workspaces/ZJWorkspaces/dockerapps/data/redisdump:/data"
+    ports:
+      - "6379:6379"
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+    networks:
+      - zj_com_network
+
+  redis-slave:
+    image: redis
+    container_name: my-redis-slave
+    volumes:
+      - "~/Workspaces/ZJWorkspaces/dockerapps/configs/redis_slave.conf:/usr/local/etc/redis/redis_slave.conf"
+    ports:
+      - "6380:6379"
+    depends_on:
+      - redis-master
+    command: [ "redis-server", "/usr/local/etc/redis/redis_slave.conf" ]
+    networks:
+      - zj_com_network
+
+networks:
+  zj_com_network:
+    driver: bridge
