@@ -1,0 +1,236 @@
+->
+kodo-nfs-beta-pipeline
+=> kodo-nfs-staging-docker-build
+=> kodo-nfs-staging-deploy
+
+
+
+->
+kodo-nfs-beta-pipeline
+
+### General
+BRANCH, string parameter
+DESCRIPTION, multi-line string parameter
+PACKAGE_NAME, dynamic parameter (Scriptler) => script => PackageName (PREFIX:KODO.NFS.TEST) => add datetime
+LINUX_SYSTEM, extended choice parameter => single select
+NFS_PR, string parameter
+
+// keep with "kodo-nfs-staging-docker-build", run docker cmds
+Restrict where this project can be run => CI_BUILD
+
+
+### Source Code Management
+None
+
+
+### Build Triggers
+None
+
+
+### Build Environment
+Locks => kodo-build-lock
+SSH agent => Credentials
+
+
+### Build
+1) Triggers/call builds on other projects
+=> kodo-nfs-staging-docker-build
+- Block until the triggered projects finish their builds
+- Current build parameters
+- Build on the same node
+2) Triggers/call builds on other projects
+=> kodo-nfs-staging-deploy
+- Block until the triggered projects finish their builds
+- Current build parameters
+3) Triggers/call builds on other projects
+=> kodo-nfs-staging-test
+- Block until the triggered projects finish their builds
+
+
+### Post-build Actions
+None
+
+
+
+->
+kodo-nfs-staging-docker-build
+
+### General
+Discard old builds => Log Rotation
+
+BRANCH, string parameter
+NFS_PR, string parameter
+LINUX_SYSTEM, extended choice parameter => radio buttons
+PACKAGE_NAME, dynamic parameter (Scriptler) => script => PackageName (PREFIX:KODO.NFS.TEST) => add datetime
+
+// node for run docker cmd
+Restrict where this project can be run => CI_BUILD
+
+
+### Source Code Management
+Multiple SCMs
+git@github.com:qbox/nfs-ganesha.git
+Branch Specifier : ${BRANCH}
+Repository browser : AssemblaWeb
+Check out to a sub-dir => Local subdir for repo : nfs-ganesha
+Check out to specific local branch => Branch name : ${BRANCH}
+
+git@gitlab.qiniu.io:qbox/deploy-test.git
+Branch Specifier : */master
+Repository browser : Auto
+Check out to a sub-dir => Local subdir for repo : deploy-test
+Check out to specific local branch => Branch name : master
+
+
+### Build Triggers
+None
+
+
+### Build Environment
+Delete workspace before build starts
+Add timestamps to the Console Output
+Color ANSI Console Output => xterm
+
+
+### Build
+Execute shell
+
+#!/bin/bash
+set -ex
+
+echo "***** clear"
+docker_container="nfs"
+docker stop ${docker_container} && docker rm ${docker_container}
+
+echo "***** git pull"
+if [ -n "$NFS_PR" ];then
+  NFS_PRID=$(echo $NFS_PR | awk -F "/" '{ print $7 }')
+  cd ${WORKSPACE}/nfs-ganesha
+  git fetch origin pull/$NFS_PRID/head:$BUILD_ID
+  git checkout $BUILD_ID
+  echo "log info before commit pr"
+  git log|head -n 10    
+  git pull --no-edit origin $BRANCH    
+  echo "log info after commit pr"
+  git log|head -n 10
+fi
+
+echo "***** dockerfile build"
+docker_image="nfs-${LINUX_SYSTEM}"
+docker_file="deploy-test/floy/nfs/dockerfile-nfs-${LINUX_SYSTEM}-build"
+cd ${WORKSPACE}
+docker build -t ${docker_image} -f ${docker_file} .
+
+echo "***** ganesha build"
+target_dir="${WORKSPACE}/build_out"
+if [ -d ${target_dir} ];then
+  rm -rf ${target_dir}
+fi
+mkdir ${target_dir}
+
+docker run --name ${docker_container} --rm -v ${target_dir}:/home/build_out ${docker_image}
+
+echo "***** package"
+build_package="ganesha.tar.gz"
+mv ${target_dir}/${build_package} "${WORKSPACE}/${PACKAGE_NAME}"
+
+
+### Post-build Actions
+Archive the artifacts => Files to archive => **/${PACKAGE_NAME}
+
+
+
+->
+kodo-nfs-staging-deploy
+
+### General
+Discard old builds => Log Rotation
+
+BUILD_NUMBER, dynamic parameter (Scriptler) => script => Build_Numbers (BUILD_JOB_NAME:kodo-nfs-staging-docker-build)
+PACKAGE_NAME, string parameter
+
+Restrict where this project can be run => ANY
+
+
+### Source Code Management
+Multiple SCMs
+git@gitlab.qiniu.io:qbox/deploy-test.git
+Branch Specifier : */master
+Repository browser : Auto
+Check out to a sub-dir => Local subdir for repo : deploy-test
+Check out to specific local branch => Branch name : master
+
+
+### Build Triggers
+None
+
+
+### Build Environment
+Color ANSI Console Output => xterm
+
+
+### Build
+Copy artifacts from another project
+Project name => kodo-nfs-staging-docker-build
+Which build => Specific build => Build numnber => ${BUILD_NUMBER}
+Artifacts to copy => ${PACKAGE_NAME}
+
+Execute shell
+#!/bin/bash
+set -ex
+
+TEST_ENV="dev"
+cd ${WORKSPACE}/deploy-test && source env.sh
+
+echo "***** deploy package: ${PACKAGE_NAME}"
+HOST="cs1"
+bs_dist_pkg ${HOST} ${PACKAGE_NAME}
+floy_deploy ${HOST} "nfs" ${PACKAGE_NAME}
+# hook floy_after_switch.sh
+
+
+### Post-build Actions
+Editable Email Notification => Disable Extended Email Publisher
+
+
+
+->
+kodo-nfs-staging-test
+
+### General
+CS_NODE => default "cs50"
+TEST_SHELL_PATH => default "/home/qboxserver/zhengjin/ddtest.sh"
+
+Restrict where this project can be run => ANY
+
+
+### Source Code Management
+None
+
+
+### Build Triggers
+None
+
+
+### Build Environment
+Color ANSI Console Output => xterm
+
+
+### Build
+Execute shell
+#!/bin/bash
+set -ex
+
+ssh cs1 qssh ${CS_NODE} "sh ${TEST_SCRIPT_PATH}" | tee logfile
+error=`cat logfile | grep "exit 99" | wc -l`
+if [ ${error} -gt 0 ]; then
+ exit 99
+fi
+
+
+### Post-build Actions
+Editable Email Notification => Disable Extended Email Publisher
+
+
+
+->
