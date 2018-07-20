@@ -1,0 +1,69 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: mgoroll
+spec:
+  serviceName: "mgoroll"
+  replicas: 2
+  template:
+    spec:
+      imagePullSecrets:
+        - name: qn-registry-secret
+      containers:
+      - name: mgoroll
+        image: reg.qiniu.com/spock-release-candidates/mgoroll:20180720115247-develop-pr659
+        imagePullPolicy: Always
+        ports:
+            - name: http
+              containerPort: 2324
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: AUDITLOG_PATH
+          value: /mgoroll/run/auditlog
+        volumeMounts:
+        - name: mgoroll
+          mountPath: /mgoroll/qboxmgoroll.conf
+          subPath: qboxmgoroll.conf
+      volumes:
+      - name: mgoroll
+        configMap:
+          name: mgoroll-configmap
+          items:
+            - key: qboxmgoroll
+              path: qboxmgoroll.conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mgoroll
+spec:
+  ports:
+    - name: mgoroll
+      protocol: TCP
+      port: 2324
+      targetPort: http
+  clusterIP: None
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: mgoroll
+spec:
+  rules:
+  - host: mgoroll.kodo.$Namespace$.cs-spock.cloudappl.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: mgoroll
+          servicePort: 2324
+
