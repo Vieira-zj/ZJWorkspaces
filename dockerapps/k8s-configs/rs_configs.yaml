@@ -1,1 +1,89 @@
-
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: rspub
+spec:
+  replicas: 1
+  template:
+    spec:
+      imagePullSecrets:
+        - name: qn-registry-secret
+      containers:
+      - name: rspub-consul-z0
+        image: consul
+        imagePullPolicy: Always
+        args:
+            - "agent"
+            - "-server"
+            - "-datacenter=spock_z0"
+            - "-bootstrap-expect=2"
+            - "-retry-join=consul-z0"
+        ports:
+            - name: server
+              containerPort: 8300
+            - name: serflan
+              containerPort: 8301
+            - name: rpc
+              containerPort: 8400
+            - name: dns
+              containerPort: 8600
+      - name: rspub
+        image: reg.qiniu.com/spock-release-candidates/rspub:20180408165347-master
+        imagePullPolicy: Always
+        resources:
+            limits:
+              cpu: 4000m
+              memory: 4000Mi
+        command: ["/rspub/qboxrspub"]
+        args: ["-r", "conf/qboxrs.conf", "-p", "conf/qboxpub.conf"]
+        ports:
+        - name: http
+          containerPort: 9433
+        volumeMounts:
+        - name: config
+          mountPath: /rspub/conf
+      volumes:
+      - name: config
+        configMap:
+          name: rspub
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: rspub
+spec:
+  rules:
+  - host: rspub.kodo.$Namespace$.cs-spock.cloudappl.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: rspub
+          servicePort: 9433
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rspub
+spec:
+  ports:
+    - name: rspub
+      protocol: TCP
+      port: 9433
+      targetPort: http
+    - name: consulserver
+      protocol: TCP
+      port: 8300
+      targetPort: server
+    - name: consulserflan
+      protocol: TCP
+      port: 8301
+      targetPort: serflan
+    - name: consulrpc
+      protocol: TCP
+      port: 8400
+      targetPort: rpc
+    - name: consuldns
+      protocol: TCP
+      port: 8600
+      targetPort: dns
