@@ -1,0 +1,38 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: regionstat
+spec:
+  replicas: 1
+  template:
+    spec:
+      imagePullSecrets:
+        - name: qn-registry-secret
+      containers:
+      - name: regionstat
+        image: reg.qiniu.com/spock-release-candidates/regionstat:20180720115719-develop-pr659
+        imagePullPolicy: Always
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: AUDITLOG_PATH
+          value: /regionstat/run/auditlog
+        volumeMounts:
+        - name: regionstat
+          mountPath: /regionstat/regionstat.conf
+          subPath: regionstat.conf
+      volumes:
+      - name: regionstat
+        configMap:
+          name: regionstat-configmap
+          items:
+            - key: regionstat
+              path: regionstat.conf

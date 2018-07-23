@@ -66,4 +66,3 @@ spec:
         backend:
           serviceName: mgoroll
           servicePort: 2324
-
