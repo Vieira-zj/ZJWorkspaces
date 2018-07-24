@@ -179,6 +179,12 @@ Execute shell
 #!/bin/bash
 set -ex
 
+echo "***** os system: $LINUX_SYSTEM"
+if [ $LINUX_SYSTEM == "centos" ]; then
+  echo "current, not support deploy on centos, and exit."
+  exit 0
+fi
+
 TEST_ENV="dev"
 cd ${WORKSPACE}/deploy-test && source env.sh
 
