@@ -1,0 +1,146 @@
+###
+kodo-mgoexporter-beta-pipeline
+
+->
+General
+Parameters
+BRANCH : master
+TEST_ENV => beta, dev
+PACKAGE_NAME => Dynamic Parameters (Scriptler) => Script "PackageName" => Parm "PREFIX" : "KODO.TEST"
+
+->
+Source Code Management
+None
+
+->
+Build Triggers
+None
+
+->
+Build Environment
+None
+
+->
+Build
+Triggers/call builds on other projects
+=> kodo-mgoexporter-staging-build => Current build parameters
+=> kodo-mgoexporter-staging-deploy => Current build parameters
+Block until the triggered projects finish their builds
+
+->
+Post-build Actions
+None
+
+
+
+### 
+kodo-mgoexporter-staging-build
+
+->
+General
+Discard old builds => Strategy : Log Rotation => Days to keep builds : 30
+
+Parameters
+BRANCH : master
+PACKAGE_NAME => Dynamic Parameters (Scriptler) => Script "PackageName" => Parm "PREFIX" : "KODO.TEST"
+
+->
+Source Code Management
+Git => https://github.com/percona/mongodb_exporter.git => Credentials : none => Branch Specifier : ${BRANCH} 
+=> Checkout to a sub-dir : ${WORKSPACE}/src/github.com/percona/mongodb_exporter
+Checkout to specific local branch => ${BRANCH}
+=> Shallow clone => Shallow clone depth : 1 => Timeout (in minutes) for clone and fetch operations : 30
+
+Git => git@gitlab.qiniu.io:qbox/deploy-test.git => Credentials : gitlab => Branch Specifier : */master
+=> Checkout to a sub-dir : deploy-test
+=> Shallow clone => Shallow clone depth : 1 => Timeout (in minutes) for clone and fetch operations : 30
+
+->
+Build Triggers
+None
+
+->
+Build Environment
+Color ANSI Console Output => ANSI color map : xterm
+
+->
+Build
+Execute Shell
+#!/bin/bash
+set -ex
+
+export http_proxy=http://10.200.20.61:8118
+export https_proxy=http://10.200.20.61:8118
+
+src_dir="${WORKSPACE}/src/github.com/percona/mongodb_exporter"
+target_dir="${WORKSPACE}/_package"
+
+cd ${WORKSPACE}/deploy-test && source env.sh && setGoEnv
+cd ${src_dir} && make build
+
+cp mongodb_exporter ${target_dir}
+cd ${WORKSPACE} && tar -zcvf ${PACKAGE_NAME} _package
+
+export http_proxy=
+export https_proxy=
+
+set +ex
+
+->
+Post-build Actions
+Archive artifacts => Files to archive : **/${PACKAGE_NAME}
+
+
+
+###
+kodo-mgoexporter-staging-deploy
+
+->
+General
+Discard old builds => Strategy : Log Rotation => Days to keep builds : 30
+
+Parameters
+BUILD_NUMBER => Dynamic Parameters (Scriptler) => Script "Build_Numbers" => Parm "BUILD_JOB_NAME" : "kodo-mgoexporter-staging-build"
+PACKAGE_NAME => inherit from "kodo-mgoexporter-beta-pipeline"
+TEST_ENV => beta, dev
+
+Restrict where this project can be run => "Label Expression" : ANY
+
+->
+Source Code Management
+Git => git@gitlab.qiniu.io:qbox/deploy-test.git => Credentials : gitlab => Branch Specifier : */master
+=> Checkout to a sub-dir : deploy-test
+=> Checkout to specific local branch => master => inherit from "kodo-mgoexporter-beta-pipeline"
+=> Shallow clone => Shallow clone depth : 1 => Timeout (in minutes) for clone and fetch operations : 30
+
+->
+Build Triggers
+None
+
+->
+Build Environment
+Color ANSI Console Output => ANSI color map : xterm
+
+->
+Build
+Copy artifacts from another project => Project name : kodo-mgoexporter-staging-build
+=> Which build => Speicfic build => Build Number : ${BUILD_NUMBER}
+=> Artifacts to copy : ${PACKAGE_NAME}
+
+Execute Shell
+#!/bin/bash
+set -ex
+
+cd ${WORKSPACE}/deploy-test && source env.sh
+
+echo "***** deploy package: ${PACKAGE_NAME}"
+HOST="cs1"
+bin_name="mongodb_exporter"
+
+bs_dist_pkg ${HOST} ${PACKAGE_NAME}
+floy_deploy ${HOST} ${bin_name} ${PACKAGE_NAME}
+remote_supervisorctl "restart" ${bin_name}
+
+->
+Post-build Actions
+Eiditable Email Notification
