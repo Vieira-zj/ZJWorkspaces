@@ -1,0 +1,135 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: io-disk1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ceph
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: io-disk3
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ceph
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: io
+spec:
+  strategy:
+    type:  Recreate
+  replicas: 1
+  template:
+    spec:
+      imagePullSecrets:
+        - name: qn-registry-secret
+      containers:
+      - name: io-consul-z0
+        image: consul
+        imagePullPolicy: Always
+        args:
+            - "agent"
+            - "-server"
+            - "-datacenter=spock_z0"
+            - "-bootstrap-expect=2"
+            - "-retry-join=consul-z0"
+        ports:
+            - name: server
+              containerPort: 8300
+            - name: serflan
+              containerPort: 8301
+            - name: rpc
+              containerPort: 8400
+            - name: dns
+              containerPort: 8600
+      - name: io
+        image: reg.qiniu.com/spock-release-candidates/io:20180408165406-master
+        imagePullPolicy: Always
+        command: ["/io/qboxio"]
+        args: ["-f", "conf/qboxio.conf"]
+        ports:
+        - name: http
+          containerPort: 5000
+        volumeMounts:
+        - name: io
+          mountPath: /io/conf
+        - name: disk1
+          mountPath: /disk1
+        - name: disk3
+          mountPath: /disk3
+      volumes:
+      - name: disk1
+        persistentVolumeClaim:
+            claimName: io-disk1
+      - name: disk3
+        persistentVolumeClaim:
+            claimName: io-disk3
+      - name: io
+        configMap:
+          name: io
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: io
+spec:
+  rules:
+  - host: io.kodo.$Namespace$.cs-spock.cloudappl.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: io
+          servicePort: 5000
+  - host: "*.io.kodo.$Namespace$.cs-spock.cloudappl.com"
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: io
+          servicePort: 5000
+  - host: "*.z0.glb.qiniucdn.com"
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: io
+          servicePort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: io
+spec:
+  ports:
+    - name: io
+      protocol: TCP
+      port: 5000
+      targetPort: http
+    - name: consulserver
+      protocol: TCP
+      port: 8300
+      targetPort: server
+    - name: consulserflan
+      protocol: TCP
+      port: 8301
+      targetPort: serflan
+    - name: consulrpc
+      protocol: TCP
+      port: 8400
+      targetPort: rpc
+    - name: consuldns
+      protocol: TCP
+      port: 8600
+      targetPort: dns
