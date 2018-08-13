@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x -e
+set -ex
 
 # https://jenkins.qiniu.io/job/kodo-redis-build/configure
 REDIS_RELEASE="redis-4.0.7"
@@ -12,7 +12,7 @@ BUILD_DIR="_package"
 
 cd ${WORKSPACE}
 if [ -d "${REDIS_RELEASE}" ]; then
-    rm -rf  ${REDIS_RELEASE}
+  rm -rf  ${REDIS_RELEASE}
 fi
 
 curl -o ${REDIS_DOWNLOAD_FILE} ${REDIS_DOWNLOAD_URL}
@@ -36,4 +36,4 @@ tar -zcvf $PACKAGE_NAME ${BUILD_DIR}
 
 # bs_dist_pkg "cs1" ${PACKAGE_NAME}
 
-set +x +e
+set +ex

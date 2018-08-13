@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x -e
+set -ex
 
 # https://jenkins.qiniu.io/job/kodo-consul-deploy/configure
 CONSUL_RELEASE="1.0.0"
@@ -21,12 +21,12 @@ echo "test env: ${TEST_ENV}"
 
 cd ${WORKSPACE}
 if [ ! -f ${CONSUL_DOWNLOAD_FILE} ]; then
-curl -o ${CONSUL_DOWNLOAD_FILE} ${CONSUL_DOWNLOAD_URL}
+  curl -o ${CONSUL_DOWNLOAD_FILE} ${CONSUL_DOWNLOAD_URL}
 fi
 tar -xzf ${CONSUL_DOWNLOAD_FILE}
 
 if [ -d ${DIRPATH} ]; then
-rm -rf ${DIRPATH}
+  rm -rf ${DIRPATH}
 fi
 mkdir -p "${DIRPATH}/${BUILD_DIR}"
 mv ${BIN_FILE} "${DIRPATH}/${BUILD_DIR}"
@@ -41,4 +41,4 @@ tar zcvf ${WORKSPACE}/${PACKAGE_NAME} ${BUILD_DIR}
 # floy_deploy ${HOST} ${TAGNAME} ${PACKAGE_NAME}
 # remote_supervisorctl "restart" ${TAGNAME}
 
-set +x +e
+set +ex
