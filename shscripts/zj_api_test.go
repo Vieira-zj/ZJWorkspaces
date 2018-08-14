@@ -681,25 +681,28 @@ var _ = Describe("common api test", func() {
 
 		It("xxxx, list files in bucket", func() {
 			user = configs.BucketUser
-			bucket = "urlrew3bucket_z0"
+			bucket = "ftp_dev_test_pub_bucket"
+			isVersion2 := false
 
 			listParam := rsf.ListParam{
 				Bucket:     bucket,
 				Limit:      500,
-				IsVersion2: true,
+				IsVersion2: isVersion2,
 			}
 			resp, _ := rsf.List(user, listParam)
 			Expect(resp.Status()).To(Equal(200))
 
-			var dumpRet rsf.DumpRet
-			resp.Unmarshal(&dumpRet)
+			if !isVersion2 { // version1
+				var dumpRet rsf.DumpRet
+				resp.Unmarshal(&dumpRet)
 
-			marker, _ := util.Decode(util.EncodeType_Base64, dumpRet.Marker)
-			fmt.Printf("marker: %v\n", marker)
+				marker, _ := util.Decode(util.EncodeType_Base64, dumpRet.Marker)
+				fmt.Printf("marker: %v\n", marker)
 
-			fmt.Println("items:")
-			for _, item := range dumpRet.Items {
-				fmt.Printf("%+v\n", item)
+				fmt.Println("items:")
+				for _, item := range dumpRet.Items {
+					fmt.Printf("%+v\n", item)
+				}
 			}
 		})
 
