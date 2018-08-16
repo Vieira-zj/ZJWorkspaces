@@ -1,0 +1,50 @@
+#
+# Created by zhengjn, at 2018-08-16
+# Ref: https://docs.docker.com/compose/compose-file/compose-file-v2
+#
+# mongo replication set: 3 instances (primary, slave, arbiter)
+#
+version: "2"
+
+services:
+  mongo-master:
+    image: mongo:latest
+    container_name: my-mongo-master
+    volumes:
+      - "~/Workspaces/ZJWorkspaces/dockerapps/configs:/etc/mongo"
+      - "~/Workspaces/ZJWorkspaces/dockerapps/data/mongodata/mongo_pri:/data/db"
+    ports:
+      - "27017:27017"
+    command: [ "--config", "/etc/mongo/mongo_primary.config.yaml" ]
+    networks:
+      - zj_com_network
+
+  mongo-slave:
+    image: mongo:latest
+    container_name: my-mongo-slave
+    volumes:
+      - "~/Workspaces/ZJWorkspaces/dockerapps/configs:/etc/mongo"
+      - "~/Workspaces/ZJWorkspaces/dockerapps/data/mongodata/mongo_slave:/data/db"
+    ports:
+      - "27018:27017"
+    depends_on:
+      - mongo-master
+    command: [ "--config", "/etc/mongo/mongo_slave.config.yaml" ]
+    networks:
+      - zj_com_network
+
+  mongo-arbiter:
+    image: mongo:latest
+    container_name: my-mongo-arbiter
+    volumes:
+      - "~/Workspaces/ZJWorkspaces/dockerapps/configs:/etc/mongo"
+      - "~/Workspaces/ZJWorkspaces/dockerapps/data/mongodata/mongo_arb:/data/db"
+    depends_on:
+      - mongo-master
+    command: [ "--config", "/etc/mongo/mongo_arbiter.config.yaml" ]
+    networks:
+      - zj_com_network
+
+networks:
+  zj_com_network:
+    driver: bridge
