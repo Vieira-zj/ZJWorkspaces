@@ -1,0 +1,20 @@
+#
+# configs: single mongodb instance
+# create at 2018-08-18
+#
+systemLog:
+  destination: file
+  path: "/var/log/mongodb/mongod.log"
+  logAppend: true
+  #timeStampFormat: iso8601-utc
+storage:
+  dbPath: "/data/db"
+  journal:
+    enabled: true
+processManagement:
+  fork: false # false for docker
+net:
+  bindIp: 0.0.0.0
+  port: 27017
+setParameter:
+  enableLocalhostAuthBypass: false
