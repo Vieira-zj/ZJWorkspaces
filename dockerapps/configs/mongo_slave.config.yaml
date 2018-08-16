@@ -1,6 +1,9 @@
 #
-# configs: single mongodb instance
+# configs: replication sets (primary, slave, arbiter)
 # create at 2018-08-18
+#
+# replication-options ref:
+# https://docs.mongodb.com/manual/reference/configuration-options/#replication-options
 #
 systemLog:
   destination: file
@@ -12,9 +15,12 @@ storage:
   journal:
     enabled: true
 processManagement:
-  fork: false # false for docker
+  fork: false # for docker
 net:
   bindIp: 0.0.0.0
   port: 27017
 setParameter:
   enableLocalhostAuthBypass: false
+replication:
+  oplogSizeMB: 1024
+  replSetName: rs0

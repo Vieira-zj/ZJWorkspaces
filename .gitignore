@@ -1,3 +1,4 @@
-dockerapps/git-repo/nfs-ganesha
-dockerapps/data/mongodata/
+dockerapps/data/mongodata/mongo_pri
+dockerapps/data/mongodata/mongo_slave
+dockerapps/data/mongodata/mongo_arb
 
