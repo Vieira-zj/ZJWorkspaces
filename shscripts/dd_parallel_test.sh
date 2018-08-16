@@ -4,6 +4,8 @@ set -ex
 cur_path=$(pwd)
 if [ -f $cur_path/logfile ]; then
   echo "" > $cur_path/logfile
+else
+  touch $cur_path/logfile
 fi
 
 # print rw throughput
@@ -20,8 +22,8 @@ for (( i = 0; i < 10; i++ )); do
 done
 
 # get total throughput for all rw
-file_size=`ls -l logfile | awk '{print $5}'`
-while [ $file_size -lt 500 ]; do
+file_size=0
+while [ $file_size -lt 50 ]; do
   sleep 5
   file_size=`ls -l logfile | awk '{print $5}'`
 done
