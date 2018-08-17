@@ -2,7 +2,7 @@
 set -e
 
 for dir in $(ls | grep -E "^mongo"); do
-  echo "dir to be remove ${dir}"
+  echo "mongo data dir be clear ${dir}"
   rm -rf ${dir}/*
 done
 
