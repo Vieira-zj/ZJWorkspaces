@@ -73,6 +73,7 @@ ginkgo -v ${run_cmd}
 # ginkgo -v -focus="xxxxx" biz/rsf
 # ginkgo -v -focus="xxxxx" biz/bucket/uc
 # ginkgo -v -focus="xxxxx" biz/bucket/tblmgr
+# ginkgo -v -focus="xxxxx" biz/bucket/domain
 # ginkgo -v -focus="xxxxx" biz/kmq
 # ginkgo -v -focus="xxxxx" biz/confg
 # ginkgo -v -focus="xxxxx" biz/pfd
@@ -88,9 +89,6 @@ ginkgo -v ${run_cmd}
 # spock
 # ginkgo -v -focus="NewSpockSetUp" src/qiniu.com/qtest/manual
 # ginkgo -v -focus="xxxxx" src/qiniu.com/qtest/manual
-
-# domain
-# ginkgo -v -focus="xxxxx" biz/qboxone/domain
 
 # zj test
 # ginkgo -v -focus="xxxxx" biz/zj
