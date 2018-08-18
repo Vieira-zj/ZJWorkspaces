@@ -1,4 +1,5 @@
 dockerapps/data/mongodata/mongo_pri
 dockerapps/data/mongodata/mongo_slave
 dockerapps/data/mongodata/mongo_arb
+dockerapps/data/mongodata/mongod
 
