@@ -102,7 +102,7 @@ var _ = Describe("common api test", func() {
 
 			It("xxxx, get bucket by domain", func() {
 				user := configs.AdminUser
-				testDomain := "urlrew2.com1.z0.glb.clouddn.com"
+				testDomain := "8gwxx3.com1.test.z0.glb.clouddn.com"
 				resp, err := domain.GetByDomain(user, testDomain)
 				Expect(err).ShouldNot(HaveOccurred())
 				Expect(resp.Status()).Should(Equal(200))
@@ -127,7 +127,7 @@ var _ = Describe("common api test", func() {
 			})
 		})
 
-		Context("test api, publish, list domain", func() {
+		Context("test api, publish / unpublish, list domain", func() {
 
 			user := configs.BucketUser
 
@@ -146,8 +146,20 @@ var _ = Describe("common api test", func() {
 				domain.PublishOnOneFunc(args)
 			})
 
+			It("xxxx, unpublish domain", func() {
+				user := configs.BucketUser
+				testDomain := "8gwxx4.com1.test.z0.glb.clouddn.com"
+
+				args := domain.UnpublishDomainArgsFunc{
+					User:   user,
+					Domain: testDomain,
+					Status: 200,
+				}
+				domain.UnpublishDomainFunc(args)
+			})
+
 			It("xxxx, get bucket domains v1/v2", func() {
-				bucket := "urlrew3bucket_z0"
+				bucket := "publicbucket_z0"
 				args2 := domain.GetDomainsArgsFunc{
 					Args: domain.GetDomainsArgs{
 						Prefix: "/v2",

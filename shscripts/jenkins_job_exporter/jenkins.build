@@ -140,7 +140,29 @@ bin_name="mongodb_exporter"
 bs_dist_pkg ${HOST} ${PACKAGE_NAME}
 floy_deploy ${HOST} ${bin_name} ${PACKAGE_NAME}
 remote_supervisorctl "restart" ${bin_name}
+# custom supervisor.conf
 
 ->
 Post-build Actions
 Eiditable Email Notification
+
+
+
+###
+->
+supervisor.conf
+
+[program:{{.dir}}]
+command=python /etc/supervisord/qboxproxy.py \
+  -p /home/qboxserver/{{.dir}}/_package/run/{{.service}}.pid \
+  -r /home/qboxserver/{{.dir}}/_package/run/{{.service}}.log \
+   -c '/home/qboxserver/{{.dir}}/_package/{{.service}} -mongodb.uri={{.addr}} -web.listen-address=:{{.listenip}}'
+directory=/home/qboxserver/{{.dir}}/_package
+priority=999
+autostart=true
+startsecs=1
+autorestart=true
+user=qboxserver
+
+// {{.var}} define in mongodb_exporter.csv
+
