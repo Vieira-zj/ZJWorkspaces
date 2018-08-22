@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
@@ -106,6 +107,27 @@ var _ = Describe("common api test", func() {
 				resp, err := domain.GetByDomain(user, testDomain)
 				Expect(err).ShouldNot(HaveOccurred())
 				Expect(resp.Status()).Should(Equal(200))
+			})
+
+			It("xxxx, get user buckets", func() {
+				user := configs.BucketUser
+
+				args := tblmgr.V2BucketsArgs{
+					User:   user,
+					Region: os.Getenv("TEST_ZONE"),
+					Line:   false,
+					Global: false,
+				}
+				resp, err := tblmgr.V2Buckets(args)
+				Expect(err).ShouldNot(HaveOccurred())
+				Expect(resp.Status()).To(Equal(200))
+
+				var buckets []tblmgr.BucketEntry
+				err = json.Unmarshal([]byte(resp.RawText()), &buckets)
+				Expect(err).ShouldNot(HaveOccurred())
+				for index, bkt := range buckets {
+					fmt.Printf("index %d, bucket %s\n", index, bkt.Tbl)
+				}
 			})
 
 			It("xxxx, bucket transfer", func() {
@@ -1255,7 +1277,7 @@ var _ = Describe("common api test", func() {
 			reqid := "KCYAAP0KXJQOJRsV"
 			auditPath := " /home/qboxserver/io/_package/run/auditlog/io"
 			// io.GetIOAuditlog()
-			ret, err := util.GetAuditlog(configs.Configs.Host.IO, auditPath, reqid, "")
+			ret, err := util.GetAuditlog(configs.Configs.Host.IO, auditPath, reqid)
 			log.Printf("\naudit log: %s\n", ret)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(ret).To(ContainSubstring("///file-url-rewrite-C6fQBVTHAb"))

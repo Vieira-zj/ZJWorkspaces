@@ -1,0 +1,29 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: cdnrefresh
+spec:
+  replicas: 1
+  template:
+    spec:
+      imagePullSecrets:
+        - name: qn-registry-secret
+      containers:
+      - name: cdnrefresh
+        image: reg.qiniu.com/spock-release-candidates/cdnrefresh:20180706134335-develop-pr633
+        imagePullPolicy: Always
+        env:
+        - name: APP_BIN
+          value: qboxcdnrefresh
+        - name: APP_CFG
+          value: conf/qboxcdnrefresh.conf
+        volumeMounts:
+        - name: cdnrefresh
+          mountPath: /app/conf
+      volumes:
+      - name: cdnrefresh
+        configMap:
+          name: cdnrefresh
+          items:
+            - key: qboxcdnrefresh.conf
+              path: qboxcdnrefresh.conf
