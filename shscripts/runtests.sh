@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x -e
+set -ex
 
 # GINKGO
 # ginkgo <FLAGS> <PACKAGES> -- <PASS-THROUGHS>
@@ -93,5 +93,4 @@ ginkgo -v ${run_cmd}
 # zj test
 # ginkgo -v -focus="xxxxx" biz/zj
 
-
-set +x +e # set config x off
+set +ex # set config x off
