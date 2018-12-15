@@ -24,6 +24,7 @@ alias grep='grep -i --color=always'
 alias superc='supervisorctl -c /usr/local/etc/supervisord.ini'
 alias dk='docker'
 alias dkc='docker-compose'
+alias py='python3'
 # TERMINAL
 #enables colorin the terminal bash shell export
 export CLICOLOR=1
