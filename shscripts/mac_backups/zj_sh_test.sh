@@ -19,4 +19,8 @@ ret=$(func_trim_last_char "testt")
 echo "trim last char results: ${ret}"
 
 
+# ex3, >&2
+ls -l ~/.bash_profile ~/not_exist.file >${HOME}/Downloads/tmp_files/test.out 2>&1
+
+
 set +ex
