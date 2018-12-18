@@ -1,11 +1,11 @@
 #
 # Create at 2018-12-17
-# Build selenium grid to run ui test parallel in headless mode. 
+# Build selenium grid debug (with vnc record enabled) to run ui test parallel. 
 # selenium hub check: http://localhost:4444/wd/hub/status
 #
 # Run commands:
-# $ docker-compose -f selenium-hub-compose.yaml up -d
-# $ docker-compose -f selenium-hub-compose.yaml down
+# $ docker-compose -f selenium-hub-compose-debug.yaml up -d
+# $ docker-compose -f selenium-hub-compose-debug.yaml down
 #
 version: "3"
 
@@ -19,14 +19,14 @@ services:
       - selenium-grid
 
   selenium-node-chrome:
-    image: selenium/node-chrome 
-    container_name: selenium-node-chrome
+    image: selenium/node-chrome-debug 
+    container_name: selenium-node-chrome-debug
     depends_on:
       - selenium-hub
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
-      - START_XVFB=false # disable vnc for headless mode
+      - VNC_NO_PASSWORD=1 # vnc without pwd, uri: 127.0.0.1:5901
     ports:
       - "5901:5900"
     networks:
@@ -34,14 +34,14 @@ services:
     shm_size: 1G
 
   selenium-node-firefox:
-    image: selenium/node-firefox
-    container_name: selenium-node-firefox
+    image: selenium/node-firefox-debug
+    container_name: selenium-node-firefox-debug
     depends_on:
       - selenium-hub
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
-      - START_XVFB=false
+      - VNC_NO_PASSWORD=1
     ports:
       - "5902:5900"
     networks:
