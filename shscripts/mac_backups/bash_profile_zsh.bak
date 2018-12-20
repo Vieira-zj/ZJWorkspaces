@@ -3,8 +3,11 @@ echo 'zhengjin, here'
 # ENV VARS
 export GOROOT="/usr/local/go"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home"
-export ANDROID_HOME="/Users/zhengjin/Library/Android/sdk"
 export CLASS_PATH="$JAVA_HOME/lib"
+export ANDROID_HOME="/Users/zhengjin/Library/Android/sdk"
+export HADOOP_HOME="/usr/local/Cellar/hadoop"
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export HADOOP_LIBEXEC_DIR=${HADOOP_HOME}/libexec
 MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 export LANG="en_US.UTF-8"
 # ENV PATH
