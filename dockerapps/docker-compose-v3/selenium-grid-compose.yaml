@@ -27,8 +27,8 @@ services:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
       - START_XVFB=false # disable vnc for headless mode
-    ports:
-      - "5901:5900"
+    #ports:
+    #  - "5901:5900"
     networks:
       - selenium-grid
     shm_size: 1G
@@ -42,8 +42,8 @@ services:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
       - START_XVFB=false
-    ports:
-      - "5902:5900"
+    #ports:
+    #  - "5902:5900"
     networks:
       - selenium-grid
     shm_size: 1G
