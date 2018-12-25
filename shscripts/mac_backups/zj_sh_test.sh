@@ -20,7 +20,32 @@ echo "trim last char results: ${ret}"
 
 
 # ex3, >&2
-ls -l ~/.bash_profile ~/not_exist.file >${HOME}/Downloads/tmp_files/test.out 2>&1
+# ls -l ~/.bash_profile ~/not_exist.file >${HOME}/Downloads/tmp_files/test.out 2>&1
+
+
+# ex4, read file
+read_lines_fn1() {
+    file="$1"
+    while IFS='=' read -r key value; do
+        echo "${key}=${value}"
+    done < "$file"
+}
+
+read_lines_fn2() {
+    file="$1"
+    cat "$file" | while IFS='=' read -r key value; do
+        echo "${key}=${value}"
+    done
+}
+
+file="${HOME}/Downloads/tmp_files/test.out"
+if [ -f "$file" ]; then
+    echo "$file found and read."
+    #read_lines_fn1 "$file"
+    read_lines_fn2 "$file"
+else
+    echo "$file not found."
+fi
 
 
 set +ex

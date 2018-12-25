@@ -28,6 +28,7 @@ alias tree='tree -N'
 alias superc='supervisorctl -c /usr/local/etc/supervisord.ini'
 alias dk='docker'
 alias dkc='docker-compose'
+alias kc='kubectl'
 alias py='python3'
 # TERMINAL
 #enables colorin the terminal bash shell export
