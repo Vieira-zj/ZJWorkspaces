@@ -1,0 +1,20 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: mock-svc
+  namespace: kube-test-ns
+spec:
+  replicas: 2 
+  selector:
+    matchLabels:
+      app: mock-app
+  template:
+    metadata:
+      labels:
+        app: mock-app
+    spec:
+      containers:
+      - name: mock-svc
+        image: localhost:5000/mock
+        ports:
+        - containerPort: 17891

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-mock-service
+  namespace: kube-test-ns
+  labels:
+    name: kube-mock-service
+spec:
+  ports:
+  - port: 17891
+    targetPort: 17891
+    protocol: TCP
+  selector:
+    app: mock-app
