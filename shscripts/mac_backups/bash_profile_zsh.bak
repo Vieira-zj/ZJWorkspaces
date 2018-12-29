@@ -24,11 +24,13 @@ alias ..='cd ..'
 alias c='clear'
 #alias ps?='ps aux | grep'
 alias grep='grep -i --color=always'
+alias ts='date +%s'
 alias tree='tree -N'
 alias superc='supervisorctl -c /usr/local/etc/supervisord.ini'
 alias dk='docker'
 alias dkc='docker-compose'
 alias kc='kubectl'
+alias kcgetall='kubectl get --all-namespaces'
 alias py='python3'
 # TERMINAL
 #enables colorin the terminal bash shell export

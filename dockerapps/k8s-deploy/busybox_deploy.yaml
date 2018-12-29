@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: busybox-svc
+  name: busybox-app
   namespace: kube-test-ns
 spec:
   replicas: 1
@@ -14,6 +14,6 @@ spec:
         app: busybox-app
     spec:
       containers:
-      - name: busybox-svc
+      - name: busybox-app
         image: localhost:5000/busybox
         command: ["sh", "-c", "while true; do echo 'hello'; sleep 5; done;"]

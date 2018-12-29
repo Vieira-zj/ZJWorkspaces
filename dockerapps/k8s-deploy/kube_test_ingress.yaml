@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test-ingress
+  namespace: kube-test-ns
+  annotations: 
+    kubernets.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: zjtest.mock.com 
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ingress-nginx-lb
+          servicePort: 80
+    http:
+      paths:
+      - path: /index
+        backend:
+          serviceName: mock-service-lb
+          servicePort: 17891
