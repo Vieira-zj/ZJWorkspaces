@@ -1,0 +1,29 @@
+set nocompatible
+syntax on
+set showmode
+set showcmd
+set encoding=utf-8
+set t_Co=256
+
+set autoindent
+set tabstop=2
+set expandtab
+set softtabstop=2
+
+set number
+set cursorline
+set ruler
+
+set showmatch
+set hlsearch
+set ignorecase
+set smartcase
+
+set spell spelllang=en_us
+set noerrorbells
+set visualbell
+set autoread
+
+set wildmenu
+set wildmode=longest:list,full
+
