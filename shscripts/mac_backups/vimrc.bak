@@ -19,7 +19,6 @@ set hlsearch
 set ignorecase
 set smartcase
 
-set spell spelllang=en_us
 set noerrorbells
 set visualbell
 set autoread
