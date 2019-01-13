@@ -7,11 +7,13 @@ version: '3.2'
 
 services:
   zookeeper:
+    container_name: "test-zookeeper"
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
 
   kafka:
+    container_name: "test-kafka"
     image: wurstmeister/kafka
     ports:
       - target: 9094
