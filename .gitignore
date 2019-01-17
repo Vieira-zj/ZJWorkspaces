@@ -3,4 +3,7 @@ dockerapps/data/mongodata/mongo_slave
 dockerapps/data/mongodata/mongo_arb
 dockerapps/data/mongodata/mongod
 
+dockerapps/configs/.DS_Store
 dockerapps/k8s-configs/.DS_Store
+dockerapps/configs/consul_conf/.DS_Store
+
