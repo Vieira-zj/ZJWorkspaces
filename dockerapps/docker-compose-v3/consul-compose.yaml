@@ -1,0 +1,63 @@
+#
+# Create at 2019-01-17, build consul cluster env.
+# 
+# 4 nodes: 3 servers (1 leader, 2 follows) and 1 client. 
+#
+version: '3.2'
+
+services:
+  consul-leader:
+    container_name: "consul-leader"
+    image: bigdata/consul
+    ports:
+      - "8500:8500"
+    environment:
+      CONSUL_BIND_INTERFACE: eth0 # compute bind ip from eth0
+      CONSUL_LOCAL_CONFIG: '{"skip_leave_on_interrupt": true}'
+    volumes:
+      - "consul-data:/consul/data"
+    networks:
+      - consul-net
+    command: "agent --server=true --bootstrap-expect=3 --client=0.0.0.0 -ui" # access outside
+
+  consul-follower1:
+    container_name: "consul-follower1"
+    image: bigdata/consul
+    depends_on: 
+      - consul-leader
+    environment:
+      CONSUL_BIND_INTERFACE: eth0
+      CONSUL_LOCAL_CONFIG: '{"skip_leave_on_interrupt": true}'
+    networks:
+      - consul-net
+    command: "agent --server=true --client=127.0.0.1 --retry-join=consul-leader"
+
+  consul-follower2:
+    container_name: "consul-follower2"
+    image: bigdata/consul
+    depends_on: 
+      - consul-leader
+    environment:
+      CONSUL_BIND_INTERFACE: eth0
+      CONSUL_LOCAL_CONFIG: '{"skip_leave_on_interrupt": true}'
+    networks:
+      - consul-net
+    command: "agent --server=true --client=127.0.0.1 --retry-join=consul-leader"
+
+  consul-client1:
+    container_name: "consul-client1"
+    image: bigdata/consul
+    depends_on: 
+      - consul-leader
+    environment:
+      CONSUL_BIND_INTERFACE: eth0
+      CONSUL_LOCAL_CONFIG: '{"leave_on_terminate": true}'
+    networks:
+      - consul-net
+    command: "agent --server=false --client=127.0.0.1 --retry-join=consul-leader"
+
+networks:
+  consul-net:
+
+volumes:
+  consul-data:
