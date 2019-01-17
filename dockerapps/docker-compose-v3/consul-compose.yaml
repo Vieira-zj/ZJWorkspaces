@@ -2,6 +2,8 @@
 # Create at 2019-01-17, build consul cluster env.
 # 
 # 4 nodes: 3 servers (1 leader, 2 follows) and 1 client. 
+# services setup: cd dockerapps/configs/consul_conf;sh consul-setup.sh >/dev/null
+# consul manager ui: http://localhost:8500
 #
 version: '3.2'
 
@@ -14,8 +16,6 @@ services:
     environment:
       CONSUL_BIND_INTERFACE: eth0 # compute bind ip from eth0
       CONSUL_LOCAL_CONFIG: '{"skip_leave_on_interrupt": true}'
-    volumes:
-      - "consul-data:/consul/data"
     networks:
       - consul-net
     command: "agent --server=true --bootstrap-expect=3 --client=0.0.0.0 -ui" # access outside
@@ -59,5 +59,3 @@ services:
 networks:
   consul-net:
 
-volumes:
-  consul-data:

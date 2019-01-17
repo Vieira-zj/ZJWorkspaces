@@ -1,0 +1,209 @@
+[
+  {
+    "Node": {
+      "ID": "c29b23f6-079e-6f13-9c7a-6604ef4ea9ac",
+      "Node": "0b5eab7446da",
+      "Address": "172.30.0.3",
+      "Datacenter": "dc1",
+      "TaggedAddresses": {
+        "lan": "172.30.0.3",
+        "wan": "172.30.0.3"
+      },
+      "Meta": {
+        "consul-network-segment": ""
+      },
+      "CreateIndex": 5,
+      "ModifyIndex": 9
+    },
+    "Service": {
+      "ID": "mock3",
+      "Service": "mock",
+      "Tags": [
+        "primary"
+      ],
+      "Address": "consul-node3",
+      "Meta": null,
+      "Port": 17891,
+      "Weights": {
+        "Passing": 1,
+        "Warning": 1
+      },
+      "EnableTagOverride": false,
+      "ProxyDestination": "",
+      "Proxy": {},
+      "Connect": {},
+      "CreateIndex": 19,
+      "ModifyIndex": 19
+    },
+    "Checks": [
+      {
+        "Node": "0b5eab7446da",
+        "CheckID": "serfHealth",
+        "Name": "Serf Health Status",
+        "Status": "passing",
+        "Notes": "",
+        "Output": "Agent alive and reachable",
+        "ServiceID": "",
+        "ServiceName": "",
+        "ServiceTags": [],
+        "Definition": {},
+        "CreateIndex": 5,
+        "ModifyIndex": 5
+      },
+      {
+        "Node": "0b5eab7446da",
+        "CheckID": "service:mock3",
+        "Name": "Service 'mock' check",
+        "Status": "passing",
+        "Notes": "",
+        "Output": "HTTP Get http://localhost:17891/index: 200 OK Output: from Host: 0b5eab7446da\nfrom Mock01, mock returned text",
+        "ServiceID": "mock3",
+        "ServiceName": "mock",
+        "ServiceTags": [
+          "primary"
+        ],
+        "Definition": {},
+        "CreateIndex": 19,
+        "ModifyIndex": 20
+      }
+    ]
+  },
+  {
+    "Node": {
+      "ID": "dae68176-4fbc-b5b8-9934-2c81675e5e4c",
+      "Node": "0db15828c1db",
+      "Address": "172.30.0.4",
+      "Datacenter": "dc1",
+      "TaggedAddresses": {
+        "lan": "172.30.0.4",
+        "wan": "172.30.0.4"
+      },
+      "Meta": {
+        "consul-network-segment": ""
+      },
+      "CreateIndex": 8,
+      "ModifyIndex": 10
+    },
+    "Service": {
+      "ID": "mock2",
+      "Service": "mock",
+      "Tags": [
+        "primary"
+      ],
+      "Address": "consul-node2",
+      "Meta": null,
+      "Port": 17891,
+      "Weights": {
+        "Passing": 1,
+        "Warning": 1
+      },
+      "EnableTagOverride": false,
+      "ProxyDestination": "",
+      "Proxy": {},
+      "Connect": {},
+      "CreateIndex": 16,
+      "ModifyIndex": 16
+    },
+    "Checks": [
+      {
+        "Node": "0db15828c1db",
+        "CheckID": "serfHealth",
+        "Name": "Serf Health Status",
+        "Status": "passing",
+        "Notes": "",
+        "Output": "Agent alive and reachable",
+        "ServiceID": "",
+        "ServiceName": "",
+        "ServiceTags": [],
+        "Definition": {},
+        "CreateIndex": 8,
+        "ModifyIndex": 8
+      },
+      {
+        "Node": "0db15828c1db",
+        "CheckID": "service:mock2",
+        "Name": "Service 'mock' check",
+        "Status": "passing",
+        "Notes": "",
+        "Output": "HTTP Get http://localhost:17891/index: 200 OK Output: from Host: 0db15828c1db\nfrom Mock01, mock returned text",
+        "ServiceID": "mock2",
+        "ServiceName": "mock",
+        "ServiceTags": [
+          "primary"
+        ],
+        "Definition": {},
+        "CreateIndex": 16,
+        "ModifyIndex": 18
+      }
+    ]
+  },
+  {
+    "Node": {
+      "ID": "4e899ca8-451f-45f7-a532-d782abe4bce9",
+      "Node": "3606f27cddde",
+      "Address": "172.30.0.5",
+      "Datacenter": "dc1",
+      "TaggedAddresses": {
+        "lan": "172.30.0.5",
+        "wan": "172.30.0.5"
+      },
+      "Meta": {
+        "consul-network-segment": ""
+      },
+      "CreateIndex": 6,
+      "ModifyIndex": 12
+    },
+    "Service": {
+      "ID": "mock1",
+      "Service": "mock",
+      "Tags": [
+        "primary"
+      ],
+      "Address": "consul-node1",
+      "Meta": null,
+      "Port": 17891,
+      "Weights": {
+        "Passing": 1,
+        "Warning": 1
+      },
+      "EnableTagOverride": false,
+      "ProxyDestination": "",
+      "Proxy": {},
+      "Connect": {},
+      "CreateIndex": 14,
+      "ModifyIndex": 14
+    },
+    "Checks": [
+      {
+        "Node": "3606f27cddde",
+        "CheckID": "serfHealth",
+        "Name": "Serf Health Status",
+        "Status": "passing",
+        "Notes": "",
+        "Output": "Agent alive and reachable",
+        "ServiceID": "",
+        "ServiceName": "",
+        "ServiceTags": [],
+        "Definition": {},
+        "CreateIndex": 6,
+        "ModifyIndex": 6
+      },
+      {
+        "Node": "3606f27cddde",
+        "CheckID": "service:mock1",
+        "Name": "Service 'mock' check",
+        "Status": "passing",
+        "Notes": "",
+        "Output": "HTTP Get http://localhost:17891/index: 200 OK Output: from Host: 3606f27cddde\nfrom Mock01, mock returned text",
+        "ServiceID": "mock1",
+        "ServiceName": "mock",
+        "ServiceTags": [
+          "primary"
+        ],
+        "Definition": {},
+        "CreateIndex": 14,
+        "ModifyIndex": 17
+      }
+    ]
+  }
+]

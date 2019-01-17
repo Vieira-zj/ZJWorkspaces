@@ -11,8 +11,8 @@ services:
     image: redis:latest
     container_name: my-redis-master
     volumes:
-      - "~/Workspaces/ZJWorkspaces/dockerapps/configs/redis.conf:/usr/local/etc/redis/redis.conf"
-      - "~/Workspaces/ZJWorkspaces/dockerapps/data/redisdump:/data"
+      - "${HOME}/Workspaces/ZJWorkspaces/dockerapps/configs/redis_conf/redis.conf:/usr/local/etc/redis/redis.conf"
+      - "${HOME}/Workspaces/ZJWorkspaces/dockerapps/data/redisdump:/data"
     ports:
       - "6379:6379"
     command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
@@ -23,7 +23,7 @@ services:
     image: redis
     container_name: my-redis-slave
     volumes:
-      - "~/Workspaces/ZJWorkspaces/dockerapps/configs/redis_slave.conf:/usr/local/etc/redis/redis_slave.conf"
+      - "${HOME}/Workspaces/ZJWorkspaces/dockerapps/configs/redis_conf/redis_slave.conf:/usr/local/etc/redis/redis_slave.conf"
     ports:
       - "6380:6379"
     depends_on:
