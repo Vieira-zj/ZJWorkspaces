@@ -1,0 +1,9 @@
+#
+# Create at 2019-01-21, build namespace for test.
+#
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kc-test-ns
+  labels:
+    name: kc-test-ns

@@ -1,0 +1,36 @@
+#
+# Created at 2019-01-21, build busybox pod test demo.
+#
+# commands:
+# kc create -f busybox_pod_deploy.yml
+
+# kc get pod -n kc-test-ns -o wide
+# kc get pod busybox-test-app-pod -n kc-test-ns -o yaml
+# kc describe pod busybox-test-app-pod -n kc-test-ns
+# kc logs busybox-test-app-pod -n kc-test-ns
+
+# kc exec -it busybox-test-app-pod -n kc-test-ns sh
+#/# echo $DEMO_GREETING
+#/# echo $DEMO_FAREWELL
+
+# kc edit pod busybox-test-app-pod -n kc-test-ns
+# kc delete pod busybox-test-app-pod -n kc-test-ns --grace-period=10
+#
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-test-app-pod 
+  namespace: kc-test-ns
+  labels:
+    env: test
+spec:
+  containers:
+  - name: busybox-test-app
+    image: localhost:5000/busybox
+    imagePullPolicy: IfNotPresent
+    command: ["sh", "-c", "while true; do echo 'busybox is running ...'; sleep 5; done;"]
+    env: 
+    - name: DEMO_GREETING 
+      value: "Hello from the environment" 
+    - name: DEMO_FAREWELL 
+      value: "Such a sweet sorrow"
