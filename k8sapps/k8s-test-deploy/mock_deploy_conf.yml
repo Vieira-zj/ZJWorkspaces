@@ -1,0 +1,25 @@
+#
+# Create at 2019-01-21, build busybox deployment with 3 replicate set.
+# 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mock-app-deploy
+  namespace: kc-test-ns
+  labels:
+    app: mock-app-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mock-app
+  template:
+    metadata:
+      labels:
+        app: mock-app
+    spec:
+      containers:
+      - name: mock-app
+        image: localhost:5000/mock
+        ports:
+        - containerPort: 17891

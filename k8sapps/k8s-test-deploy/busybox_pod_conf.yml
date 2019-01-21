@@ -1,0 +1,21 @@
+#
+# Created at 2019-01-21, build busybox pod test demo.
+#
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-app-pod 
+  namespace: kc-test-ns
+  labels:
+    env: test
+spec:
+  containers:
+  - name: busybox-app
+    image: localhost:5000/busybox
+    imagePullPolicy: IfNotPresent
+    command: ["sh", "-c", "while true; do echo 'busybox is running ...'; sleep 5; done;"]
+    env: 
+    - name: DEMO_GREETING 
+      value: "Hello from the environment" 
+    - name: DEMO_FAREWELL 
+      value: "Such a sweet sorrow"
