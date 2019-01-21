@@ -1,0 +1,42 @@
+#
+# Create at 2019-01-21, build mock service alone with deployment backend. 
+# 
+kind: Service 
+apiVersion: v1
+metadata:
+  name: mock-app-service
+  namespace: kc-test-ns
+  labels:
+    app: mock-app-service
+spec:
+  type: NodePort  # "LoadBalancer" not support on docker for mac
+  ports:
+  - protocol: TCP
+    port: 17891   # 暴露在clusterip上的端口, 供集群内部使用
+    targetPort: 17891  # pod上的端口
+  selector:
+    app: mock-app  # select pods
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mock-app-deploy
+  namespace: kc-test-ns
+  labels:
+    app: mock-app-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mock-app
+  template:
+    metadata:
+      labels:
+        app: mock-app
+    spec:
+      containers:
+      - name: mock-app
+        image: localhost:5000/mock
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 17891

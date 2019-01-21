@@ -1,5 +1,5 @@
 #
-# Create at 2019-01-21, build busybox deployment with 3 replicate set.
+# Create at 2019-01-21, build mockserver deployment with 3 replicate set.
 # 
 apiVersion: apps/v1
 kind: Deployment
@@ -21,5 +21,6 @@ spec:
       containers:
       - name: mock-app
         image: localhost:5000/mock
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 17891
