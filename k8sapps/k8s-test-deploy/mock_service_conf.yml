@@ -9,13 +9,14 @@ metadata:
   labels:
     app: mock-app-service
 spec:
-  type: NodePort  # "LoadBalancer" not support on docker for mac
+  type: NodePort  # "LoadBalancer" not support on docker-desktop
   ports:
   - protocol: TCP
     port: 17891   # 暴露在clusterip上的端口, 供集群内部使用
     targetPort: 17891  # pod上的端口
   selector:
     app: mock-app  # select pods
+
 ---
 apiVersion: apps/v1
 kind: Deployment
