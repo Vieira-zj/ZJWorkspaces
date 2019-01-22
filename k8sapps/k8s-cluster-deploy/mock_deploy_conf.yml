@@ -1,11 +1,11 @@
 #
-# Create at 2019-01-21, build mockserver deployment with 3 replicate set.
+# Create at 2019-01-21, build mockserver deployment with 2 replicate set.
 # 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mock-app-deploy
-  namespace: kc-test-ns
+  namespace: k8s-test-ns
   labels:
     app: mock-app-deploy
 spec:

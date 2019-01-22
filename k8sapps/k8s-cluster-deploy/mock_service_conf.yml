@@ -1,11 +1,11 @@
 #
-# Create at 2019-01-21, build mock service alone with deployment backend. 
+# Create at 2019-01-21, build mock service alone with 2 instances deployment backend. 
 # 
 kind: Service 
 apiVersion: v1
 metadata:
   name: mock-app-service
-  namespace: kc-test-ns
+  namespace: k8s-test-ns
   labels:
     app: mock-app-service
 spec:
@@ -22,7 +22,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mock-app-deploy
-  namespace: kc-test-ns
+  namespace: k8s-test-ns
   labels:
     app: mock-app-deploy
 spec:
@@ -41,3 +41,5 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 17891
+
+---

@@ -1,14 +1,18 @@
+#
+# NGINX Ingress Controller
+# Refer: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml
+#
 kind: Service
 apiVersion: v1
 metadata:
-  name: ingress-nginx-nodeport
-  namespace: kube-test-ns
+  name: ingress-nginx
+  namespace: ingress-nginx
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 spec:
   externalTrafficPolicy: Local
-  type: NodePort
+  type: LoadBalancer
   selector:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
@@ -16,10 +20,8 @@ spec:
     - name: http
       port: 80
       targetPort: http
-      nodePort: 32080
     - name: https
       port: 443
       targetPort: https
-      nodePort: 32443
 
 ---

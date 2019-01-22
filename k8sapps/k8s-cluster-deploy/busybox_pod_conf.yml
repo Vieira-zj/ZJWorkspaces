@@ -1,11 +1,11 @@
 #
-# Created at 2019-01-21, build busybox pod test demo.
+# Created at 2019-01-21, build busybox pod for debug k8s env. 
 #
 apiVersion: v1
 kind: Pod
 metadata:
   name: busybox-app-pod 
-  namespace: kc-test-ns
+  namespace: k8s-test-ns
   labels:
     env: test
 spec:

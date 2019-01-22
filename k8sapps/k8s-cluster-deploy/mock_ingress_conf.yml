@@ -1,11 +1,11 @@
 #
-# Create at 2019-01-22, build mock ingress env.
+# Create at 2019-01-22, build ingress network for mockserver.
 #
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: mock-app-ingress
-  namespace: kc-test-ns
+  namespace: k8s-test-ns
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -16,14 +16,14 @@ spec:
       - backend:
           serviceName: mock-app-service
           servicePort: 17891
-#       path: /mock
+        path: /mock
 
 ---
 kind: Service 
 apiVersion: v1
 metadata:
   name: mock-app-service
-  namespace: kc-test-ns
+  namespace: k8s-test-ns
   labels:
     app: mock-app-service
 spec:
@@ -40,7 +40,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mock-app-deploy
-  namespace: kc-test-ns
+  namespace: k8s-test-ns
   labels:
     app: mock-app-deploy
 spec:
@@ -59,3 +59,5 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 17891
+
+---
