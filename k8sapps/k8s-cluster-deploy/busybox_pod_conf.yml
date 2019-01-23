@@ -14,21 +14,31 @@ spec:
   - name: busybox-app
     image: localhost:5000/busybox
     imagePullPolicy: IfNotPresent
-    command: ["sh", "-c", "while true; do echo 'busybox is running ...'; sleep 5; done;"]
+    command: ["sh", "-c", "while true; do echo ${KEY_01} ${KEY_02}', busybox is running ...'; sleep 5; done;"]
     env: 
     - name: DEMO_GREETING 
       value: "Hello from the environment" 
     - name: DEMO_FAREWELL 
       value: "Such a sweet sorrow"
-    - name: PROPERTY_01 
+    - name: KEY_01 
       valueFrom:
         configMapKeyRef:
           name: k8s-test-config 
-          key: property.1 
-    - name: PROPERTY_02
+          key: key.1 
+    - name: KEY_02
       valueFrom:
         configMapKeyRef:
           name: k8s-test-config
-          key: property.2
+          key: key.2
+    volumeMounts:
+    - name: config-vol
+      mountPath: /etc/config
+  volumes:
+  - name: config-vol
+    configMap:
+      name: k8s-test-config
+      items:
+      - key: app.properties
+        path: properties
 
 ---

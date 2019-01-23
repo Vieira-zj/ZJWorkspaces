@@ -9,11 +9,11 @@ metadata:
   namespace: k8s-test-ns
 data:
   # example of a simple property defined using --from-literal
-  property.1: hello
-  property.2: world
+  key.1: hello
+  key.2: world
   # example of a complex property defined using --from-file
-#  example.property.file: 
-#    property.1=value-1
-#    property.2=value-2
+  app.properties: 
+    property.1=value1
+    property.2=value2
 
 ---
