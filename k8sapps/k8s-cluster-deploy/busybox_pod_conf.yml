@@ -9,6 +9,7 @@ metadata:
   labels:
     env: test
 spec:
+  restartPolicy: Always 
   containers:
   - name: busybox-app
     image: localhost:5000/busybox
@@ -19,3 +20,15 @@ spec:
       value: "Hello from the environment" 
     - name: DEMO_FAREWELL 
       value: "Such a sweet sorrow"
+    - name: PROPERTY_01 
+      valueFrom:
+        configMapKeyRef:
+          name: k8s-test-config 
+          key: property.1 
+    - name: PROPERTY_02
+      valueFrom:
+        configMapKeyRef:
+          name: k8s-test-config
+          key: property.2
+
+---

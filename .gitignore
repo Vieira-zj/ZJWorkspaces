@@ -7,4 +7,5 @@ dockerapps/configs/.DS_Store
 dockerapps/k8s-configs/.DS_Store
 dockerapps/configs/consul_conf/.DS_Store
 k8sapps/.DS_Store
+k8sapps/k8s-cluster-deploy/.DS_Store
 
