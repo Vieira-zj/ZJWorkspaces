@@ -1,0 +1,18 @@
+#
+# Create at 2019-01-27, build cluster role bind: cluster-pods-reader (all pods) => zhengjin
+#
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  creationTimestamp: null
+  name: zhengjin-read-all-pods
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-pods-reader
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: zhengjin
+
+---
