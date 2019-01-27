@@ -1,0 +1,29 @@
+#
+# Create at 2019-01-27, build ingress (by hosts) for hello-world and hola-mundo echo servers.
+#
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: echo-hosts-ingress
+  namespace: k8s-test-ns
+  annotations:
+#   kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - host: k8s.gbexample.com 
+    http:
+      paths:
+      - path: /?(.*)
+        backend:
+          serviceName: hello-world
+          servicePort: 80
+  - host: k8s.esexample.com
+    http:
+      paths:
+      - path: /?(.*)
+        backend:
+          serviceName: hola-mundo
+          servicePort: 80
+
+---
