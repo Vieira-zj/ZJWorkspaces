@@ -31,8 +31,11 @@ spec:
             path: /healthz
             port: 8080
             scheme: HTTP
+            httpHeaders:
+            - name: X-Custom-Header
+              value: liveness-probe
           initialDelaySeconds: 30
-          timeoutSeconds: 5
+          timeoutSeconds: 10
         ports:
         - containerPort: 8080
         resources:

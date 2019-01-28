@@ -59,5 +59,14 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 17891
+        livenessProbe:
+          httpGet:
+            path: /index
+            port: 17891 
+            httpHeaders:
+            - name: X-Custom-Header
+              value: liveness-probe
+          initialDelaySeconds: 5
+          periodSeconds: 10
 
 ---
