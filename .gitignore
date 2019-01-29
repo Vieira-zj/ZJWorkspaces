@@ -9,8 +9,9 @@ dockerapps/data/granfna/
 
 dockerapps/.DS_Store
 dockerapps/configs/.DS_Store
-dockerapps/k8s-configs/.DS_Store
 dockerapps/configs/consul_conf/.DS_Store
 dockerapps/configs/prometheus_conf/.DS_Store
+dockerapps/docker-compose-v3/.DS_Store
+
 k8sapps/.DS_Store
 k8sapps/k8s-cluster-deploy/.DS_Store

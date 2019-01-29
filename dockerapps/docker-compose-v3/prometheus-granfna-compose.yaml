@@ -1,5 +1,9 @@
 #
-# Create at 2019-01-28, build prometheus + alertmanager + 2 nodeexporters env.
+# Create at 2019-01-28, build granfna + prometheus + alertmanager + 2 nodeexporters env.
+#
+# prometheus: http://localhost:9090/graph
+# alertmanager: http://localhost:9093/#/alerts
+# granfna: http://localhost:3000/
 #
 version: "3"
 
