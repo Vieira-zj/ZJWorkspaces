@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -exu
 
 # ex1, sub str
 tmp_str="hello world"
@@ -25,13 +25,21 @@ echo "trim last char results: ${ret}"
 
 # ex4, read file
 read_lines_fn1() {
+    sum=1
+    cat $1 | while read line; do
+        echo "output line ${sum}: ${line}"
+        sum=$((sum+1))
+    done
+}
+
+read_lines_fn2() {
     file="$1"
     while IFS='=' read -r key value; do
         echo "${key}=${value}"
     done < "$file"
 }
 
-read_lines_fn2() {
+read_lines_fn3() {
     file="$1"
     cat "$file" | while IFS='=' read -r key value; do
         echo "${key}=${value}"
@@ -41,11 +49,25 @@ read_lines_fn2() {
 file="${HOME}/Downloads/tmp_files/test.out"
 if [ -f "$file" ]; then
     echo "$file found and read."
-    #read_lines_fn1 "$file"
-    read_lines_fn2 "$file"
+    read_lines_fn1 $file
+    #read_lines_fn2 "$file"
+    #read_lines_fn3 "$file"
 else
     echo "$file not found."
 fi
 
 
-set +ex
+# ex5, iterator on array
+tmp_array=(v1 v2 v3)
+echo "array length: ${#tmp_array[*]}"
+for value in ${tmp_array[*]}; do
+    echo "array value: ${value}"
+done
+
+for file in $(find /Users/zhengjin/Downloads/tmp_files/ -name "*.txt" -type f); do
+   echo "text file: ${file}"
+   echo "file stat: $(stat ${file})"
+done
+
+
+set +exu
