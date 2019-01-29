@@ -1,9 +1,19 @@
 #
-# Create at 2019-01-28, build prometheus + alertmanager + nodeexporter env.
+# Create at 2019-01-28, build prometheus + alertmanager + 2 nodeexporters env.
 #
 version: "3"
 
 services:
+  granfna:
+    image: grafana/grafana
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    volumes:
+      - ${HOME}/Workspaces/zj_work_workspace/dockerapps/data/granfna:/var/lib/grafana
+
   prometheus:
     # use custom prometheus.yml and alert.rules
     image: prom/prometheus:latest

@@ -2,9 +2,12 @@ dockerapps/data/mongodata/mongo_pri
 dockerapps/data/mongodata/mongo_slave
 dockerapps/data/mongodata/mongo_arb
 dockerapps/data/mongodata/mongod
-dockerapps/data/prometheus/
-dockerapps/data/alertmanager/
 
+dockerapps/data/alertmanager/
+dockerapps/data/prometheus/
+dockerapps/data/granfna/
+
+dockerapps/.DS_Store
 dockerapps/configs/.DS_Store
 dockerapps/k8s-configs/.DS_Store
 dockerapps/configs/consul_conf/.DS_Store
