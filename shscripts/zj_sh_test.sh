@@ -58,13 +58,18 @@ fi
 
 
 # ex5, iterator on array
+tmp_values="v1/k1 v2/k1 v1/k2 v1/k3"
+for value in ${tmp_values}; do
+    echo "value: $(echo $value | awk -F '/' '{print $2}')"
+done
+
 tmp_array=(v1 v2 v3)
 echo "array length: ${#tmp_array[*]}"
 for value in ${tmp_array[*]}; do
     echo "array value: ${value}"
 done
 
-for file in $(find /Users/zhengjin/Downloads/tmp_files/ -name "*.txt" -type f); do
+for file in $(find $HOME/Downloads/tmp_files/ -name "*.txt" -type f); do
    echo "text file: ${file}"
    echo "file stat: $(stat ${file})"
 done
