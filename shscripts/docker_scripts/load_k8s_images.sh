@@ -1,7 +1,7 @@
 #/bin/bash
 set -ex
  
-file="./images.properties"
+file="./images.v2.properties"
  
 if [ -f "$file" ]; then
   echo "$file found."
