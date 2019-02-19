@@ -1,6 +1,7 @@
 echo 'zhengjin, here'
 # The original version is saved in .bash_profile.pysave
 # ENV VARS
+export LANG="en_US.UTF-8"
 export GOROOT="/usr/local/go"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home"
 export CLASS_PATH="$JAVA_HOME/lib"
@@ -8,8 +9,9 @@ export ANDROID_HOME="/Users/zhengjin/Library/Android/sdk"
 export HADOOP_HOME="/usr/local/Cellar/hadoop"
 export HADOOP_HDFS_HOME=$HADOOP_HOME
 export HADOOP_LIBEXEC_DIR=${HADOOP_HOME}/libexec
+#export HADOOP_OPTS="$HADOOP_OPTS -Djava.library.path=$HADOOP_HOME/lib/"
+#export HADOOP_COMMON_LIB_NATIVE_DIR="$HADOOP_HOME/lib/native64/"
 MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
-export LANG="en_US.UTF-8"
 # ENV PATH
 #PATH=${PATH}:"/Library/Frameworks/Python.framework/Versions/3.6/bin"
 PATH=${PATH}:"${GOROOT}/bin"
@@ -27,12 +29,13 @@ alias grep='grep -i --color=always'
 alias ts='date +%s'
 alias tree='tree -N'
 alias superc='supervisorctl -c /usr/local/etc/supervisord.ini'
+alias py='python3'
 alias dk='docker'
 alias dkimgs='docker images | sort'
 alias dkc='docker-compose'
 alias kc='kubectl'
 alias kcgetall='kubectl get --all-namespaces'
-alias py='python3'
+alias minikubest='minikube start --registry-mirror=https://registry.docker-cn.com --kubernetes-version v1.12.1'
 # TERMINAL
 #enables colorin the terminal bash shell export
 export CLICOLOR=1
@@ -66,6 +69,6 @@ tarc() { tar czvf "$(trimlast $1).tar.gz" "$1";}
 tarx() { tar xzvf $1;}
 tarl() { tar tvf $1;}
 dkip() { docker inspect --format '{{ .NetworkSettings.IPAddress }}' $1;}
-dklog() { docker exec -it $1 sh;}
-cpcs1() { scp $1 qboxserver@10.200.20.21:~/zhengjin/;}
+dklogin() { docker exec -it $1 sh;}
 kubelist() { kubectl get pods -n spock-public -o=custom-columns=NameSpace:.metadata.namespace,NAME:.metadata.name,CONTAINERS:.spec.containers[*].name|grep -E "name|$1";}
+cpcs1() { scp $1 qboxserver@10.200.20.21:~/zhengjin/;}
