@@ -1,0 +1,9 @@
+#
+# Create at 2019-02-21, build namespace for test.
+#
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mini-test-ns
+  labels:
+    name: mini-test-ns
