@@ -54,6 +54,9 @@ services:
     depends_on:
       - redis
     environment:
-      - REDIS_ADDR=redis://redis:6379
+      - REDIS_ADDR=redis:6379
+    command:
+      - "./redis_exporter"
+      - "-redis.addr=redis:6379"
 #   ports:
 #     - "9121:9121"

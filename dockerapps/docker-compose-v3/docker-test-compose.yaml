@@ -1,0 +1,35 @@
+#
+# Create at 2018-12-22, docker compose test demo.
+#
+version: "3"
+
+services:
+  service-busybox:
+    image: busybox 
+    container_name: svc_busybox 
+    volumes:
+      - "testdata:/tmp/docker"
+    networks:
+      - testnet
+    environment:
+      - URL1="http://docker.test1.com"  # bad
+      - URL2=http://docker.test2.com  # good
+    command: [/bin/sh, -c, "while true; do echo 'hello busybox'; sleep 10; done;"]
+
+  service-alpine:
+    image: alpine
+    container_name: svc_alpine
+    volumes:
+      - "testdata:/tmp/docker"
+    networks:
+      - testnet
+    command: sh -c "while true; do echo 'hello alpine'; sleep 10; done;"
+
+# if not set, docker create a default bridge network "docker-compose-v3_default"
+networks:
+  testnet:
+    driver: bridge
+
+# data volumes, share data between containers
+volumes:
+  testdata:
