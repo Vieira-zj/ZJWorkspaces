@@ -1,0 +1,29 @@
+global:  # 全局设置，可以被覆盖
+  scrape_interval: 15s  # 默认值为 15s, 用于设置每次数据收集的间隔
+  scrape_timeout: 15s  # scrape_timeout is set to the global default (10s)
+
+  external_labels:  # 所有时间序列和警告与外部通信时用的外部标签
+    monitor: 'codelab-monitor'
+
+rule_files:  # 警告规则设置文件
+  - '/etc/prometheus/prometheus.alert.rules'
+
+# 用于配置 scrape 的 endpoint, 配置需要 scrape 的 targets 以及相应的参数
+scrape_configs: 
+  # The job name is added as a label "job=<job_name>" to any timeseries scraped from this config.
+  - job_name: 'prometheus'  # 一定要全局唯一, 采集 prometheus 自身的 metrics
+    # 覆盖全局的 scrape_interval
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["prometheus:9090"]
+
+  - job_name: 'node_exporter'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['node_exporter:9100']
+
+  - job_name: 'redis_exporter'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['redis_exporter:9121']
+
