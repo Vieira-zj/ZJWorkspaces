@@ -15,7 +15,7 @@ spec:
     port: 17891   # 暴露在clusterip上的端口, 供集群内部使用
     targetPort: 17891  # pod上的端口
   selector:
-    app: mock-app  # select pods
+    app: mock-app  # select matched "metadata.labels" on pod
 
 ---
 apiVersion: apps/v1

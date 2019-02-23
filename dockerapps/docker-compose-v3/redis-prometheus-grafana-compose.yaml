@@ -24,12 +24,14 @@ services:
       - redis
       - redis_exporter
       - node_exporter
-    volumes:
-      - ${HOME}/Workspaces/zj_work_workspace/dockerapps/configs/prometheus_conf:/etc/prometheus
-      - ${HOME}/Workspaces/zj_work_workspace/dockerapps/data/prometheus:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus2.yml"
       - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+    volumes:
+      - ${HOME}/Workspaces/zj_work_workspace/dockerapps/configs/prometheus_conf:/etc/prometheus
+      - ${HOME}/Workspaces/zj_work_workspace/dockerapps/data/prometheus:/prometheus
     ports:
       - "9090:9090"
 
