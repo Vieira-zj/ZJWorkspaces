@@ -5,7 +5,7 @@
 # Update kind from statefulset to deployment.
 #
 apiVersion: apps/v1
-kind: Deployment 
+kind: StatefulSet 
 metadata:
   name: prometheus
   namespace: kube-system
@@ -43,7 +43,7 @@ spec:
           subPath: ""
       containers:
         - name: prometheus-server-configmap-reload
-          image: "jimmidyson/configmap-reload:v0.1"
+          image: "jimmidyson/configmap-reload:v0.2.2"
           imagePullPolicy: "IfNotPresent"
           args:
             - --volume-dir=/etc/config
