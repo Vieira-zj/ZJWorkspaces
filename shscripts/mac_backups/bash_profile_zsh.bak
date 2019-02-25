@@ -27,7 +27,7 @@ alias c='clear'
 #alias ps?='ps aux | grep'
 alias grep='grep -i --color=always'
 alias ts='date +%s'
-alias tree='tree -N'
+alias tree='tree -N -L'
 alias superc='supervisorctl -c /usr/local/etc/supervisord.ini'
 alias py='python3'
 alias dk='docker'
@@ -35,7 +35,8 @@ alias dkimgs='docker images | sort'
 alias dkc='docker-compose'
 alias kc='kubectl'
 alias kcgetall='kubectl get --all-namespaces'
-alias minikubest='minikube start --registry-mirror=https://registry.docker-cn.com --kubernetes-version v1.12.1'
+alias ministart='minikube start --registry-mirror=https://registry.docker-cn.com --kubernetes-version v1.12.1'
+alias setminidkenv='eval $(minikube docker-env)'
 # TERMINAL
 #enables colorin the terminal bash shell export
 export CLICOLOR=1
