@@ -1,0 +1,25 @@
+#
+# Create at 2019-02-26
+#
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis
+  namespace: mini-test-ns
+  labels:
+    svc: "redis"
+spec:
+  ports:
+    - name: http-redis
+      port: 6379
+      protocol: TCP
+      targetPort: 6379
+    - name: http-exporter
+      port: 9121
+      protocol: TCP
+      targetPort: 9121
+  selector:
+    run: redis
+  type: ClusterIP
+
+---

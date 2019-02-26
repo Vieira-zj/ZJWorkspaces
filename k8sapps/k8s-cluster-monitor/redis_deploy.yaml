@@ -1,0 +1,41 @@
+#
+# Ceate at 2019-02-26, build redis + redis_exporter cluster.
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: redis
+  name: redis
+  namespace: mini-test-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: redis
+  template:
+    metadata:
+      labels:
+        run: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:4.0
+        args:
+        - redis-server
+        - "--appendonly yes"
+        ports:
+        - containerPort: 6379
+      - name: redis-exporter
+        image: oliver006/redis_exporter:v0.29.0
+        args:
+        - redis_exporter
+        - -redis.addr=localhost:6379
+        ports:
+        - containerPort: 9121
+      - name: busybox
+        image: busybox:latest
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "-c", "while true; do echo 'busybox is running ...'; sleep 8; done;"]
+
+---
