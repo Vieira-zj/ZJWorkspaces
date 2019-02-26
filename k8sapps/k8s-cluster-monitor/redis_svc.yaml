@@ -1,5 +1,5 @@
 #
-# Create at 2019-02-26
+# Create at 2019-02-26, build services for reids and redis_exporter.
 #
 kind: Service
 apiVersion: v1

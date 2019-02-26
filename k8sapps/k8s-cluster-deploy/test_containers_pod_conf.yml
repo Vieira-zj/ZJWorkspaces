@@ -1,0 +1,25 @@
+#
+# Created at 2019-01-26, test deploy one pod includes 2 containers "busybox" and "alpine". 
+#
+apiVersion: v1
+kind: Pod
+metadata:
+  name: containers-pod 
+  namespace: mini-test-ns
+  labels:
+    app: containers-pod
+    env: test
+spec:
+  restartPolicy: Always 
+  containers:
+  - name: busybox
+    image: busybox:1.30
+    imagePullPolicy: IfNotPresent
+    command: ["sh", "-c", "while true; do echo 'busybox is running ...'; sleep 5; done;"]
+  - name: alpine
+    image: alpine:3.9
+    imagePullPolicy: IfNotPresent
+    command: ["sh"]
+    args: ["-c", "while true; do echo 'alpine is running ...'; sleep 8; done;"]
+
+---

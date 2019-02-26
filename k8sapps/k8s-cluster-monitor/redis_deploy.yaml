@@ -1,5 +1,5 @@
 #
-# Ceate at 2019-02-26, build redis + redis_exporter cluster.
+# Ceate at 2019-02-26, build redis env, and redis_exporter and busybox as sidecar for monitor.
 #
 apiVersion: apps/v1
 kind: Deployment
@@ -22,20 +22,21 @@ spec:
       - name: redis
         image: redis:4.0
         args:
-        - redis-server
         - "--appendonly yes"
         ports:
         - containerPort: 6379
       - name: redis-exporter
         image: oliver006/redis_exporter:v0.29.0
+        #command:
+        #- "./redis_exporter"
         args:
-        - redis_exporter
-        - -redis.addr=localhost:6379
+        - "-redis.addr=localhost:6379"
         ports:
         - containerPort: 9121
       - name: busybox
-        image: busybox:latest
+        image: busybox:1.30
         imagePullPolicy: IfNotPresent
-        command: ["sh", "-c", "while true; do echo 'busybox is running ...'; sleep 8; done;"]
+        command: ["sh"]
+        args: ["-c", "while true; do echo 'busybox is running ...'; sleep 8; done;"]
 
 ---
