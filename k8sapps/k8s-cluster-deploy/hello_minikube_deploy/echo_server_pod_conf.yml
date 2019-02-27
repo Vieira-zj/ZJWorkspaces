@@ -1,0 +1,36 @@
+#
+# Create at 2019-02-27, build headless service + pod (with subdomain and hostname) env. 
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-subdomain
+  namespace: mini-test-ns
+spec:
+  selector:
+    run: hello-pod
+  clusterIP: None
+  ports:
+  - name: http 
+    port: 8081
+    targetPort: 8080
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-pod
+  namespace: mini-test-ns
+  labels:
+    run: hello-pod
+spec:
+  hostname: hello-pod-1
+  subdomain: hello-subdomain
+  containers:
+  - image: k8s.gcr.io/echoserver:1.10
+    imagePullPolicy: IfNotPresent
+    name: hello-pod
+    ports:
+    - containerPort: 8080
+
+---
