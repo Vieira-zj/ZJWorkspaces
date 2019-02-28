@@ -1,5 +1,5 @@
 #!/bin/bash
-set -exu
+set -eu
 
 # ex1, sub str
 tmp_str="hello world"
@@ -57,7 +57,15 @@ else
 fi
 
 
-# ex5, iterator on array
+# ex5, loop in shell 
+for int_val in {1..10}; do
+  echo "int value: ${int_val}"
+done
+
+for ((i=0;i<10;i++)); do
+  echo "current value: $i"
+done
+
 tmp_values="v1/k1 v2/k1 v1/k2 v1/k3"
 for value in ${tmp_values}; do
     echo "value: $(echo $value | awk -F '/' '{print $2}')"
@@ -73,6 +81,22 @@ for file in $(find $HOME/Downloads/tmp_files/ -name "*.txt" -type f); do
    echo "text file: ${file}"
    echo "file stat: $(stat ${file})"
 done
+
+
+# ex6, awk test
+awk_if_test() {
+    set -x
+    test_file=${HOME}/Downloads/tmp_files/test.out
+    echo '01|b6' > $test_file 
+    echo '02|b6' >> $test_file 
+    echo '03|b7' >> $test_file 
+    echo '04|b6' >> $test_file 
+
+    echo "grade b6:"
+    cat ${test_file} | awk -F '|' '{if($2=="b6") {print "id: " $1}}'
+}
+
+awk_if_test
 
 
 set +exu
