@@ -8,7 +8,7 @@ apiVersion: apps/v1
 kind: StatefulSet 
 metadata:
   name: prometheus
-  namespace: kube-system
+  namespace: k8s-monitor
   labels:
     k8s-app: prometheus
     kubernetes.io/cluster-service: "true"
@@ -111,3 +111,5 @@ spec:
       resources:
         requests:
           storage: "3Gi"
+
+---

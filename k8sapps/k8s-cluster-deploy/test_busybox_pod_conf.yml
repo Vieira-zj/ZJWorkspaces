@@ -14,7 +14,7 @@ spec:
   - name: busybox-app
     image: localhost:5000/busybox
     imagePullPolicy: IfNotPresent
-    command: ["sh", "-c", "while true; do echo ${KEY_01} ${KEY_02}', busybox is running ...'; sleep 5; done;"]
+    command: ["sh", "-c", "while true; do echo $(date +'%Y-%m-%d_%H:%M:%S') ${KEY_01} ${KEY_02} ', busybox is running ...'; sleep 5; done;"]
     env: 
     - name: DEMO_GREETING 
       value: "Hello from the environment" 

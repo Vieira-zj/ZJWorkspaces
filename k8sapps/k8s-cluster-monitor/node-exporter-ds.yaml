@@ -6,7 +6,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: node-exporter
-  namespace: kube-system
+  namespace: k8s-monitor
   labels:
     k8s-app: node-exporter
     kubernetes.io/cluster-service: "true"
@@ -62,3 +62,5 @@ spec:
         - name: sys
           hostPath:
             path: /sys
+
+---

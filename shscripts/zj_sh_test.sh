@@ -85,7 +85,6 @@ done
 
 # ex6, awk test
 awk_if_test() {
-    set -x
     test_file=${HOME}/Downloads/tmp_files/test.out
     echo '01|b6' > $test_file 
     echo '02|b6' >> $test_file 
@@ -95,8 +94,21 @@ awk_if_test() {
     echo "grade b6:"
     cat ${test_file} | awk -F '|' '{if($2=="b6") {print "id: " $1}}'
 }
+#awk_if_test
 
-awk_if_test
+awk_script_test() {
+    set -x
+    test_file=${HOME}/Downloads/tmp_files/test.out
+    echo '01|b6' > $test_file 
+    echo '02|b6' >> $test_file 
+    echo '03|b7' >> $test_file 
+    echo '04|b6' >> $test_file 
+    echo '05|b7' >> $test_file 
+    echo '06|b8' >> $test_file
+
+    cat ${test_file} | awk -F '|' '{if ($2=="b6") c1++; if($2=="b7") c2++; if($2=="b8") c3++;} END{print "b6: " c1 "\nb7: " c2 "\nb8: " c3;}'
+}
+awk_script_test
 
 
 set +exu

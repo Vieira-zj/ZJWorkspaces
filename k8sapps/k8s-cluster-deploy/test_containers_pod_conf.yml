@@ -15,11 +15,11 @@ spec:
   - name: busybox
     image: busybox:1.30
     imagePullPolicy: IfNotPresent
-    command: ["sh", "-c", "while true; do echo 'busybox is running ...'; sleep 5; done;"]
+    command: ["sh", "-c", "while true; do echo $(date +'%Y-%m-%d_%H:%M:%S') 'busybox is running ...'; sleep 5; done;"]
   - name: alpine
     image: alpine:3.9
     imagePullPolicy: IfNotPresent
     command: ["sh"]
-    args: ["-c", "while true; do echo 'alpine is running ...'; sleep 8; done;"]
+    args: ["-c", "while true; do echo $(date +'%Y-%m-%d_%H:%M:%S') 'alpine is running ...'; sleep 8; done;"]
 
 ---

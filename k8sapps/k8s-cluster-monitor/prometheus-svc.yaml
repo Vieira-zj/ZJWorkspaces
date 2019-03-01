@@ -6,7 +6,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: prometheus
-  namespace: kube-system
+  namespace: k8s-monitor
   labels:
     kubernetes.io/name: "Prometheus"
     kubernetes.io/cluster-service: "true"
@@ -21,3 +21,5 @@ spec:
   type: NodePort
   selector:
     k8s-app: prometheus
+
+---
