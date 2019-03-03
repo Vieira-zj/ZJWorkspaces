@@ -5,7 +5,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: redis
-  namespace: k8s-monitor
+  namespace: mini-test-ns
   labels:
     svc: "redis"
 spec:
