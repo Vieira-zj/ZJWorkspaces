@@ -111,4 +111,22 @@ awk_script_test() {
 awk_script_test
 
 
+# ex7, default value
+set_arg_default() {
+  set +u
+
+  input1=$1
+  echo "var input1 with default: ${input1:=default}"
+  echo "var input1 changed to: ${input1}"
+
+  input2=$2
+  echo "var input2 with default: ${input2:-default}"
+  echo "var input2 unchanged: ${input2}"
+
+  set -u
+}
+set_arg_default test
+set_arg_default
+
+
 set +exu
