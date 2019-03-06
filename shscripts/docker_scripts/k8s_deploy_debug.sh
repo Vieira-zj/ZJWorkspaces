@@ -1,6 +1,6 @@
 #!/bin/bash
-# Refer: https://github.com/rosskukulinski/k8s-scripts/blob/master/bin/debug-deployment
 
+# Refer: https://github.com/rosskukulinski/k8s-scripts/blob/master/bin/debug-deployment
 set -eu
 
 if [ -z "$1" ]
@@ -9,8 +9,8 @@ then
   exit 1
 fi
 
-DEPLOY=${1}
-NAMESPACE=${2:-default}
+DEPLOY=${1:-hello-minikube}
+NAMESPACE=${2:-mini-test-ns}
 
 printf "\n\nOk - Let's figure out why this deployment might have failed"
 
@@ -46,17 +46,17 @@ fi
 
 printf "\n\n------------------------------\n\n"
 
-NEW_RS=$(kubectl describe deploy ${DEPLOY} --namespace=${NAMESPACE} | grep "NewReplicaSet" | awk '{print $2}')
+NEW_RS=$(kubectl describe deploy ${DEPLOY} --namespace=${NAMESPACE} | grep "NewReplicaSet:" | awk '{print $2}')
 POD_HASH=$(kubectl get rs ${NEW_RS} --namespace=${NAMESPACE} -o jsonpath='{.metadata.labels.pod-template-hash}')
 
 printf "Pods for this deployment:\n\n"
-printf "> kubectl get pods  --namespace=${NAMESPACE} -l pod-template-hash=${POD_HASH}\n\n"
+printf "> kubectl get pods --namespace=${NAMESPACE} -l pod-template-hash=${POD_HASH}\n\n"
 kubectl get pods --namespace=${NAMESPACE} -l pod-template-hash=${POD_HASH}
 
 printf "\n\n------------------------------\n\n"
 
 printf "Detailed pods for this deployment:\n\n"
-printf "> kubectl describe pods  --namespace=${NAMESPACE} -l pod-template-hash=${POD_HASH}\n\n"
+printf "> kubectl describe pods --namespace=${NAMESPACE} -l pod-template-hash=${POD_HASH}\n\n"
 kubectl describe pods --namespace=${NAMESPACE} -l pod-template-hash=${POD_HASH}
 
 printf "\n\n------------------------------\n\n"
@@ -67,7 +67,7 @@ kubectl get pods --namespace=${NAMESPACE} -l pod-template-hash=${POD_HASH} -o js
 
 printf "\n\n------------------------------\n\n"
 
-printf "Pods with Terminated state\n\n"
+printf "Pods with Terminated state:\n\n"
 printf "> kubectl get pods --namespace=${NAMESPACE} -l pod-template-hash=${POD_HASH} -o jsonpath='...'\n"
 kubectl get pods --namespace=${NAMESPACE} -l pod-template-hash=${POD_HASH} -o jsonpath='{"\n"}{range .items[*]}{"\n"}{@.metadata.name}:{"\n"}{"\n\tTerminated Containers\n"}{range @.status.containerStatuses[?(@.lastState.terminated)]}{"\t\tName: "}{@.name}{"\n\t\tImage: "}{@.image}{"\n\t\texitCode: "}{@.lastState.terminated.exitCode}{"\n\t\tReason: "}{@.lastState.terminated.reason}{"\n"}{end}{"\n"}{end}'
 
