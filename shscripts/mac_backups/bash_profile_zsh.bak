@@ -2,6 +2,7 @@ echo 'zhengjin, here'
 # The original version is saved in .bash_profile.pysave
 # ENV VARS
 export LANG="en_US.UTF-8"
+export PYPATH='/Users/zhengjin/Workspaces/zj_py3_project'
 export GOROOT="/usr/local/go"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home"
 export CLASS_PATH="$JAVA_HOME/lib"
@@ -13,7 +14,6 @@ export HADOOP_LIBEXEC_DIR=${HADOOP_HOME}/libexec
 #export HADOOP_COMMON_LIB_NATIVE_DIR="$HADOOP_HOME/lib/native64/"
 MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 # ENV PATH
-#PATH=${PATH}:"/Library/Frameworks/Python.framework/Versions/3.6/bin"
 PATH=${PATH}:"${GOROOT}/bin"
 PATH=${PATH}:${JAVA_HOME}/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 PATH="$PATH:/usr/local/opt/coreutils/libexec/gnubin"
@@ -35,7 +35,7 @@ alias dkimgs='docker images | sort'
 alias dkc='docker-compose'
 alias kc='kubectl'
 alias kcgetall='kubectl get --all-namespaces'
-alias ministart='minikube start --registry-mirror=https://registry.docker-cn.com --kubernetes-version v1.12.1'
+alias ministart='minikube start --registry-mirror=https://registry.docker-cn.com --kubernetes-version v1.11.1'
 alias setminidkenv='eval $(minikube docker-env)'
 # TERMINAL
 #enables colorin the terminal bash shell export

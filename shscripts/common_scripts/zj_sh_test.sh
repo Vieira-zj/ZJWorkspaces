@@ -1,10 +1,26 @@
 #!/bin/bash
 set -eu
 
-# ex1, sub str
+# ex1-1, sub str
 tmp_str="hello world"
 echo "sub str: ${tmp_str:0:5}"
 echo "length: ${#tmp_str}"
+
+
+# ex1-2, str compare
+value1="zhengjin.test"
+value2="zhengjin.test1"
+if [ "$value1" = "$value2" ]; then
+    echo "values equal."
+else
+    echo "values not equal."
+fi
+
+if [[ "$value1" == "$value2" ]]; then
+    echo "values equal."
+else
+    echo "values not equal."
+fi
 
 
 # ex2, trim last char
@@ -77,7 +93,7 @@ for value in ${tmp_array[*]}; do
     echo "array value: ${value}"
 done
 
-for file in $(find $HOME/Downloads/tmp_files/ -name "*.txt" -type f); do
+for file in $(find $HOME/Downloads/tmp_files/ -name "*.zip" -type f); do
    echo "text file: ${file}"
    echo "file stat: $(stat ${file})"
 done
