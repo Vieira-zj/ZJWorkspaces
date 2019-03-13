@@ -87,11 +87,18 @@ for value in ${tmp_values}; do
     echo "value: $(echo $value | awk -F '/' '{print $2}')"
 done
 
-tmp_array=(v1 v2 v3)
-echo "array length: ${#tmp_array[*]}"
-for value in ${tmp_array[*]}; do
+tmp_array1=("v1" "v2" "v3")
+echo "array length: ${#tmp_array1[*]}"
+for value in ${tmp_array1[*]}; do
     echo "array value: ${value}"
 done
+
+tmp_array2=("val4" "val5" "val6")
+echo "2 arrays values => "
+for value in ${tmp_array1[*]} ${tmp_array2[*]}; do
+    echo "array value: ${value}" 
+done
+
 
 for file in $(find $HOME/Downloads/tmp_files/ -name "*.zip" -type f); do
    echo "text file: ${file}"
