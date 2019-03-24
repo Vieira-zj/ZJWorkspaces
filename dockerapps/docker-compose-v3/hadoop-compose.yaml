@@ -12,4 +12,6 @@ services:
       - 9001:9000
       - 50070:50070  # hdfs
       - 8088:8088  # yarn
-    #command: ["/etc/bootstrap.sh", "-d"] 
+    #command: ["/etc/bootstrap.sh", "-d"]
+    volumes:
+      - "/tmp/hadoop_test:/usr/local/hadoop/src"
