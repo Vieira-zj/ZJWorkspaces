@@ -1,5 +1,6 @@
 #
 # Create at 2019-03-24, build hadoop (hdfs + mapreduce + yarn) env.
+# Java version: 1.7
 #
 version: '3.1'
 

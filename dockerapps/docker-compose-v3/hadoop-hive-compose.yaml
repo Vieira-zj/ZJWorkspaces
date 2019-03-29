@@ -1,6 +1,10 @@
 #
-# Create at 2018-12-21, build hadoop hive env.
-# Refer to https://github.com/big-data-europe/docker-hive/blob/master/docker-compose.yml
+# Create at 2018-12-21, build hadoop namenode + datanode + hive + postgresql env.
+# Java version: 1.8 (openjdk version "1.8.0_131")
+#
+# Refer https://github.com/big-data-europe/docker-hive/blob/master/docker-compose.yml
+#
+# login: docker exec -it hadoop-hive-server sh
 #
 version: "3"
 
@@ -39,6 +43,8 @@ services:
       SERVICE_PRECONDITION: "hive-metastore:9083"
     ports:
       - "10000:10000"
+    volumes:
+      - "/tmp/hive_test:/tmp/hive_input"
 
   hive-metastore:
     image: bde2020/hive:2.3.2-postgresql-metastore
