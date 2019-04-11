@@ -1,13 +1,19 @@
 #!/bin/bash
-set -eu
+set -u
 
 # ex1-1, sub str
+echo ""
+echo "example1-1"
+
 tmp_str="hello world"
 echo "sub str: ${tmp_str:0:5}"
 echo "length: ${#tmp_str}"
 
 
 # ex1-2, str compare
+echo ""
+echo "example1-2"
+
 value1="zhengjin.test"
 value2="zhengjin.test1"
 if [ "$value1" = "$value2" ]; then
@@ -24,6 +30,9 @@ fi
 
 
 # ex2, trim last char
+echo ""
+echo "example2"
+
 func_trim_last_char() {
     input1=$1
     len=${#input1}
@@ -36,10 +45,13 @@ echo "trim last char results: ${ret}"
 
 
 # ex3, >&2
-# ls -l ~/.bash_profile ~/not_exist.file >${HOME}/Downloads/tmp_files/test.out 2>&1
+# ls -l ~/.bash_profile ~/not_exist.file > ${HOME}/Downloads/tmp_files/test.out 2>&1
 
 
 # ex4, read file
+echo ""
+echo "example4"
+
 read_lines_fn1() {
     sum=1
     cat $1 | while read line; do
@@ -73,14 +85,24 @@ else
 fi
 
 
-# ex5, loop in shell 
-for int_val in {1..10}; do
+# ex5, loop in shell
+echo ""
+echo "example5"
+
+for int_val in {1..5}; do
   echo "int value: ${int_val}"
 done
 
-for ((i=0;i<10;i++)); do
+for seq_val in $(seq 5); do
+  echo "seq value: ${seq_val}"
+done
+
+for ((i=0;i<5;i++)); do
   echo "current value: $i"
 done
+
+awk 'BEGIN{total=0; for(i=0;i<=10;i++){total+=i}; print "awk total: " total;}'
+
 
 tmp_values="v1/k1 v2/k1 v1/k2 v1/k3"
 for value in ${tmp_values}; do
@@ -107,6 +129,9 @@ done
 
 
 # ex6, awk test
+echo ""
+echo "example6"
+
 awk_if_test() {
     test_file=${HOME}/Downloads/tmp_files/test.out
     echo '01|b6' > $test_file 
@@ -130,11 +155,15 @@ awk_script_test() {
     echo '06|b8' >> $test_file
 
     cat ${test_file} | awk -F '|' '{if ($2=="b6") c1++; if($2=="b7") c2++; if($2=="b8") c3++;} END{print "b6: " c1 "\nb7: " c2 "\nb8: " c3;}'
+    set +x
 }
 awk_script_test
 
 
 # ex7, default value
+echo ""
+echo "example7"
+
 set_arg_default() {
   set +u
 
@@ -152,4 +181,56 @@ set_arg_default test
 set_arg_default
 
 
-set +exu
+# ex8, alias check in sub-shell
+echo ""
+echo "example8"
+
+alias_build() {
+  shopt -s expand_aliases
+  shopt expand_aliases
+  alias jv='java -version'
+  # jv  command not found
+}
+alias_build
+alias
+type jv
+jv
+
+# ex9-1, var scope
+echo ""
+echo "example9-1"
+
+is_exist() {
+  pid=$(ps -ef | grep -i $1 | grep -v "grep" | awk '{print $2}' | head -n 1)
+  if [ -z "$pid" ]; then
+    pid="null"
+    return 1
+  else
+    return 0
+  fi
+}
+
+var_scope_check() {
+  is_exist 'sublime'
+  if [[ $? == 0 ]]; then
+    echo "process is running, pid=${pid}."
+  else
+    echo "process is not running, pid=${pid}."
+  fi  
+}
+var_scope_check
+
+
+# ex9-2, var scope
+echo ""
+echo "example9-2"
+
+local_var_scope() {
+  for scpoe_i in {1..5}; do
+    echo $scpoe_i
+  done
+  echo "final i: $scpoe_i"
+}
+local_var_scope
+
+set +u
