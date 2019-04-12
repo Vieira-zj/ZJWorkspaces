@@ -90,16 +90,19 @@ echo ""
 echo "example5"
 
 for int_val in {1..5}; do
-  echo "int value: ${int_val}"
+  echo -n "int_value=${int_val},"
 done
+echo ""
 
 for seq_val in $(seq 5); do
-  echo "seq value: ${seq_val}"
+  echo -n "seq_value=${seq_val},"
 done
+echo ""
 
 for ((i=0;i<5;i++)); do
-  echo "current value: $i"
+  echo -n "current_i=$i,"
 done
+echo ""
 
 awk 'BEGIN{total=0; for(i=0;i<=10;i++){total+=i}; print "awk total: " total;}'
 
@@ -116,7 +119,7 @@ for value in ${tmp_array1[*]}; do
 done
 
 tmp_array2=("val4" "val5" "val6")
-echo "2 arrays values => "
+echo "arrays values => "
 for value in ${tmp_array1[*]} ${tmp_array2[*]}; do
     echo "array value: ${value}" 
 done
@@ -225,10 +228,14 @@ var_scope_check
 echo ""
 echo "example9-2"
 
+global_var="gloabl_test"
 local_var_scope() {
+  echo "global_var=$global_var"
+
   for scpoe_i in {1..5}; do
-    echo $scpoe_i
+    echo -n "i=$scpoe_i,"
   done
+  echo ""
   echo "final i: $scpoe_i"
 }
 local_var_scope
