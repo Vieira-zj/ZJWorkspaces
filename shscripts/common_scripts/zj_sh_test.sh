@@ -29,6 +29,16 @@ else
 fi
 
 
+# ex1-3, calculation
+function calculate_test() {
+  count=1000
+  min=10
+  cur=30
+  count=$(($cur*$count/$min))
+  echo "current count: $count"
+}
+calculate_test
+
 # ex2, trim last char
 echo ""
 echo "example2"
@@ -109,13 +119,13 @@ awk 'BEGIN{total=0; for(i=0;i<=10;i++){total+=i}; print "awk total: " total;}'
 
 tmp_values="v1/k1 v2/k1 v1/k2 v1/k3"
 for value in ${tmp_values}; do
-    echo "value: $(echo $value | awk -F '/' '{print $2}')"
+  echo "value: $(echo $value | awk -F '/' '{print $2}')"
 done
 
 tmp_array1=("v1" "v2" "v3")
 echo "array length: ${#tmp_array1[*]}"
 for value in ${tmp_array1[*]}; do
-    echo "array value: ${value}"
+  echo "array value: ${value}" 
 done
 
 tmp_array2=("val4" "val5" "val6")
@@ -131,36 +141,55 @@ for file in $(find $HOME/Downloads/tmp_files/ -name "*.zip" -type f); do
 done
 
 
-# ex6, awk test
+# ex6-1, awk test
 echo ""
-echo "example6"
+echo "example6-1"
 
-awk_if_test() {
-    test_file=${HOME}/Downloads/tmp_files/test.out
-    echo '01|b6' > $test_file 
-    echo '02|b6' >> $test_file 
-    echo '03|b7' >> $test_file 
-    echo '04|b6' >> $test_file 
+function awk_if_test() {
+  test_file=${HOME}/Downloads/tmp_files/test.out
+  echo '01|b6' > $test_file
+  lines=('02|b6' '03|b7' '04|b6')
+  for line in ${lines[*]}; do
+    echo $line >> $test_file 
+  done
 
-    echo "grade b6:"
-    cat ${test_file} | awk -F '|' '{if($2=="b6") {print "id: " $1}}'
+  echo "grade b6:"
+  cat ${test_file} | awk -F '|' '{if($2=="b6") {print "id: " $1}}'
 }
 #awk_if_test
 
-awk_script_test() {
+function awk_script_test() {
     set -x
     test_file=${HOME}/Downloads/tmp_files/test.out
-    echo '01|b6' > $test_file 
-    echo '02|b6' >> $test_file 
-    echo '03|b7' >> $test_file 
-    echo '04|b6' >> $test_file 
-    echo '05|b7' >> $test_file 
-    echo '06|b8' >> $test_file
+    echo '01|b6' > $test_file
+    lines=('02|b6' '03|b7' '04|b6' '05|b7' '06|b8')
+    for line in ${lines[*]}; do
+      echo $line >> $test_file 
+    done
 
     cat ${test_file} | awk -F '|' '{if ($2=="b6") c1++; if($2=="b7") c2++; if($2=="b8") c3++;} END{print "b6: " c1 "\nb7: " c2 "\nb8: " c3;}'
     set +x
 }
 awk_script_test
+
+
+# ex6-2, awk test
+echo ""
+echo "example6-2"
+
+# get total files size in dir
+function awk_test_01() {
+  input_path=$1
+  ls -l $input_path | awk 'BEGIN{sum=0} !/^d/{sum+=$5} END{print "files total size is:",int(sum/1024),"KB"}'
+}
+#awk_test_01 $HOME/Downloads/tmp_files
+
+# get files count for each user
+function awk_test_02() {
+  input_path=$1
+  ls -l $input_path | awk 'NR!=1 && !/^d/{sum[$3]++} END{for (user in sum) printf "%-6s %-5s %-3s \n",user," ",sum[user]}'
+}
+awk_test_02 $HOME/Downloads/tmp_files
 
 
 # ex7, default value
@@ -198,6 +227,7 @@ alias_build
 alias
 type jv
 jv
+
 
 # ex9-1, var scope
 echo ""
