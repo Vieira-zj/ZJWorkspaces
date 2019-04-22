@@ -1,0 +1,24 @@
+#
+# Create at 2019-04-22, build hadoop hdfs + mapreduce + yarn + spark env.
+# Java version: 1.7
+#
+version: '3.1'
+
+services:
+  spark:
+    image: sequenceiq/spark:1.6.0
+    container_name: spark-test
+    hostname: sandbox
+    # restart: "no"
+    ports:
+      - 8088:8088  # yarn.resourcemanager.webapp.address (yarn web ui)
+      # - 8042:8042  # yarn.nodemanager.webapp.address
+      # - 8040:8040  # yarn.nodemanager.localizer.address
+      # - 50010:50010  # dfs.datanode.address
+      # - 50020:50020  # dfs.datanode.ipc.address
+      - 50070:50070  # dfs.namenode.http-address (namenode web ui)
+      # - 50075:50075  # dfs.datanode.http.address
+      # - 50090:50090  # dfs.namenode.secondary.http-address
+    command: ["-d"]
+    volumes:
+      - "/tmp/spark_test:/mnt/ds_test"
