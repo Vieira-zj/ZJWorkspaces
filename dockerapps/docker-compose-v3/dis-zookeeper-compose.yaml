@@ -5,7 +5,7 @@ version: '3.1'
 
 services:
   zoo1:
-    image: bigdata/zookeeper
+    image: zookeeper
     container_name: zk-zoo1
     restart: always
     hostname: zoo1
@@ -16,7 +16,7 @@ services:
       ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
 
   zoo2:
-    image: bigdata/zookeeper
+    image: zookeeper
     container_name: zk-zoo2
     restart: always
     hostname: zoo2
@@ -27,7 +27,7 @@ services:
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zoo3:2888:3888
 
   zoo3:
-    image: bigdata/zookeeper
+    image: zookeeper
     container_name: zk-zoo3
     restart: always
     hostname: zoo3

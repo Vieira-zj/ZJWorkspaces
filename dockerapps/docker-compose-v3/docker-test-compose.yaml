@@ -6,7 +6,8 @@ version: "3"
 services:
   service-busybox:
     image: busybox 
-    container_name: svc_busybox 
+    hostname: busybox
+    container_name: svc-busybox 
     volumes:
       - "testdata:/tmp/docker"
     networks:
@@ -18,7 +19,8 @@ services:
 
   service-alpine:
     image: alpine
-    container_name: svc_alpine
+    hostname: alpine
+    container_name: svc-alpine
     volumes:
       - "testdata:/tmp/docker"
     networks:

@@ -10,7 +10,7 @@ version: '3.2'
 services:
   consul-leader:
     container_name: "consul-leader"
-    image: bigdata/consul
+    image: consul
     ports:
       - "8500:8500"
     environment:
@@ -22,7 +22,7 @@ services:
 
   consul-follower1:
     container_name: "consul-follower1"
-    image: bigdata/consul
+    image: consul
     depends_on: 
       - consul-leader
     environment:
@@ -34,7 +34,7 @@ services:
 
   consul-follower2:
     container_name: "consul-follower2"
-    image: bigdata/consul
+    image: consul
     depends_on: 
       - consul-leader
     environment:
@@ -46,7 +46,7 @@ services:
 
   consul-client1:
     container_name: "consul-client1"
-    image: bigdata/consul
+    image: consul
     depends_on: 
       - consul-leader
     environment:
@@ -58,4 +58,3 @@ services:
 
 networks:
   consul-net:
-
