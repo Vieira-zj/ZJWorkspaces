@@ -21,4 +21,4 @@ services:
       # - 50090:50090  # dfs.namenode.secondary.http-address
     command: ["-d"]
     volumes:
-      - "/tmp/spark_test:/mnt/ds_test"
+      - "/tmp/spark_test:/mnt/spark_dir"
