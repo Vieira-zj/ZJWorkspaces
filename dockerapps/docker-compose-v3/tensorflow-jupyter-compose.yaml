@@ -1,0 +1,15 @@
+#
+# Create at 2019-05-18, create python3 + tensorflow + jupyter dev env. 
+#
+version: "3"
+
+services:
+  tensorflow:
+    image: tensorflow/tensorflow:latest-py3-jupyter
+    container_name: tensorflow
+    volumes:
+      - /tmp/tf_scripts:/tf/tf_scripts
+      - /tmp/notebooks:/tf/notebooks
+    ports:
+      - 6006:6006  # tensorboard
+      - 8888:8888  # jupyter
