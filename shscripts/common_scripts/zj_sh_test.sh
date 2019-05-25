@@ -1,5 +1,5 @@
 #!/bin/bash
-set -u
+set -eu
 
 # ex1-1, sub str
 echo ""
@@ -229,11 +229,11 @@ type jv
 jv
 
 
-# ex9-1, var scope
+# ex9, return val from function
 echo ""
-echo "example9-1"
+echo "example9"
 
-is_exist() {
+is_process_exist() {
   pid=$(ps -ef | grep -i $1 | grep -v "grep" | awk '{print $2}' | head -n 1)
   if [ -z "$pid" ]; then
     pid="null"
@@ -243,31 +243,49 @@ is_exist() {
   fi
 }
 
-var_scope_check() {
-  is_exist 'sublime'
+process_check() {
+  is_process_exist $1
   if [[ $? == 0 ]]; then
-    echo "process is running, pid=${pid}."
+    echo "process '$1' is running, pid=${pid}."
   else
-    echo "process is not running, pid=${pid}."
+    echo "process '$1' is not running, pid=${pid}."
   fi  
 }
-var_scope_check
+process_check 'sublime'
 
 
-# ex9-2, var scope
+# ex10-1, var scope
 echo ""
-echo "example9-2"
+echo "example10-1"
 
-global_var="gloabl_test"
+g_var="global_var"
 local_var_scope() {
-  echo "global_var=$global_var"
+  fun_var="var_in_func"
+  local l_var="local_var"
 
-  for scpoe_i in {1..5}; do
-    echo -n "i=$scpoe_i,"
+  echo "global var: $g_var"
+  echo "function var: $fun_var"
+  echo "local var: $l_var"
+
+  for iter_i in {1..5}; do
+    echo -n "i=$iter_i,"
   done
   echo ""
-  echo "final i: $scpoe_i"
+  echo "iter i: $iter_i"
 }
+# echo "main, function var: $fun_var"
 local_var_scope
 
-set +u
+
+# ex10-2, readonly var
+echo ""
+echo "example10-2"
+function readonly_var_fn() {
+    readonly readonly_var="init"
+    echo "read only var: $readonly_var"
+    # readonly_var="changed"
+}
+readonly_var_fn
+
+
+set +eu
