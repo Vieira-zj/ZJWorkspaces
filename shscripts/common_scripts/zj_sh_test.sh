@@ -229,9 +229,9 @@ type jv
 jv
 
 
-# ex9, return val from function
+# ex9-1, return int from func
 echo ""
-echo "example9"
+echo "example9-1"
 
 is_process_exist() {
   pid=$(ps -ef | grep -i $1 | grep -v "grep" | awk '{print $2}' | head -n 1)
@@ -252,6 +252,21 @@ process_check() {
   fi  
 }
 process_check 'sublime'
+
+
+# ex9-2, return value from func
+echo ""
+echo "example9-2"
+
+function my_prefix() {
+  echo "custom_prefix_$1"
+}
+
+function ret_value_check() {
+  prefix_val=$(my_prefix "shelltest")
+  echo "prefix value: ${prefix_val}"
+}
+ret_value_check
 
 
 # ex10-1, var scope
