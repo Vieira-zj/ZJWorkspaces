@@ -1,0 +1,13 @@
+#
+# Create at 2019-06-02, test service with external name.
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: ext-mock-svc
+  namespace: mini-test-ns
+spec:
+  type: ExternalName
+  externalName: 192.168.1.6
+
+---

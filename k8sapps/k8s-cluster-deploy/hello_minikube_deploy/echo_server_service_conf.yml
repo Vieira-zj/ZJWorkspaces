@@ -1,6 +1,6 @@
 #
 # Create at 2019-02-21, minikube quick start demo.
-# Create byP kubectl expose deployment hello-minikube --type=NodePort -n mini-test-ns  --dry-run -o yaml > echo_server_service_conf.yml
+# Create by "kubectl expose deployment hello-minikube --type=NodePort -n mini-test-ns  --dry-run -o yaml > echo_server_service_conf.yml"
 #
 apiVersion: v1
 kind: Service
