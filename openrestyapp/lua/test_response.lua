@@ -1,4 +1,4 @@
---zhengjin, create at 20190605
+--zhengjin, create at 20190604
 --test: curl -v "http://127.0.0.1:8080/lua_response" 
 
 --写响应头
