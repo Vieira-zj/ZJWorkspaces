@@ -1,0 +1,22 @@
+#
+# Create at 2019-06-04, build OpenResty (nginx + lua) env. 
+#
+version: "3"
+
+services:
+  openresty:
+    image: openresty/openresty:1.15.8.1-1-alpine-fat-nosse42
+    container_name: openresty 
+    environment:
+      - CONF_HOME=/etc/nginx/conf.d
+    volumes:
+      - /tmp/openresty_app:/tmp/lua_scripts
+    ports:
+      - 8080:80
+    networks:
+      - openresty-net
+
+networks:
+  openresty-net:
+    driver: bridge
+
