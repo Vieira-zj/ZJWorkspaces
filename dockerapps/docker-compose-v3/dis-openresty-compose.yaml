@@ -10,7 +10,7 @@ services:
     environment:
       - CONF_HOME=/etc/nginx/conf.d
     volumes:
-      - /tmp/openresty_app:/tmp/lua_scripts
+      - /tmp/openrestyapp:/tmp/openrestyapp
     ports:
       - 8080:80
     networks:
