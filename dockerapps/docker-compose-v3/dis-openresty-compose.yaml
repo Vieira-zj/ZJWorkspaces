@@ -16,6 +16,17 @@ services:
     networks:
       - openresty-net
 
+  redis:
+    image: redis:4.0
+    container_name: redis
+    networks:
+      - openresty-net
+    command:
+      - "redis-server"
+      - "--appendonly yes"
+    ports:
+      - 6379:6379
+
 networks:
   openresty-net:
     driver: bridge
