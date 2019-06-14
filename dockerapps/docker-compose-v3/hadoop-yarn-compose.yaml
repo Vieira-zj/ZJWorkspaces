@@ -2,6 +2,10 @@
 # Create at 2019-03-24, build hadoop (hdfs + mapreduce + yarn) env.
 # Java version: 1.7
 #
+# access web:
+# hdfs: http://localhost:50070
+# yarn: http://localhost:8088
+#
 version: '3.1'
 
 services:
@@ -11,7 +15,8 @@ services:
     restart: "no"
     ports:
       - 9001:9000
-      - 50070:50070  # hdfs
+      - 50070:50070  # namenode
+      - 50075:50075  # datanode
       - 8088:8088  # yarn
     #command: ["/etc/bootstrap.sh", "-d"]
     volumes:
