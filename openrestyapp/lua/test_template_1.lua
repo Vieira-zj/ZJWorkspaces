@@ -1,11 +1,14 @@
+-- zhengjin, create at 2019-06-11
+--
 --pre conditions:
 --cd ${HOME}/Workspaces/zj_work_workspace/openrestyapp/lualib
 --curl -O https://raw.githubusercontent.com/bungle/lua-resty-template/master/lib/resty/template.lua
 --mkdir ${HOME}/Workspaces/zj_work_workspace/openrestyapp/lualib/html
 --cd ${HOME}/Workspaces/zj_work_workspace/openrestyapp/lualib/html
 --curl -O https://raw.githubusercontent.com/bungle/lua-resty-template/master/lib/resty/template/html.lua
-
+--
 --test: curl -v "http://127.0.0.1:8080/lua_template_1"
+
 local template = require("template")
 
 local context = {
