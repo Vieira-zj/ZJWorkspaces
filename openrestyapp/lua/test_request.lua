@@ -1,5 +1,5 @@
---zhengjin, create at 20190604
---test: curl -v -X POST "http://127.0.0.1:8080/lua_request/1/2?a=3&b=4" -d "a=1&b=2"
+-- #2
+-- test: curl -v -X POST "http://127.0.0.1:8080/lua_request/1/2?a=3&b=4" -d "a=1&b=2"
 
 --nginx变量
 local var = ngx.var

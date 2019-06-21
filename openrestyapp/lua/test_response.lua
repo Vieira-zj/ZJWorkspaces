@@ -1,5 +1,5 @@
---zhengjin, create at 20190604
---test: curl -v "http://127.0.0.1:8080/lua_response" 
+-- #3
+-- test: curl -v "http://127.0.0.1:8080/lua_response" 
 
 --写响应头
 ngx.header.a = "1"
@@ -10,4 +10,3 @@ ngx.say("a", "b", "<br/>")
 ngx.print("c", "d", "<br/>")
 --200状态码退出
 return ngx.exit(200)
-

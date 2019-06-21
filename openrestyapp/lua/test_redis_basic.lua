@@ -1,4 +1,5 @@
---test: http://127.0.0.1:8080/lua_redis_basic
+-- #8
+-- curl -v "http://127.0.0.1:8080/lua_redis_basic"
 
 local function close_redis(red)
     if not red then
@@ -17,7 +18,7 @@ local red = redis:new()
 --设置超时（毫秒）
 red:set_timeout(1000)
 --建立连接
-local ip = "172.18.0.2"
+local ip = "172.19.0.2"
 local port = 6379
 local ok, err = red:connect(ip, port)
 if not ok then

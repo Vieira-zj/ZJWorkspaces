@@ -1,6 +1,7 @@
---zhengjin, create at 20190605, module test
+-- #7
 
 local count = 0
+--闭包
 local function hello()
    count = count + 1
    ngx.say("count : ", count)

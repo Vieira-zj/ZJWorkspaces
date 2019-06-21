@@ -1,5 +1,5 @@
---zhengjin, create at 20190604
---test: curl -v "http://127.0.0.1:8080/lua_shared_dict"
+-- #4
+-- test: curl -v "http://127.0.0.1:8080/lua_shared_dict"
 
 --1. 获取全局共享内存变量
 local shared_data = ngx.shared.shared_data
@@ -17,7 +17,7 @@ end
 i = shared_data:incr("i", 1)
 ngx.say("i=", i, "<br/>")
 
---var "count" define in init.lua
+--var "count" is defined in init.lua
 ngx.say("global count: ", shared_data:get("count"))
 shared_data:incr("count", 1)
 

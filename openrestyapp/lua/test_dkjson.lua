@@ -1,4 +1,5 @@
---test: curl -v "http://127.0.0.1:8080/lua_dkjson"
+-- #9
+-- test: curl -v "http://127.0.0.1:8080/lua_dkjson"
 
 local dkjson = require("dkjson")
 
@@ -16,7 +17,6 @@ ngx.say(str, "<br/>")
 --字符串到lua对象
 str = '{"hobby":["film","music","read"],"is_male":false,"name":"zhangsan","id":1,"age":null}'
 local obj, pos, err = dkjson.decode(str, 1, nil)  
-ngx.say(obj.age, "<br/>")
-ngx.say(obj.age == nil, "<br/>")
-ngx.say(obj.hobby[1], "<br/>")
-
+ngx.say("obj.age = ", obj.age, "<br/>")
+ngx.say("obj.age == nil: ", obj.age == nil, "<br/>")
+ngx.say("obj.hobby[1]: ", obj.hobby[1], "<br/>")

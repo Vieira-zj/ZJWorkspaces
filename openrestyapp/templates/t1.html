@@ -2,9 +2,9 @@
 <html>
   <head>Openresty Template Test</head><br/>
   <body>
-    {# 不转义变量输出 #}
-    姓名：{* string.upper(name) *}<br/>
     {# 转义变量输出 #}
+    姓名：{* string.upper(name) *}<br/>
+    {# 变量输出 #}
     简介：{{ description }}<br/>
     {* description *}
     {# 可以做一些运算 #}
