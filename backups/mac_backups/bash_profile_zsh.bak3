@@ -2,11 +2,21 @@ echo 'zhengjin, here'
 # The original version is saved in .bash_profile.pysave
 # ENV VARS
 export LANG="en_US.UTF-8"
+# PYTHON
 export PYPATH='/Users/zhengjin/Workspaces/zj_py3_project'
+# GO
 export GOROOT="/usr/local/go"
+PATH=${PATH}:"${GOROOT}/bin"
+# note: it should set only one value in GOPATH
+export GOPATH=$HOME/Workspaces/zj_go_project
+export GOBIN=${GOPATH}/bin
+PATH=$PATH:$GOBIN
+# JAVA
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home"
 export CLASS_PATH="$JAVA_HOME/lib"
 export ANDROID_HOME="/Users/zhengjin/Library/Android/sdk"
+PATH=${PATH}:${JAVA_HOME}/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+# HADOOP
 export HADOOP_COMMON_HOME="/usr/local/Cellar/hadoop"
 export HADOOP_HDFS_HOME=${HADOOP_COMMON_HOME}
 export HADOOP_MAPRED_HOME=${HADOOP_COMMON_HOME}
@@ -18,8 +28,6 @@ export HADOOP_LIBEXEC_DIR=${HADOOP_COMMON_HOME}/libexec
 #export HADOOP_COMMON_LIB_NATIVE_DIR="$HADOOP_HOME/lib/native64/"
 MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 # ENV PATH
-PATH=${PATH}:"${GOROOT}/bin"
-PATH=${PATH}:${JAVA_HOME}/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 PATH="$PATH:/usr/local/opt/coreutils/libexec/gnubin"
 PATH=/usr/local/mongodb/bin:$PATH
 PATH=/usr/local/sbin:$PATH # mtr-packet
@@ -52,12 +60,6 @@ export LSCOLORS=gxfxcxdxbxegedabagacad
 export TERM=xterm-256color
 # TEST ENV SET
 # TODO:
-# GO ENV SET
-# note: it should set only one value in GOPATH
-export GOPATH=$HOME/gopath
-export GOBIN=${GOPATH}/bin
-PATH=$PATH:$GOBIN
-export PATH
 # ENV FN
 trimlast() {
     input1=$1
