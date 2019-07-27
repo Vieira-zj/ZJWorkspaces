@@ -1,0 +1,19 @@
+#
+# Create at 2019-07-24, build env with iptables rules.
+#
+version: '3.2'
+
+services:
+  iptables:
+    image: vimagick/iptables
+    container_name: iptables
+    ports:
+      - "8388:8388"
+    environment:
+      - TCP_PORTS=80,443
+      - UDP_PORTS=53
+      - RATE=4mbit
+      - BURST=4kb
+    cap_add:
+      - NET_ADMIN
+    restart: always
