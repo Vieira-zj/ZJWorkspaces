@@ -1,0 +1,15 @@
+#
+# Created by zhengjn, at 2019-09-03
+#
+version: "2.1"
+
+services:
+  vueserver:
+    image: tomcat:latest
+    container_name: vue3
+    volumes:
+      - "/tmp/dist:/usr/local/tomcat/webapps/dist"
+    ports:
+      - "8080:8080"
+
+# todo: nginx server
