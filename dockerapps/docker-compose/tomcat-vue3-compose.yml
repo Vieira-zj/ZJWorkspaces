@@ -2,8 +2,8 @@
 # Created by zhengjn, at 2019-09-03
 #
 # Pre-conditions:
-# cp dockerapps/configs/vue3_nginx_conf/*.conf /tmp/openrestyapp
-# host entry: 127.0.0.1 mockserver.test.com vueserver.test.com
+# 1. cp dockerapps/configs/vue3_nginx_conf/*.conf /tmp/openrestyapp
+# 2. host entry: 127.0.0.1 mockserver.test.com vueserver.test.com
 #
 version: "2.1"
 
@@ -31,3 +31,7 @@ services:
       - "/tmp/openrestyapp:/tmp/openrestyapp"
     ports:
       - "8081:80"
+    depends_on:
+      - vueserver
+      - mockserver
+
