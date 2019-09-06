@@ -3,7 +3,7 @@
 #
 # Pre-conditions:
 # 1. host entry: 127.0.0.1 mockserver.test.com vueserver.test.com
-# 2. sh prepare_files.sh
+# 2. sh prepare_files.sh, and sh setup.sh for each service in docker env.
 #
 version: "2.1"
 
