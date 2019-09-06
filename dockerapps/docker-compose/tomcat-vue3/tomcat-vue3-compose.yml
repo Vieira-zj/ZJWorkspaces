@@ -2,8 +2,8 @@
 # Created by zhengjn, at 2019-09-03
 #
 # Pre-conditions:
-# 1. cp dockerapps/configs/vue3_nginx_conf/*.conf /tmp/openrestyapp
-# 2. host entry: 127.0.0.1 mockserver.test.com vueserver.test.com
+# 1. host entry: 127.0.0.1 mockserver.test.com vueserver.test.com
+# 2. sh prepare_files.sh
 #
 version: "2.1"
 
@@ -12,15 +12,17 @@ services:
     image: tomcat:latest
     container_name: vue3
     volumes:
-      - "/tmp/dist:/usr/local/tomcat/webapps/dist"
-    #ports:
-    #  - "8080:8080"
+      - "/tmp/dist:/tmp/dist"
+    ports:
+      - "8080:8080"
 
   mockserver:
     image: mockserver:latest
     container_name: mockserver
-    #ports:
-    #  - "17891:17891"
+    volumes:
+      - "/tmp/mockserver:/tmp/mockserver"
+    ports:
+      - "17891:17891"
 
   openresty:
     image: openresty/openresty:1.15.8.1-1-alpine-fat-nosse42
