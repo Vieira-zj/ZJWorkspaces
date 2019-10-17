@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>JS for image lazy render</title>
+ <style>
+ {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+ }
+ h1 {
+  text-align: center;
+ }
+ ul{
+  overflow: hidden;
+  list-style: none;
+ }
+ li{
+  float: left;
+  width: 50%;
+  height: 200px;
+  padding: 10px;
+ }
+ li img{
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+ }
+ </style>
+</head>
+<body>
+<h1>原生js实现图片懒加载</h1>
+<div class="container">
+ <ul>
+   <li><img src="http://cdn.jirengu.com/book.jirengu.com/img/1.jpg" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/1.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/2.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/3.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/4.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/5.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/6.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/7.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/8.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/9.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/10.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/11.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/12.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/13.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/14.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/15.jpg"></li>
+   <li><img src="./loading.gif" alt="" data-src="http://cdn.jirengu.com/book.jirengu.com/img/16.jpg"></li>
+ </ul>
+</div>
+<script>
+  let timerID;
+  // window绑定滚动事件
+  // 对于300毫秒内的scroll事件，不会生成新的timeID值，所以会一直被clearTimeout掉，不会执行setTimeout.
+  // 大于300毫秒的操作，会执行一次setTimeout并得到一个新的timeID, 然后保存这次setTimeout的ID.
+  window.addEventListener('scroll', function() {
+    console.log('scroll')
+    if(timerID){
+      clearTimeout(timerID)
+    }
+    timerID=setTimeout(()=>{
+      console.log('lazyRenderImg...');
+      lazyRenderImg();
+    }, 500);
+  })
+
+  lazyRenderImg();
+
+  function lazyRenderImg() {
+    Array.prototype.slice.apply(document.getElementsByTagName('li')).forEach((li)=>{
+      let img=li.getElementsByTagName('img')[0];
+      // 判断当前img是否出现在了视野中
+      // 判断当前img是否被加载过了
+      if(checkShow(img) && !isLoaded(img)){
+        loadImg(img);
+      }
+    })
+  }
+
+  // 判断img是否出现浏览器视野中
+  function checkShow(img) {
+    let scrollTop=document.documentElement.scrollTop; // 页面向上滚动的高度
+    let windowHeight=window.innerHeight; // 浏览器自身高度
+    let offsetTop=img.offsetTop; // 目标标签相对于document的高度
+    return (offsetTop > scrollTop && offsetTop<(windowHeight + scrollTop));
+  }
+  
+  // 判断是否已经加载过
+  function isLoaded(img) {
+    return img.getAttribute('src')===img.getAttribute('data-src');
+  }
+
+  // 加载图片
+  function loadImg(img) {
+    console.log('loading image')
+    img.setAttribute('src',img.getAttribute('data-src'));
+  }
+</script>
+</body>
+</html>
