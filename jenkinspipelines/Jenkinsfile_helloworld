@@ -1,0 +1,100 @@
+#!groovy
+// declarative pipeline
+
+// def IS_FAILED=false
+def RUN_ONLY_IF='This will run only if '
+
+pipeline {
+    agent any
+
+    options {
+        timeout(time: 3, unit: 'MINUTES')
+    }
+
+    environment {
+        MY_JENKINS_HOME='/Users/zhengjin/Downloads/tmp_files/jenkins_home'
+    }
+
+    parameters {
+        string(name: 'Greeting', defaultValue: 'Hello', description: 'How should I greet the world?')
+        booleanParam(name: 'IS_FAILED', defaultValue: false, description: 'Mock job as failed!')
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                sh 'printenv | grep -i "my_jenkins"'
+                sh 'java -version'
+                check_mvn_env()
+                echo 'Build Over...'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                // mock_fail(IS_FAILED)
+                mock_fail()
+            }
+        }
+        stage('Hello') {
+            steps {
+                echo "${params.Greeting} World!"
+                script {
+                    def browsers = ['chrome', 'firefox']
+                    for (int i = 0; i < browsers.size(); ++i) {
+                        echo "Testing the ${browsers[i]} browser"
+                    }
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+                echo "当前BuildId: ${env.BUILD_ID}"
+                echo "当前Job: ${env.JOB_NAME}"
+                echo "当前URL: ${env.JENKINS_URL}"
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'This will always run'
+        }
+        success {
+            echo RUN_ONLY_IF + 'successful'
+        }
+        failure {
+            echo RUN_ONLY_IF + 'failed'
+        }
+        unstable {
+            echo RUN_ONLY_IF + 'the run was marked as unstable'
+        }
+        changed { // job status changed
+            echo RUN_ONLY_IF + 'the state of the Pipeline has changed'
+            echo 'For example, if the Pipeline was previously failing but is now successful'
+        }
+    }
+}
+
+def check_mvn_env() {
+    // wrapped scripted pipeline
+    script {
+        try {
+            sh 'mvn -version'
+        } catch (error) {
+            echo 'The Maven env is not ready!'
+            echo error
+        }
+    }
+}
+
+def mock_fail() {
+    script {
+        if (params.IS_FAILED) {
+            echo 'mock failed!'
+            sh 'echo "Fail!"; exit 1'
+        }
+    }
+}
