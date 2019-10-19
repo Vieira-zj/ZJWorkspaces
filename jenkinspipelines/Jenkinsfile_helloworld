@@ -1,8 +1,8 @@
 #!groovy
-// declarative pipeline
+// Created at 2019-10-19, declarative pipeline helloworld.
 
 // def IS_FAILED=false
-def RUN_ONLY_IF='This will run only if '
+def RUN_ONLY_IF='This will run only if'
 
 pipeline {
     agent any
@@ -40,6 +40,7 @@ pipeline {
         stage('Hello') {
             steps {
                 echo "${params.Greeting} World!"
+                // wrapped scripted pipeline
                 script {
                     def browsers = ['chrome', 'firefox']
                     for (int i = 0; i < browsers.size(); ++i) {
@@ -63,29 +64,27 @@ pipeline {
             echo 'This will always run'
         }
         success {
-            echo RUN_ONLY_IF + 'successful'
+            echo "${RUN_ONLY_IF} successful"
         }
         failure {
-            echo RUN_ONLY_IF + 'failed'
+            echo RUN_ONLY_IF + ' failed'
         }
         unstable {
-            echo RUN_ONLY_IF + 'the run was marked as unstable'
+            echo "${RUN_ONLY_IF} the run was marked as unstable"
         }
         changed { // job status changed
-            echo RUN_ONLY_IF + 'the state of the Pipeline has changed'
+            echo "${RUN_ONLY_IF} the state of the Pipeline has changed"
             echo 'For example, if the Pipeline was previously failing but is now successful'
         }
     }
 }
 
 def check_mvn_env() {
-    // wrapped scripted pipeline
     script {
         try {
             sh 'mvn -version'
-        } catch (error) {
-            echo 'The Maven env is not ready!'
-            echo error
+        } catch (err) {
+            error "The Maven env is not ready! ${err}"
         }
     }
 }
@@ -93,7 +92,7 @@ def check_mvn_env() {
 def mock_fail() {
     script {
         if (params.IS_FAILED) {
-            echo 'mock failed!'
+            echo '${env.BUILD_TAG} mock failed!'
             sh 'echo "Fail!"; exit 1'
         }
     }

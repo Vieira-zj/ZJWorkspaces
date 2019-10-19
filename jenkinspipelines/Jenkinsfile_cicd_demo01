@@ -1,0 +1,89 @@
+#!groovy
+// Created at 2019-10-19, cicd for my java maven project.
+
+def WS_PATH="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}/workspace"
+def PROJECT_PATH='eclipse_ws/zj_maven_project'
+def ARCHIVE_FILE='jar_release.zip'
+
+pipeline {
+    agent any
+    
+    options {
+        timeout(time: 10, unit: 'MINUTES')
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                dir('eclipse_ws') {
+                    echo 'Checkout Code...'
+                    git 'https://github.com/Vieira-zj/zj_eclipse_workspace.git'
+                }
+                // checkout([
+                //     $class: 'GitSCM', branches: [[name: '*/master']],
+                //     doGenerateSubmoduleConfigurations: false,
+                //     extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'eclipse_ws']],
+                //     submoduleCfg: [],
+                //     userRemoteConfigs: [[url: 'https://github.com/Vieira-zj/zj_eclipse_workspace.git']]
+                // ])
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Build Jar...'
+                check_env()
+                dir(PROJECT_PATH) {
+                    sh 'pwd; ls -l'
+                    // sh 'mvn clean package'
+                }
+            }
+        }
+        stage('Archive') {
+            steps {
+                echo 'Zip and Archive...'
+                script {
+                    if (fileExists(ARCHIVE_FILE)) {
+                        echo "rm old archive file ${ARCHIVE_FILE}"
+                        sh "rm ${ARCHIVE_FILE}"
+                    }
+                }
+                zip archive: true, dir: "${PROJECT_PATH}/target", glob: '*.jar', zipFile: ARCHIVE_FILE
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'send job results email'
+            emailext (
+                // https://jenkins.io/doc/pipeline/steps/email-ext/
+                to: 'zhengjin@4paradigm.com',
+                subject: "${env.JOB_NAME} #${env.BUILD_NUMBER} [${currentBuild.result}]",
+                body: "Build URL: ${env.BUILD_URL}.\n\n",
+                attachLog: true,
+                attachmentsPattern: "**/${ARCHIVE_FILE}",
+            )
+            echo 'clear workspace'
+            // cleanWs()
+        }
+        success {
+            echo "job ${env.BUILD_TAG} success."
+            // mail to:"zhengjin@4paradigm.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Yay, we passed."
+        }
+        failure {
+            echo "job ${env.BUILD_TAG} failed!"
+            // mail to:"zhengjin@4paradigm.com", subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "Boo, we failed."
+        }
+    }
+}
+
+def check_env() {
+    script {
+        try {
+            sh 'java -version'
+            sh 'mvn -version'
+        } catch (err) {
+            error "The Build env is not ready! ${err}"
+        }
+    }
+}
