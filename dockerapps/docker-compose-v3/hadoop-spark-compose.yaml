@@ -12,7 +12,7 @@ services:
     # restart: "no"
     ports:
       - 8088:8088  # yarn.resourcemanager.webapp.address (yarn web ui)
-      # - 8042:8042  # yarn.nodemanager.webapp.address
+      - 8042:8042  # yarn.nodemanager.webapp.address (spark job logs)
       # - 8040:8040  # yarn.nodemanager.localizer.address
       # - 50010:50010  # dfs.datanode.address
       # - 50020:50020  # dfs.datanode.ipc.address
