@@ -1,0 +1,12 @@
+{
+    "editor.fontSize": 14,
+    "editor.suggestSelection": "first",
+    // "editor.minimap.enabled": false,
+    "window.zoomLevel": 0,
+    "workbench.editor.enablePreview": false,
+    "workbench.settings.editor": "json",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    }
+}
