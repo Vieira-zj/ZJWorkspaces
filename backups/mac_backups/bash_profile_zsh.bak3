@@ -2,6 +2,7 @@ echo 'zhengjin, here'
 # The original version is saved in .bash_profile.pysave
 # ENV VARS
 export LANG="en_US.UTF-8"
+export MAVEN_HOME="${HOME}/Workspaces/mvn_repository"
 # PYTHON
 export PYPATH='/Users/zhengjin/Workspaces/zj_py3_project'
 # GO
