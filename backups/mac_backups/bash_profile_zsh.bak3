@@ -3,6 +3,7 @@ echo 'zhengjin, here'
 # ENV VARS
 export LANG="en_US.UTF-8"
 export MAVEN_HOME="${HOME}/Workspaces/mvn_repository"
+export SONARQUBE_HOME="${HOME}/Downloads/tmp_files/sonarqube_home"
 # PYTHON
 export PYPATH='/Users/zhengjin/Workspaces/zj_py3_project'
 # GO

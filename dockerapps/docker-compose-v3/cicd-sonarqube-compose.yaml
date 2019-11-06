@@ -1,0 +1,18 @@
+#
+# Create at 2019-11-09, sonar web.
+#
+version: "3"
+
+services:
+  sonarqube:
+    image: sonarqube
+    container_name: sonarqube
+    volumes:
+      - "/usr/share/zoneinfo/Asia/Shanghai:/etc/localtime"
+      - "$SONARQUBE_HOME/conf:/opt/sonarqube/conf"
+      - "$SONARQUBE_HOME/extensions:/opt/sonarqube/extensions"
+      - "$SONARQUBE_HOME/logs:/opt/sonarqube/logs"
+      - "$SONARQUBE_HOME/data:/opt/sonarqube/data sonarqube"
+    ports:
+      - "9000:9000"
+    stop_grace_period: 1m

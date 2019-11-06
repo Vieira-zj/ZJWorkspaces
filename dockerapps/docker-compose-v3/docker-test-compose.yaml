@@ -1,6 +1,9 @@
 #
 # Create at 2018-12-22, docker compose test demo.
 #
+# Docker compose file refer: 
+# https://docs.docker.com/compose/compose-file/
+#
 version: "3"
 
 services:
