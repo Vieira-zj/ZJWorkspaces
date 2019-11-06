@@ -12,7 +12,7 @@ services:
       - "$SONARQUBE_HOME/conf:/opt/sonarqube/conf"
       - "$SONARQUBE_HOME/extensions:/opt/sonarqube/extensions"
       - "$SONARQUBE_HOME/logs:/opt/sonarqube/logs"
-      - "$SONARQUBE_HOME/data:/opt/sonarqube/data sonarqube"
+      - "$SONARQUBE_HOME/data:/opt/sonarqube/data"
     ports:
       - "9000:9000"
     stop_grace_period: 1m
