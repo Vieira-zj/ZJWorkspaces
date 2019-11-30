@@ -1,25 +1,33 @@
 #
 # Create at 2018-12-17
 # Build selenium grid to run ui test parallel in headless mode. 
-# selenium hub check: http://localhost:4444/wd/hub/status
+# Refer: https://github.com/SeleniumHQ/docker-selenium
 #
 # Run commands:
 # $ docker-compose -f selenium-hub-compose.yaml up -d
 # $ docker-compose -f selenium-hub-compose.yaml down
 #
+# selenium hub check: http://localhost:4444/wd/hub/status
+# run ui test: py ~/Workspaces/zj_py3_project/pydemos/py_unittest.py
+#
 version: "3"
 
 services:
   selenium-hub:
-    image: selenium/hub
+    image: selenium/hub:3.141
     container_name: selenium-hub
     ports:
       - "4444:4444"
     networks:
       - selenium-grid
+    healthcheck:
+      test: ["CMD", "/opt/bin/check-grid.sh", "--host 0.0.0.0", "--port 4444"]
+      interval: 15s
+      timeout: 30s
+      retries: 5
 
   selenium-node-chrome:
-    image: selenium/node-chrome 
+    image: selenium/node-chrome:3.141 
     container_name: selenium-node-chrome
     depends_on:
       - selenium-hub
@@ -27,14 +35,12 @@ services:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
       - START_XVFB=false # disable vnc for headless mode
-    #ports:
-    #  - "5901:5900"
     networks:
       - selenium-grid
     shm_size: 1G
 
   selenium-node-firefox:
-    image: selenium/node-firefox
+    image: selenium/node-firefox:3.141
     container_name: selenium-node-firefox
     depends_on:
       - selenium-hub
@@ -42,8 +48,6 @@ services:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
       - START_XVFB=false
-    #ports:
-    #  - "5902:5900"
     networks:
       - selenium-grid
     shm_size: 1G
