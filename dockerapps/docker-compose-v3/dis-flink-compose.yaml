@@ -1,0 +1,42 @@
+#
+# Created at 2019-12-29, build flink+nc env.
+#
+version: "3.1"
+services:
+  ncsocket:
+    image: appropriate/nc
+    container_name: ncsocket
+    expose:
+      - "9000"
+    command: [/bin/sh, -c, "while true; do echo 'hello nc'; sleep 10; done;"] 
+
+  jobmanager:
+    image: flink:1.9.1
+    container_name: jobmanager
+    expose:
+      - "6123"
+    ports:
+      - "8081:8081"
+    depends_on:
+      - ncsocket
+    command: jobmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+    links:
+      - "ncsocket:ncsocket"
+    volumes:
+      - "/tmp/target_jars:/tmp/target_jars"
+
+  taskmanager:
+    image: flink:1.9.1 
+    container_name: taskmanager
+    expose:
+      - "6121"
+      - "6122"
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    environment:
+      - JOB_MANAGER_RPC_ADDRESS=jobmanager
+    links:
+      - "jobmanager:jobmanager"
