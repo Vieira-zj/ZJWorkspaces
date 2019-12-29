@@ -1,35 +1,28 @@
 #
-# Created at 2019-12-29, build flink+nc env.
+# Created at 2019-12-29, build flink+nc+kafka env.
 #
-version: "3.1"
-services:
-  ncsocket:
-    image: appropriate/nc
-    container_name: ncsocket
-    expose:
-      - "9000"
-    command: [/bin/sh, -c, "while true; do echo 'hello nc'; sleep 10; done;"] 
+version: "3.2"
 
+services:
   jobmanager:
     image: flink:1.9.1
-    container_name: jobmanager
+    container_name: "jobmanager"
     expose:
       - "6123"
     ports:
       - "8081:8081"
-    depends_on:
-      - ncsocket
     command: jobmanager
     environment:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
     links:
       - "ncsocket:ncsocket"
+      - "kafka:kafka"
     volumes:
       - "/tmp/target_jars:/tmp/target_jars"
 
   taskmanager:
     image: flink:1.9.1 
-    container_name: taskmanager
+    container_name: "taskmanager"
     expose:
       - "6121"
       - "6122"
@@ -40,3 +33,40 @@ services:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
     links:
       - "jobmanager:jobmanager"
+
+  ncsocket:
+    image: appropriate/nc
+    container_name: "ncsocket"
+    expose:
+      - "9000"
+    command: [/bin/sh, -c, "while true; do echo 'hello nc'; sleep 10; done;"] 
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: "zookeeper"
+    expose:
+      - "2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: "kafka"
+    depends_on:
+      - zookeeper
+    expose:
+      - "9092"
+    ports:
+      - target: 9094
+        published: 9094
+        protocol: tcp
+        mode: host
+    environment:
+      HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://zjmbp:9094
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+    links:
+      - "zookeeper:zookeeper"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
