@@ -2,7 +2,7 @@
 # Create at 2019-03-24, build hadoop (hdfs + mapreduce + yarn) env.
 # Java version: 1.7
 #
-# access web:
+# access web ui:
 # hdfs: http://localhost:50070
 # yarn: http://localhost:8088
 #
@@ -11,7 +11,7 @@ version: '3.1'
 services:
   hadoop:
     image: sequenceiq/hadoop-docker
-    container_name: hadoop-test
+    container_name: hadoop-yarn
     restart: "no"
     ports:
       - 9001:9000
@@ -19,5 +19,7 @@ services:
       - 50075:50075  # datanode
       - 8088:8088  # yarn
     #command: ["/etc/bootstrap.sh", "-d"]
+    environment:
+      PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/java/default/bin:/usr/local/hadoop/bin"
     volumes:
-      - "/tmp/hadoop_test:/usr/local/hadoop/src"
+      - "/tmp/hadoop_test:/tmp/hadoop_test"

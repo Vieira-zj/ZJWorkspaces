@@ -18,7 +18,7 @@ services:
       - "ncsocket:ncsocket"
       - "kafka:kafka"
     volumes:
-      - "/tmp/target_jars:/tmp/target_jars"
+      - "/tmp/flink_test:/tmp/flink_test"
 
   taskmanager:
     image: flink:1.9.1 
