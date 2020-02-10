@@ -3,7 +3,7 @@ set -eu
 
 # ex1-1, sub str
 function sub_str_test() {
-  tmp_str="hello world"
+  local tmp_str="hello world"
   echo "sub str: ${tmp_str:0:5}"
   echo "length: ${#tmp_str}"  
 }
@@ -11,8 +11,8 @@ function sub_str_test() {
 
 # ex1-2, str compare
 function str_compare_test() {
-  value1="zhengjin.test"
-  value2="zhengjin.test1"
+  local value1="zhengjin.test"
+  local value2="zhengjin.test1"
   if [ "$value1" = "$value2" ]; then
     echo "values equal."
   else
@@ -29,19 +29,19 @@ function str_compare_test() {
 
 # ex1-3, calculation
 function calculate_test() {
-  count=1000
-  min=10
-  cur=30
-  count=$(($cur*$count/$min))
+  local count=1000
+  local min=10
+  local cur=30
+  local count=$(($cur*$count/$min))
   echo "current count: $count"
 }
 
 
 # ex2, trim last char
 func_trim_last_char() {
-    input1=$1
-    len=${#input1}
-    end=$((len-1))
+    local input1=$1
+    local len=${#input1}
+    local end=$((len-1))
     echo ${input1:0:${end}}
 }
 
@@ -52,7 +52,7 @@ func_trim_last_char() {
 
 # ex4, read file
 read_lines_fn1() {
-    sum=1
+    local sum=1
     cat $1 | while read line; do
         echo "output line ${sum}: ${line}"
         sum=$((sum+1))
@@ -60,14 +60,14 @@ read_lines_fn1() {
 }
 
 read_lines_fn2() {
-    file="$1"
+    local file="$1"
     while IFS='=' read -r key value; do
         echo "${key}=${value}"
     done < "$file"
 }
 
 read_lines_fn3() {
-    file="$1"
+    local file="$1"
     cat "$file" | while IFS='=' read -r key value; do
         echo "${key}=${value}"
     done
@@ -96,18 +96,18 @@ function loop_test() {
 
 
 function iterator_test() {
-  tmp_values="v1/k1 v2/k1 v1/k2 v1/k3"
+  local tmp_values="v1/k1 v2/k1 v1/k2 v1/k3"
   for value in ${tmp_values}; do
     echo "value: $(echo $value | awk -F '/' '{print $2}')"
   done
 
-  tmp_array1=("v1" "v2" "v3")
+  local tmp_array1=("v1" "v2" "v3")
   echo "array length: ${#tmp_array1[*]}"
   for value in ${tmp_array1[*]}; do
     echo "array value: ${value}" 
   done
 
-  tmp_array2=("val4" "val5" "val6")
+  local tmp_array2=("val4" "val5" "val6")
   echo "arrays values => "
   for value in ${tmp_array1[*]} ${tmp_array2[*]}; do
       echo "array value: ${value}" 
@@ -122,9 +122,9 @@ function iterator_test() {
 
 # ex6-1, awk test
 function awk_if_test() {
-  test_file=${HOME}/Downloads/tmp_files/test.out
+  local test_file=${HOME}/Downloads/tmp_files/test.out
   echo '01|b6' > $test_file
-  lines=('02|b6' '03|b7' '04|b6')
+  local lines=('02|b6' '03|b7' '04|b6')
   for line in ${lines[*]}; do
     echo $line >> $test_file 
   done
@@ -135,9 +135,9 @@ function awk_if_test() {
 
 function awk_script_test() {
     set -x
-    test_file=${HOME}/Downloads/tmp_files/test.out
+    local test_file=${HOME}/Downloads/tmp_files/test.out
     echo '01|b6' > $test_file
-    lines=('02|b6' '03|b7' '04|b6' '05|b7' '06|b8')
+    local lines=('02|b6' '03|b7' '04|b6' '05|b7' '06|b8')
     for line in ${lines[*]}; do
       echo $line >> $test_file 
     done
@@ -150,13 +150,13 @@ function awk_script_test() {
 # ex6-2, awk test
 # get total files size in dir
 function awk_test_01() {
-  input_path=$1
+  local input_path=$1
   ls -l $input_path | awk 'BEGIN{sum=0} !/^d/{sum+=$5} END{print "files total size is:",int(sum/1024),"KB"}'
 }
 
 # get files count for each user
 function awk_test_02() {
-  input_path=$1
+  local input_path=$1
   ls -l $input_path | awk 'NR!=1 && !/^d/{sum[$3]++} END{for (user in sum) printf "%-6s %-5s %-3s \n",user," ",sum[user]}'
 }
 
@@ -165,11 +165,11 @@ function awk_test_02() {
 set_arg_default() {
   set +u
 
-  input1=$1
+  local input1=$1
   echo "var input1 with default: ${input1:=default}"
   echo "var input1 changed to: ${input1}"
 
-  input2=$2
+  local input2=$2
   echo "var input2 with default: ${input2:-default}"
   echo "var input2 unchanged: ${input2}"
 
@@ -213,7 +213,7 @@ function my_prefix() {
 }
 
 function ret_value_check() {
-  prefix_val=$(my_prefix "shelltest")
+  local prefix_val=$(my_prefix "shelltest")
   echo "prefix value: ${prefix_val}"
 }
 
@@ -248,12 +248,25 @@ function readonly_var_fn() {
 
 # ex11, file not exist
 function is_file_not_exist() {
-  path=$1
+  local path=$1
   echo "check path: ${path}"
   if [[ ! -f $path ]]; then
     echo "path (${path}) not exist!"
   fi
 }
+
+
+# ex12, while loop for number
+function while_loop_test() {
+  local num=$1
+  while [[ $num -ne 0 ]]; do
+    echo "number: ${num}"
+    ((num = num - 1))
+    sleep 1
+  done
+  echo "while loop done."
+}
+
 
 # main
 function main() {
@@ -289,11 +302,12 @@ function main() {
   # type jv
   # jv
 
-  # process_check 'sublime'
+  #process_check 'sublime'
 
   # ret_value_check
   # readonly_var_fn
-  is_file_not_exist /tmp/target_jar
+  #is_file_not_exist /tmp/target_jar
+  while_loop_test 3
 }
 main
 
