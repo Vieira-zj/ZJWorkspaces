@@ -5,7 +5,8 @@ version: "3"
 
 services:
   tensorflow:
-    image: tensorflow/tensorflow:latest-py3-jupyter
+    #image: tensorflow/tensorflow:latest-py3-jupyter
+    image: tf-with-pandas
     container_name: tensorflow
     volumes:
       - /tmp/tf_scripts:/tf/tf_scripts
