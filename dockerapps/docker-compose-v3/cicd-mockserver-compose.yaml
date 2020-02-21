@@ -1,0 +1,19 @@
+#
+# Create at 2020-02-20, build mock server.
+#
+version: "3"
+
+services:
+  mockServer:
+    image: mockserver/mockserver
+    container_name: mockserver
+    ports:
+      - 1090:1090
+    environment:
+      LOG_LEVEL: "INFO"
+      SERVER_PORT: 1090
+      #PROXY_REMOTE_PORT: 80
+      #PROXY_REMOTE_HOST: www.mock-server.com
+      #JVM_OPTIONS: -Dmockserver.sslSubjectAlternativeNameDomains='org.mock-server.com,mock-server.com'
+    volumes:
+      - /tmp/mockserver:/tmp/mockserver
