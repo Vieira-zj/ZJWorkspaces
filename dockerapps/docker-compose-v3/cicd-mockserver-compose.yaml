@@ -1,10 +1,12 @@
 #
 # Create at 2020-02-20, build mock server.
 #
+# Configs: mockserver2_conf/*
+#
 version: "3"
 
 services:
-  mockServer:
+  mockserver:
     image: mockserver/mockserver
     container_name: mockserver
     ports:
@@ -17,3 +19,13 @@ services:
       #JVM_OPTIONS: -Dmockserver.sslSubjectAlternativeNameDomains='org.mock-server.com,mock-server.com'
     volumes:
       - /tmp/mockserver:/tmp/mockserver
+
+  nginx:
+     image: nginx
+     container_name: nginx
+     depends_on:
+       - mockserver
+     ports:
+       - 1080:80
+     volumes:
+       - /tmp/nginx:/tmp/nginx

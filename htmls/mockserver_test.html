@@ -2,7 +2,6 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <style type="text/css">
       h1 {
         text-align: center;
@@ -25,122 +24,100 @@
         <div>
           <p>1. match request by path</p>
           <button @click="match01">Match</button>
-          <p>Test By: curl -v "{{ url }}/mock01"</p>
+          <p>Test By: curl -v -H "Host:{{ host }}" "{{ url }}/mock01"</p>
         </div>
+      </div>
+      <div>
+        <h2>Response Action</h2>
         <div>
-          <h2>Response Action</h2>
-          <div>
-            <p>1. literal response with body only</p>
-            <button @click="action01">Action</button>
-            <p>Test By: curl -v "{{ url }}/"</p>
-          </div>
-          <div>
-            <p>2. literal response with status code and reason phrase</p>
-            <button @click="action02">Action</button>
-            <p>Test By: curl -v -XPOST "{{ url }}/action02"</p>
-          </div>
-        </div>
-        <div>
-          <p v-show="message.length > 0" v-bind:style="resultsColor">
-            Results: {{ message }}
+          <p>1. literal response with status code and reason phrase</p>
+          <button @click="action01">Action</button>
+          <p>
+            Test By: curl -v -H "Host:{{ host }}" -XPOST "{{ url }}/action01"
           </p>
         </div>
       </div>
+      <div>
+        <p v-show="message.length > 0" v-bind:style="resultsColor">
+          Results: {{ message }}
+        </p>
+      </div>
     </div>
-  </body>
-  <script src="modules/vue.min.js"></script>
-  <script src="modules/mockServerClient.js"></script>
-  <script>
-    const host = 'localhost'
-    const port = '1090'
-    const client = mockServerClient(host, port)
+    <script src="modules/vue.min.js"></script>
+    <script src="modules/mockServerClient.js"></script>
+    <script>
+      const host = 'mockserver.test.com'
+      const port = '1080'
+      const client = mockServerClient(host, port)
 
-    let app = new Vue({
-      el: '#app',
-      data() {
-        return {
-          url: `http://${host}:${port}`,
-          mockSuccess: false,
-          message: ''
-        }
-      },
-      computed: {
-        resultsColor: function() {
-          let color = this.mockSuccess ? 'green' : 'red'
-          return `color:${color};`
-        }
-      },
-      methods: {
-        match01: function() {
-          let vm = this
-          client
-            .mockAnyResponse({
-              httpRequest: {
-                path: '/mock01'
-              },
-              httpResponse: {
-                body: 'This is MockServer Demo01.'
-              }
-            })
-            .then(
-              function() {
-                vm.mockSuccess = true
-                vm.message = 'Expectation created.'
-                console.log('match01 expectation created.')
-              },
-              function(err) {
-                vm.mockSuccess = false
-                vm.message = err
-              }
-            )
+      let app = new Vue({
+        el: '#app',
+        data() {
+          return {
+            host: host,
+            url: `http://127.0.0.1:${port}`,
+            mockSuccess: false,
+            message: ''
+          }
         },
-        action01: function() {
-          let vm = this
-          client
-            .mockAnyResponse({
-              // if no request matcher is specified then every request matched
-              httpResponse: {
-                body: 'This is MockServer default.'
-              }
-            })
-            .then(
-              function() {
-                vm.mockSuccess = true
-                vm.message = 'Expectation created.'
-                console.log('action01 expectation created.')
-              },
-              function(err) {
-                vm.mockSuccess = false
-                vm.message = err
-              }
-            )
+        computed: {
+          resultsColor: function() {
+            let color = this.mockSuccess ? 'green' : 'red'
+            return `color:${color};`
+          }
         },
-        action02: function() {
-          let vm = this
-          client
-            .mockAnyResponse({
-              httpRequest: {
-                method: 'POST',
-                path: '/action02'
-              },
-              httpResponse: {
-                statusCode: 418,
-                reasonPhrase: "I'm a teapot"
-              }
-            })
-            .then(
-              function() {
-                vm.mockSuccess = true
-                vm.message = 'Expectation created.'
-                console.log('action02 expectation created.')
-              },
-              function(err) {
-                vm.mockSuccess = false
-                vm.message = err
-              }
-            )
+        methods: {
+          match01: function() {
+            let vm = this
+            client
+              .mockAnyResponse({
+                httpRequest: {
+                  path: '/mock01'
+                },
+                httpResponse: {
+                  body: 'This is MockServer match demo01.'
+                }
+              })
+              .then(
+                function() {
+                  vm.mockSuccess = true
+                  vm.message = 'Expectation created.'
+                  console.log('match01 expectation created.')
+                },
+                function(err) {
+                  vm.mockSuccess = false
+                  vm.message = err
+                }
+              )
+          },
+          action01: function() {
+            let vm = this
+            client
+              .mockAnyResponse({
+                httpRequest: {
+                  method: 'POST',
+                  path: '/action01'
+                },
+                httpResponse: {
+                  statusCode: 419,
+                  reasonPhrase: "I'm a teapot",
+                  body: 'This is MockServer action demo01.'
+                }
+              })
+              .then(
+                function() {
+                  vm.mockSuccess = true
+                  vm.message = 'Expectation created.'
+                  console.log('action01 expectation created.')
+                },
+                function(err) {
+                  vm.mockSuccess = false
+                  vm.message = err
+                }
+              )
+          }
         }
-      }
-    })
-  </script>
+      })
+    </script>
+  </body>
 </html>
