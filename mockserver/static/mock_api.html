@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html;charset=utf-8" />
+    <title>api mock server</title>
+    <style>
+      h1, #app {
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        color: #2c3e50;
+      }
+      h1 {
+        text-align: center;
+      }
+      input {
+        padding: 5px;
+        margin: 10px;
+      }
+      button {
+        margin: 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        background: #f0f0f0;
+      }
+      button:hover {
+        background: #e0e0e0;
+      }
+      #app {
+        font-size: 80%;
+      }
+      #register_api, #mock_test, #http_req_input, #http_resp_output {
+        padding: 10px;
+        border: 1px solid #ccc;
+        margin: 10px, 10px;
+      }
+      #http_resp_output {
+        height: 500px;
+      }
+      #url_input {
+        width: 70%;
+      }
+      .link_btn {
+        color: #7f8c8d;
+        text-decoration: underline;
+      }
+      .link_btn:hover {
+        color: #4fc08d;
+        cursor: pointer;
+      }
+      #go_top {
+        position: fixed;
+        right: 50px;
+        bottom: 50px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>API Mock Server</h1>
+    <div id="app">
+      <!-- navigation div -->
+      <div id="nav">
+        <p id="go_apitest" class="link_btn" @click="scrollToApiTest">Go API Test</p>
+        <button id="go_top" @click="scrollToTop">Go Top</button>
+      </div>
+      <!-- api mock div -->
+      <div id="mock_api">
+        <h2>Mock APIs</h2>
+        <!-- register api div -->
+        <div id="register_api">
+          <h3>Register Mock API</h3>
+          <div id="register_url">
+            <label for="register_path">Register Path</label>
+            <input type="text" id="register_path" v-model.lazy="registerPath">
+            <p>
+              <b>Register URL:</b> {{ registerHost + registerPath }}
+              <span class="link_btn" @click="copyToclipboard(registerHost+registerPath)">copy</span>
+            </p>
+          </div>
+          <div id="register_params">
+            <label>Template Parameters (key-value)</label>
+            <button v-on:click="addParam">+</button>
+            <button v-on:click="removeParam">-</button>
+            <div v-for="param in registerParams" v-bind:value="param.idx">
+              <input type="text" v-model="param.key">
+              <input type="text" v-model="param.value" :placeholder="paramInputHint" style="width: 250px;">
+            </div>
+          </div>
+          <div id="register_body">
+            <p>Register Body</p>
+            <textarea cols="80" rows="20" v-model="registerBody" placeholder="body template {{.var}}"></textarea>
+          </div>
+          <div id="submit_register">
+            <p>
+              <button v-on:click="sendRegisterApi">Register Mock API</button>
+              <span id="reg_result">{{ registerResult }}</span>
+            </p>
+          </div>
+        </div><br>
+        <!-- mock test div -->
+        <div id="mock_test">
+          <h3>Mock API Test</h3>
+          <label for="mock_path">Mock Path</label>
+          <input type="text" id="mock_path" v-model.lazy="mockPath">
+          <p>
+            <b>Mock API URL:</b> {{ mockUrl + mockPath }}
+            <span class="link_btn" @click="copyToclipboard(mockUrl+mockPath)">copy</span>
+          </p>
+          <p>
+            <button v-on:click="testMock">Test Mock</button>
+            <span id="mock_result">{{ mockResult }}</span>
+          </p>
+          <p>
+            <b>Mock Response</b> <span v-show="respMockCode!==-1">({{ respMockCode }})</span><br>
+            <pre>{{ respMockData }}</pre>
+          </p>
+        </div>
+      </div><br><hr>
+      <!-- api test div -->
+      <div id="api_test">
+        <h2>HTTP API Test</h2>
+        <!-- http request div -->
+        <div id="http_req_input">
+          <h3>HTTP Request</h3>
+          <div>
+            <label for="url_input">Request URL</label>
+            <input type="text" id="url_input" v-model="reqUrl">
+          </div>
+          <div>
+            <label for="req_method">Request Method</label>
+            <input type="radio" id="r_get" value="get" v-model="reqMethod">
+            <label for="r_get">Get</label>
+            <input type="radio" id="r_post" value="post" v-model="reqMethod">
+            <label for="r_post">Post</label>
+          </div>
+          <div>
+            <label>Request Headers (key-value)</label>
+            <button v-on:click="addHeader">+</button>
+            <button v-on:click="removeHeader">-</button>
+            <div v-for="header in reqHeaders" v-bind:value="header.idx">
+              <input type="text" v-model="header.key">
+              <input type="text" v-model="header.value">
+            </div>
+          </div>
+          <div>
+            <p>Request Body</p>
+            <textarea id="req_body" cols="120" rows="30" v-show="isReqBodyShow" v-model="reqBody"></textarea>
+          </div>
+          <button v-on:click="sendRequest">Send</button>
+        </div><br>
+        <!-- http response div -->
+        <div id="http_resp_output">
+          <h3>HTTP Response</h3>
+          <div id="output_content" v-show="respStatus!==-1">
+            <p><b>Status:</b> {{ respStatus }}</p>
+            <p>
+              <b>Response Headers:</b><br>
+              <pre>{{ respHeaders }}</pre>
+            </p>
+            <p>
+              <b>Response Body:</b><br>
+              <pre>{{ respBody }}</pre>
+            </p>
+          </div>
+          <div id="output_error">
+            <p style="color: red; font-weight: bold;">{{ errMessage }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./dist/vue.js"></script>
+    <script src="./dist/axios.min.js"></script>
+    <script src="./mock_utils.js"></script>
+    <script>
+      let app = new Vue({
+        el: '#app',
+        data () {
+          return {
+            // mock api
+            registerHost: 'http://127.0.0.1:17891/mock/register/',
+            registerPath: '',
+            registerParams: [{idx: 0, key: '', value: ''}],
+            registerBody: '',
+            registerResult: '',
+            // mock test
+            mockUrl: 'http://127.0.0.1:17891/mock/',
+            mockPath: '',
+            mockResult: '',
+            respMockCode: -1,
+            respMockData: '',
+            // api test request
+            reqUrl: 'http://127.0.0.1:17891/',
+            reqMethod: methodGet,
+            reqHeaders: [{idx: 0, key: '', value: ''}],
+            isReqBodyShow: false,
+            reqBody: '',
+            paramInputHint: 'randint(n) / randstr(n) / randchoice(c1,c2)',
+            // api test response
+            respStatus: -1,
+            respHeaders: '',
+            respBody: '',
+            errMessage: '',
+            // navigation
+            scrollTop: 0
+          }
+        },
+        watch: {
+          reqMethod: function (newValue, oldValue) {
+            this.isReqBodyShow = newValue === methodPost ? true : false
+          },
+          registerPath: function (newValue, oldValue) {
+            if (!Boolean(this.mockPath)) {
+              this.mockPath = newValue
+            }
+          }
+        },
+        mounted () {
+          let goTopBtn = document.querySelector('#go_top')
+          window.onscroll = () => {
+            this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+            this.scrollTop > 50 ? (goTopBtn.style.display = 'block') : (goTopBtn.style.display = 'none')
+          }
+        },
+        methods: {
+          addParam () {
+            addField(this.registerParams)
+          },
+          removeParam () {
+            removeField(this.registerParams)
+          },
+          addHeader () {
+            addField(this.reqHeaders)
+          },
+          removeHeader () {
+            removeField(this.reqHeaders)
+          },
+          sendRegisterApi () {
+            if (!Boolean(this.registerPath)) {
+              alert('Register path is empty!')
+              return
+            }
+            if (!Boolean(this.registerBody)) {
+              alert('Register body is empty!')
+              return
+            }
+
+            let vm = this
+            axios({
+              method: methodPost,
+              url: vm.registerHost + vm.registerPath + '?' + buildQuery(vm.registerParams),
+              data: vm.registerBody
+            }).then(resp => {
+              console.log(resp.data)
+              if (resp.status >= 400) {
+                vm.registerResult = resultFail
+                updateResultElementStyle(registerResultId, false)
+                console.error('register mock api failed with status code:', resp.status)
+                return
+              }
+              vm.registerResult = resultPass
+              updateResultElementStyle(registerResultId, true)
+            }).catch(err => {
+              vm.registerResult = resultFail
+              updateResultElementStyle(registerResultId, false)
+              console.error("register mock api failed with error:", err)
+            })
+          },
+          testMock () {
+            if (!Boolean(this.mockPath)) {
+              alert('Mock path is empty!')
+              return
+            }
+            let vm = this
+            axios({
+              method: methodGet,
+              url: vm.mockUrl + vm.mockPath,
+            }).then(resp => {
+              vm.respMockCode = resp.status
+              vm.respMockData = formatJson(resp.data)
+              if (resp.status >= 400) {
+                vm.mockResult = resultFail
+                updateResultElementStyle(mockResultId, false)
+                console.error('test mock api failed with status code:', resp.status)
+                return
+              }
+              vm.mockResult = resultPass
+              updateResultElementStyle(mockResultId, true)
+            }).catch(err => {
+              vm.mockResult = resultFail
+              vm.respMockCode = -1
+              vm.respMockData = ''
+              updateResultElementStyle(mockResultId, false)
+              console.error('test mock api failed with error:', err)
+            })
+          },
+          sendRequest () {
+            if (!Boolean(this.reqUrl)) {
+              alert('Request url is empty!')
+              return
+            }
+            if (!this.reqUrl.startsWith('http')) {
+              alert('Invalid request url!')
+              return
+            }
+            console.log('custom headers:', JSON.stringify(buildHeaders(this.reqHeaders)))
+
+            let vm = this
+            axios({
+              method: vm.reqMethod,
+              url: vm.reqUrl,
+              // cors error when request with custom headers
+              // headers: buildHeaders(vm.reqHeaders),
+              data: vm.reqBody
+            }).then(function (resp) {
+              vm.respStatus = resp.status
+              vm.respHeaders = formatJson(resp.headers)
+              vm.respBody = formatJson(resp.data)
+              vm.errMessage = ''
+            }).catch(function (err) {
+              vm.errMessage = err
+              vm.respStatus = -1
+              vm.respHeaders = ''
+              vm.respBody = ''
+              console.error('api test failed with error:', err)
+            })
+          },
+          scrollToPosition (position) {
+            let vm = this
+            // 清空上一次的定时器
+            let timer = null
+            clearInterval(timer)
+
+            // 定时器，每15ms执行一次滚动事件
+            timer = setInterval(() => {
+              if (Math.abs(vm.scrollTop - position) < 3) {
+                window.scrollTo(0, position)
+                clearInterval(timer)
+              }
+              if (vm.scrollTop > position) {
+                vm.scrollTop -= (vm.scrollTop - position) / 10 // 向上滚动
+              } else {
+                vm.scrollTop += (position - vm.scrollTop) / 10 // 向下滚动
+              }
+              window.scrollTo(0, vm.scrollTop)
+            }, 15)
+          },
+          scrollToTop () {
+            this.scrollToPosition(0)
+          },
+          scrollToApiTest () {
+            this.scrollToPosition(document.querySelector('#api_test').offsetTop)
+          },
+          copyToclipboard (text) {
+            const input = document.createElement('input')
+            document.body.appendChild(input)
+            input.setAttribute('value', text)
+            input.select()
+            if (document.execCommand('copy')) {
+              document.execCommand('copy')
+              alert('copied')
+            } else {
+              alert('copied failed! browser not support.')
+            }
+            document.body.removeChild(input)
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
