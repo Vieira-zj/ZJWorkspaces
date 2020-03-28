@@ -49,8 +49,7 @@ alias dkimgs='docker images | sort'
 alias dkc='docker-compose -f'
 alias kc='kubectl'
 alias kcgetall='kubectl get --all-namespaces'
-alias ministart='minikube start --registry-mirror=https://registry.docker-cn.com --kubernetes-version v1.11.1'
-alias setminidkenv='eval $(minikube docker-env)'
+alias ministart='minikube start --vm-driver=virtualbox --kubernetes-version=1.17.3'
 # TERMINAL
 #enables colorin the terminal bash shell export
 export CLICOLOR=1
