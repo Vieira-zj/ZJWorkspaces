@@ -27,6 +27,14 @@ services:
     ports:
       - 6379:6379
 
+  echoserver:
+    image: cilium/echoserver
+    container_name: echoserver
+    ports:
+      - 8081:80
+    networks:
+      - openresty-net
+
 networks:
   openresty-net:
     driver: bridge
