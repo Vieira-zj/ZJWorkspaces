@@ -39,10 +39,10 @@ function calculate_test() {
 
 # ex2, trim last char
 func_trim_last_char() {
-    local input1=$1
-    local len=${#input1}
-    local end=$((len-1))
-    echo ${input1:0:${end}}
+  local input1=$1
+  local len=${#input1}
+  local end=$((len-1))
+  echo ${input1:0:${end}}
 }
 
 
@@ -52,25 +52,25 @@ func_trim_last_char() {
 
 # ex4, read file
 read_lines_fn1() {
-    local sum=1
-    cat $1 | while read line; do
-        echo "output line ${sum}: ${line}"
-        sum=$((sum+1))
-    done
+  local sum=1
+  cat $1 | while read line; do
+    echo "output line ${sum}: ${line}"
+    sum=$((sum+1))
+  done
 }
 
 read_lines_fn2() {
-    local file="$1"
-    while IFS='=' read -r key value; do
-        echo "${key}=${value}"
-    done < "$file"
+  local file="$1"
+  while IFS='=' read -r key value; do
+    echo "${key}=${value}"
+  done < "$file"
 }
 
 read_lines_fn3() {
-    local file="$1"
-    cat "$file" | while IFS='=' read -r key value; do
-        echo "${key}=${value}"
-    done
+  local file="$1"
+  cat "$file" | while IFS='=' read -r key value; do
+    echo "${key}=${value}"
+  done
 }
 
 
@@ -268,10 +268,32 @@ function while_loop_test() {
 }
 
 
+# ex13, echo
+echo_yellow() {
+  str=$1
+  echo -e "\033[33m ${str}\033[0m"
+}
+
+echo_red() {
+  str=$1
+  echo -e "\033[31m ${str}\033[0m"
+}
+
+echo_green() {
+  str=$1
+  echo -e "\033[32m ${str}\033[0m"
+}
+
+echo_test() {
+  echo_red "red text"
+  echo_yellow "yellow text"
+  echo_green "green text"
+}
+
 # main
 function main() {
   echo ""
-  echo "main process:"
+  echo "shell script test:"
 
   # calculate_test
 
@@ -307,7 +329,8 @@ function main() {
   # ret_value_check
   # readonly_var_fn
   #is_file_not_exist /tmp/target_jar
-  while_loop_test 3
+  # while_loop_test 3
+  echo_test
 }
 main
 
