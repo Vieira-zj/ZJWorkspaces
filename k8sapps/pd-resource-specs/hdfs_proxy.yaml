@@ -1,0 +1,245 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubernetes.io/created-by: |
+      {"kind":"SerializedReference","apiVersion":"v1","reference":{"kind":"ReplicaSet","namespace":"prophet","name":"proxy-hdfs-primary-66b546c77","uid":"43e891f8-74cb-11ea-9b56-0894ef770d44","apiVersion":"extensions","resourceVersion":"161681189"}}
+    kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for init
+      container untar-hadoop; cpu, memory limit for init container untar-hadoop'
+  creationTimestamp: 2020-04-08T04:41:01Z
+  generateName: proxy-hdfs-primary-66b546c77-
+  labels:
+    app: proxy-hdfs
+    hadoopId: primary
+    pod-template-hash: "226102733"
+    profile-name: proxy-hdfs
+    prophet.4paradigm.com/deployment: proxy-hdfs-primary
+    use-hadoop: "true"
+    use-hadoop-primary: "true"
+  name: proxy-hdfs-primary-66b546c77-xrws4
+  namespace: prophet
+  ownerReferences:
+  - apiVersion: extensions/v1beta1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: proxy-hdfs-primary-66b546c77
+    uid: 43e891f8-74cb-11ea-9b56-0894ef770d44
+  resourceVersion: "161999521"
+  selfLink: /api/v1/namespaces/prophet/pods/proxy-hdfs-primary-66b546c77-xrws4
+  uid: 262747df-7953-11ea-9b56-0894ef770d44
+
+spec:
+  automountServiceAccountToken: false
+  containers:
+  - env:
+    - name: MY_POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    - name: MY_NODE_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: spec.nodeName
+    - name: MY_CPU_REQUEST
+      valueFrom:
+        resourceFieldRef:
+          containerName: app
+          divisor: "0"
+          resource: requests.cpu
+    - name: MY_CPU_LIMIT
+      valueFrom:
+        resourceFieldRef:
+          containerName: app
+          divisor: "0"
+          resource: limits.cpu
+    - name: MY_MEM_REQUEST
+      valueFrom:
+        resourceFieldRef:
+          containerName: app
+          divisor: "0"
+          resource: requests.memory
+    - name: MY_MEM_LIMIT
+      valueFrom:
+        resourceFieldRef:
+          containerName: app
+          divisor: "0"
+          resource: limits.memory
+    - name: PROPHET_VERSION
+      value: 3.8.1.0
+    - name: JAEGER_SERVICE_NAME
+      value: proxy-hdfs
+    - name: ENDPOINTS_ENV_ENABLED
+      value: "false"
+    - name: GO_MYSQL_PARAMS
+      value: loc=Local&charset=utf8mb4&parseTime=True&time_zone=%27%2B08%3A00%27&maxAllowedPacket=0
+    - name: JAEGER_AGENT_HOST
+      value: jaeger-agent
+    - name: JAEGER_AGENT_PORT
+      value: "6831"
+    - name: JAEGER_SAMPLER_MANAGER_HOST_PORT
+      value: jaeger-agent:5778/sampling
+    - name: JAEGER_SAMPLER_TYPE
+      value: remote
+    - name: JAEGER_TAGS
+      value: namespace=${MY_POD_NAMESPACE:}, node_name=${MY_NODE_NAME:}
+    - name: JDBC_MYSQL_PARAMS
+      value: connectionCollation=utf8mb4_unicode_ci&useSSL=false&sessionVariables=time_zone%3d'%2B08%3A00'
+    - name: PROPHET_LANG
+      value: zh-CN
+    - name: TRACING_ENABLED
+      value: "true"
+    - name: TRACING_SERVLET_EXCLUDE
+      value: /health,/info
+    - name: TZ
+      value: Asia/Shanghai
+    - name: MY_POD_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.name
+    - name: MY_POD_SERVICE_ACCOUNT
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: spec.serviceAccountName
+    - name: JAVA_OPTS
+      value: -Djava.hadoop.home=/opt/hadoop
+    - name: SPRING_BOOT_PROFILE
+      value: prod
+    image: 172.25.203.50:35000/env/release/3.7.1/prophet/app/proxy-hdfs.tar:pipe-106-commit-23a1305d
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 300
+      periodSeconds: 20
+      successThreshold: 1
+      tcpSocket:
+        port: 6565
+      timeoutSeconds: 1
+    name: app
+    ports:
+    - containerPort: 6565
+      protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      tcpSocket:
+        port: 6565
+      timeoutSeconds: 1
+    resources:
+      limits:
+        cpu: "2"
+        memory: 4G
+      requests:
+        cpu: "2"
+        memory: 4G
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /opt/hadoop
+      name: hadoop-data
+
+  dnsPolicy: ClusterFirst
+  imagePullSecrets:
+  - name: docker-secret
+
+  initContainers:
+  - command:
+    - wget
+    - -nHd
+    - -m
+    - -e
+    - robots=off
+    - -np
+    - common-config-file-server/hadoops/primary/
+    image: 172.25.203.50:35000/base-image-common:1.0
+    imagePullPolicy: IfNotPresent
+    name: untar-hadoop
+    resources:
+      limits:
+        cpu: 100m
+        memory: 1024M
+      requests:
+        cpu: 100m
+        memory: 1024M
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /data/target
+      name: hadoop-data
+    workingDir: /data/target/
+  nodeName: 172.25.203.34
+  nodeSelector:
+    prophet.4paradigm.com/system: "true"
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  volumes:
+  - emptyDir: {}
+    name: hadoop-data
+
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: 2020-04-08T04:41:34Z
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: 2020-04-09T04:03:58Z
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: 2020-04-08T04:41:32Z
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: docker://3c6abbb44c44ce8703dfb7917bc0e1903e43b2a1235271132c472af6c16bd6f5
+    image: 172.25.203.50:35000/env/release/3.7.1/prophet/app/proxy-hdfs.tar:pipe-106-commit-23a1305d
+    imageID: docker-pullable://172.25.203.50:35000/env/release/3.7.1/prophet/app/proxy-hdfs.tar@sha256:1f7810e609b8e6c96827f63eeac6214e0a3cfd72800c9a2442eaf6cefa601d1c
+    lastState:
+      terminated:
+        containerID: docker://bb762761abd5d0ddd2170092838b0eb70a7f7a1a7e75f9cd321d3cd34ecb5320
+        exitCode: 0
+        finishedAt: 2020-04-09T04:03:49Z
+        reason: Completed
+        startedAt: 2020-04-09T03:08:55Z
+    name: app
+    ready: true
+    restartCount: 11
+    state:
+      running:
+        startedAt: 2020-04-09T04:03:51Z
+    name: app
+    ready: true
+    restartCount: 11
+    state:
+      running:
+        startedAt: 2020-04-09T04:03:51Z
+  hostIP: 172.25.203.34
+  initContainerStatuses:
+  - containerID: docker://2697a44d4afe6cc663e2183fe459c7f5e9c0f233575c68f62e107e8d7b4d460c
+    image: 172.25.203.50:35000/base-image-common:1.0
+    imageID: docker-pullable://172.25.203.50:35000/base-image-common@sha256:7364bceaaa57fabe340b0755382e1b8ff5631d4ee0ecfcd53333f05dcf64d7c9
+    lastState: {}
+    name: untar-hadoop
+    ready: true
+    restartCount: 0
+    state:
+      terminated:
+        containerID: docker://2697a44d4afe6cc663e2183fe459c7f5e9c0f233575c68f62e107e8d7b4d460c
+        exitCode: 0
+        finishedAt: 2020-04-08T04:41:34Z
+        reason: Completed
+        startedAt: 2020-04-08T04:41:34Z
+  phase: Running
+  podIP: 10.244.47.27
+  qosClass: Guaranteed
+  startTime: 2020-04-08T04:41:32Z
