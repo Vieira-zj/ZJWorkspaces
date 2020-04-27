@@ -69,6 +69,7 @@ function batch_hdfs_load() {
 
     if [[ $? -ne 0 ]]; then
       echo "hdfs load failed and reload"
+      sleep 3
       ${cmd}
     fi
     # break # for test
