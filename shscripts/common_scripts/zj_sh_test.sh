@@ -270,17 +270,17 @@ function while_loop_test() {
 
 # ex13, echo
 echo_yellow() {
-  str=$1
+  local str=$1
   echo -e "\033[33m ${str}\033[0m"
 }
 
 echo_red() {
-  str=$1
+  local str=$1
   echo -e "\033[31m ${str}\033[0m"
 }
 
 echo_green() {
-  str=$1
+  local str=$1
   echo -e "\033[32m ${str}\033[0m"
 }
 
@@ -289,6 +289,17 @@ echo_test() {
   echo_yellow "yellow text"
   echo_green "green text"
 }
+
+
+# ex14, loop with globs
+# https://stackoverflow.com/questions/47702490/shellcheck-warning-iterating-over-ls-output-is-fragile-use-globs-sc2045
+function listFiles() {
+  local dir="/tmp"
+  for f in "${dir}"/*.txt; do
+    echo "$f"
+  done
+}
+
 
 # main
 function main() {
@@ -330,7 +341,8 @@ function main() {
   # readonly_var_fn
   #is_file_not_exist /tmp/target_jar
   # while_loop_test 3
-  echo_test
+  # echo_test
+  listFiles
 }
 main
 
