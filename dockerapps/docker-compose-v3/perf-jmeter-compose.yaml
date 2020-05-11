@@ -1,6 +1,8 @@
 #
 # Create at 2020-05-11, create jmeter cluster env: 1 master + 2 slaves
 #
+# Refer: https://github.com/justb4/docker-jmeter.git
+#
 version: "3"
 
 services:
@@ -8,6 +10,8 @@ services:
     image: justb4/jmeter:5.1.1
     container_name: jmeter-master
     command: ["master"]
+    environment:
+      - HEAP=-Xms1G -Xmx1G -Xmn256m
     volumes:
       - /tmp/entrypoint.sh:/entrypoint.sh
       - /tmp/user.properties:/opt/apache-jmeter-5.1.1/bin/user.properties
@@ -18,6 +22,8 @@ services:
     image: justb4/jmeter:5.1.1
     container_name: jmeter-slave1
     command: ["slave"]
+    # environment:
+    #   - HEAP=-Xms1G -Xmx1G -Xmn256m
     volumes:
       - /tmp/entrypoint.sh:/entrypoint.sh
       - /tmp/user.properties:/opt/apache-jmeter-5.1.1/bin/user.properties
@@ -27,6 +33,8 @@ services:
     image: justb4/jmeter:5.1.1
     container_name: jmeter-slave2
     command: ["slave"]
+    # environment:
+    #   - HEAP=-Xms1G -Xmx1G -Xmn256m
     volumes:
       - /tmp/entrypoint.sh:/entrypoint.sh
       - /tmp/user.properties:/opt/apache-jmeter-5.1.1/bin/user.properties

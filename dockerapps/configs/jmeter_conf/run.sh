@@ -43,7 +43,7 @@ if [[ $1 == "pre" ]]; then
 fi
 
 # RUN JMETER TEST:
-# rm -rf out/
+# rm -rf out/ > /dev/null 2&>1
 # jmeter -n -R jmeter-slave1,jmeter-slave2 -t test.jmx -j out/master.log -l out/result.jtl -e -o out/reports
 
 # JMETER CLI:
@@ -54,4 +54,4 @@ fi
 # -X, --remoteexit Exit the remote servers at end of test (non-GUI)
 # -e, --reportatendofloadtests generate report dashboard after load test
 
-echo "jmeter cluster done."
+echo "$(date): jmeter cluster done."

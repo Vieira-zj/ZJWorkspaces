@@ -1,5 +1,17 @@
 #!/bin/bash
+# Create at 2020-05-11
+# Refer: https://github.com/justb4/docker-jmeter/blob/master/entrypoint.sh
+#
 set -eu
+
+function set_jvm_memory() {
+  freeMem=`awk '/MemFree/ { print int($2/1024) }' /proc/meminfo`
+  s=$(($freeMem/10*8))
+  x=$(($freeMem/10*8))
+  n=$(($freeMem/10*2))
+  export HEAP="-Xmn${n}m -Xms${s}m -Xmx${x}m"
+  echo "HEAP=${HEAP}"
+}
 
 function run_master() {
   while true; do
@@ -10,6 +22,7 @@ function run_master() {
 
 function run_slave() {
   echo "start jmeter slave."
+  set_jvm_memory
   ${JMETER_BIN}/jmeter-server
 }
 
@@ -43,4 +56,4 @@ if [[ $1 == "test" ]]; then
   run_test ${remotes} {jmx_file}
 fi
 
-echo "jmeter entrypoint done."
+echo "$(date): jmeter entrypoint done."
