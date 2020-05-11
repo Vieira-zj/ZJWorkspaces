@@ -1,0 +1,33 @@
+#
+# Create at 2020-05-11, create jmeter cluster env: 1 master + 2 slaves
+#
+version: "3"
+
+services:
+  jmeter-master:
+    image: justb4/jmeter:5.1.1
+    container_name: jmeter-master
+    command: ["master"]
+    volumes:
+      - /tmp/entrypoint.sh:/entrypoint.sh
+      - /tmp/user.properties:/opt/apache-jmeter-5.1.1/bin/user.properties
+      - /tmp/tests:/tests
+    restart: on-failure
+
+  jmeter-slave1:
+    image: justb4/jmeter:5.1.1
+    container_name: jmeter-slave1
+    command: ["slave"]
+    volumes:
+      - /tmp/entrypoint.sh:/entrypoint.sh
+      - /tmp/user.properties:/opt/apache-jmeter-5.1.1/bin/user.properties
+    restart: on-failure
+
+  jmeter-slave2:
+    image: justb4/jmeter:5.1.1
+    container_name: jmeter-slave2
+    command: ["slave"]
+    volumes:
+      - /tmp/entrypoint.sh:/entrypoint.sh
+      - /tmp/user.properties:/opt/apache-jmeter-5.1.1/bin/user.properties
+    restart: on-failure
