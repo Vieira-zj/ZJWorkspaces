@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# while read x ; do echo $x ; done
+read input
+odlCommitID=$(echo ${input} | awk '{print $1}')
+commitID=$(echo ${input} | awk '{print $2}')
+commitBranch=$(echo ${input} | awk '{print $3}')
+echo "odlCommitID=${odlCommitID}, commitID=${commitID}, commitBranch=${commitBranch}"
+echo "commit message: $(git log ${odlCommitID}..${commitID} --pretty=format:%s)"
+
+echo "PRE-RECEIVE-HOOK-ERR: My custom error message."
+exit 1
