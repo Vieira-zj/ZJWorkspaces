@@ -12,7 +12,7 @@ pipeline {
     }
 
     environment {
-        MY_JENKINS_HOME='/Users/zhengjin/Downloads/tmp_files/jenkins_home'
+        MY_JENKINS_HOME='~/cicd/jenkins_home'
     }
 
     parameters {
@@ -24,6 +24,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
+                // MY_JENKINS_HOME
                 sh 'printenv | grep -i "my_jenkins"'
                 sh 'java -version'
                 check_mvn_env()

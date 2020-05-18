@@ -1,0 +1,64 @@
+#!groovy
+// Created at 2020-05-18, cicd for my java maven project.
+
+def WS_PATH="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}/workspace"
+def PROJECT_PATH='zhengjin-repo-01'
+
+pipeline {
+    agent any
+    
+    options {
+        timeout(time: 10, unit: 'MINUTES')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                dir(PROJECT_PATH) {
+                    echo 'Checkout Code...'
+                    echo "workspace: ${WS_PATH}"
+                    git credentialsId: 'gitlab', url: 'http://gitlab:8929/root/zhengjin-repo-01.git'                
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Build App...'
+                check_env()
+                dir(PROJECT_PATH) {
+                    sh 'pwd; ls -l'
+                    sh 'sh build.sh'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'send job results email'
+            emailext (
+                // https://jenkins.io/doc/pipeline/steps/email-ext/
+                to: 'zhengjin@4paradigm.com',
+                subject: "${env.JOB_NAME} #${env.BUILD_NUMBER} [${currentBuild.result}]",
+                body: "Build URL: ${env.BUILD_URL}.\n\n",
+            )
+        }
+        success {
+            echo "job ${env.BUILD_TAG} success."
+        }
+        failure {
+            echo "job ${env.BUILD_TAG} failed!"
+        }
+    }
+}
+
+def check_env() {
+    script {
+        try {
+            sh 'java -version'
+            sh 'mvn -version'
+        } catch (err) {
+            error "The Build env is not ready! ${err}"
+        }
+    }
+}
