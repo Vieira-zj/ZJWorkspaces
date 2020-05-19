@@ -1,12 +1,11 @@
 #!groovy
-// Created at 2020-05-18, cicd for my java maven project.
+// Created at 2020-05-18, cicd job triggerred by gitlab webhook.
 
 def WS_PATH="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}/workspace"
 def PROJECT_PATH='zhengjin-repo-01'
 
 pipeline {
     agent any
-    
     options {
         timeout(time: 10, unit: 'MINUTES')
     }
@@ -14,16 +13,19 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                echo "Checkout ..."
                 dir(PROJECT_PATH) {
                     echo 'Checkout Code...'
                     echo "workspace: ${WS_PATH}"
-                    git credentialsId: 'gitlab', url: 'http://gitlab:8929/root/zhengjin-repo-01.git'                
+                    // create credential "gitlab" => root/******
+                    // git branch: 'master', credentialsId: 'gitlab', url: 'http://gitlab:8929/root/zhengjin-repo-01.git'
+                    git branch: 'develop-test', credentialsId: 'gitlab', url: 'http://gitlab:8929/root/zhengjin-repo-01.git'
                 }
             }
         }
         stage('Build') {
             steps {
-                echo 'Build App...'
+                echo 'Build App ...'
                 check_env()
                 dir(PROJECT_PATH) {
                     sh 'pwd; ls -l'

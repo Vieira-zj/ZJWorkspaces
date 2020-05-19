@@ -6,7 +6,6 @@ def RUN_ONLY_IF='This will run only if'
 
 pipeline {
     agent any
-
     options {
         timeout(time: 3, unit: 'MINUTES')
     }
