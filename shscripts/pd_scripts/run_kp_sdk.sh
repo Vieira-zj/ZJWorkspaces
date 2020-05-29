@@ -95,7 +95,7 @@ function batch_hdfs_load2() {
   local workspaceId="67"
   #groupPrn="kfc-hive/kfc_recsys_tradeup_city_recall_daily.table-group"
   local groupPrn=$1
-  thread_num=$2
+  local thread_num=$2
 
   local main="com.yumc.kp.HDFSBatchLoad"
   local cmd="java -cp ${paths} ${main} $workspaceId $groupPrn $loadTablesFile $thread_num"
