@@ -293,11 +293,25 @@ echo_test() {
 
 # ex14, loop with globs
 # https://stackoverflow.com/questions/47702490/shellcheck-warning-iterating-over-ls-output-is-fragile-use-globs-sc2045
-function listFiles() {
+function list_files() {
   local dir="/tmp"
   for f in "${dir}"/*.txt; do
     echo "$f"
   done
+}
+
+
+# ex15, word count
+word_count() {
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: $0 filename"
+    exit -1
+  fi
+
+  printf "%-14s%s\n" "Word" "Count"
+  cat $1 | tr 'A-Z' 'a-z' | egrep -o "\b[[:alpha:]]+\b" \
+  | awk '{count[$0]++} END{ for(key in count) { printf("%-14s%d\n",key,count[key]); } }' \
+  | sort -nr -k2
 }
 
 
@@ -342,8 +356,11 @@ function main() {
   #is_file_not_exist /tmp/target_jar
   # while_loop_test 3
   # echo_test
-  listFiles
+  # list_files
+
+  word_count data.txt
 }
+
 main
 
 set +eu
