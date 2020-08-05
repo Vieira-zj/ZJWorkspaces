@@ -1,5 +1,5 @@
 #
-# Create at 2018-12-22, docker compose test demo.
+# Create at 2020-08-05, docker compose test demo for fixed subnet and ip.
 #
 # Docker compose file refer: 
 # https://docs.docker.com/compose/compose-file/
@@ -8,32 +8,43 @@ version: "3"
 
 services:
   svc-busybox:
-    image: busybox 
+    image: busybox
     hostname: svc-busybox
-    container_name: svc-busybox 
+    container_name: svc-busybox
     volumes:
       - "testdata:/tmp/docker"
     networks:
-      - test_net
+      app_net:
+        ipv4_address: 172.16.238.10
     environment:
       - URL1="http://docker.test1.com"  # bad
       - URL2=http://docker.test2.com  # good
     command: [/bin/sh, -c, "while true; do echo 'hello busybox'; sleep 10; done;"]
+    extra_hosts:
+      - "alpine.com:172.16.238.11"
 
   svc-alpine:
     image: alpine
     hostname: svc-alpine
     container_name: svc-alpine
+    depends_on:
+      - svc-busybox
     volumes:
       - "testdata:/tmp/docker"
     networks:
-      - test_net
+      app_net:
+        ipv4_address: 172.16.238.11
     command: sh -c "while true; do echo 'hello alpine'; sleep 10; done;"
+    extra_hosts:
+      - "busybox.com:172.16.238.10"
 
 # if not set, docker create a default bridge network "docker-compose-v3_default"
 networks:
-  test_net:
-    driver: bridge
+  app_net:
+    ipam:
+      driver: default 
+      config:
+        - subnet: "172.16.238.0/24"
 
 # data volumes, share data between containers
 volumes:

@@ -1,26 +1,18 @@
 #
 # Create at 2020-08-04, build gitlab-ce + gitlab-runner cicd env.
+# Note: use fixed subnet and ip.
 #
 version: "3"
 
 services:
-  gitlab-runner:
-    image: gitlab/gitlab-runner:v12.10.2
-    container_name: gitlab-runner
-    restart: "no"
-    depends_on:
-      - gitlab
-    volumes:
-      - /Users/zhengjin/cicd/gitlab-runner/config:/etc/gitlab-runner
-      - /var/run/docker.sock:/var/run/docker.sock
-
   gitlab:
     image: gitlab/gitlab-ce:12.10.6-ce.0
     container_name: gitlab
+    hostname: gitlab
     restart: "no"
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://gitlab:8929'
+        external_url 'http://gitlab.example.com:8929'
         gitlab_rails['gitlab_shell_ssh_port'] = 2224
     ports:
       - '8929:8929'
@@ -30,3 +22,29 @@ services:
       - /Users/zhengjin/cicd/gitlab/config:/etc/gitlab
       - /Users/zhengjin/cicd/gitlab/logs:/var/log/gitlab
       - /Users/zhengjin/cicd/gitlab/data:/var/opt/gitlab
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.10
+
+  gitlab-runner:
+    image: gitlab/gitlab-runner:v12.10.2
+    container_name: gitlab-runner
+    hostname: gitlab-runner
+    restart: "no"
+    depends_on:
+      - gitlab
+    volumes:
+      - /Users/zhengjin/cicd/gitlab-runner/config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.11
+    extra_hosts:
+      - "gitlab.example.com:172.16.238.10"
+
+networks:
+  app_net:
+    ipam:
+      driver: default 
+      config:
+        - subnet: "172.16.238.0/24"
