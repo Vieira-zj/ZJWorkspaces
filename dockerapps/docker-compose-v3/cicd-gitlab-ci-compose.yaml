@@ -39,6 +39,7 @@ services:
     networks:
       app_net:
         ipv4_address: 172.16.238.11
+    # specified host item
     extra_hosts:
       - "gitlab.example.com:172.16.238.10"
 

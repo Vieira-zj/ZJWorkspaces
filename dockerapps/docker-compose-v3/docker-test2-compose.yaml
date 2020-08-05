@@ -1,5 +1,5 @@
 #
-# Create at 2020-08-05, docker compose test demo for fixed subnet and ip.
+# Create at 2020-08-05, docker compose test demo for extra hosts, and fixed subnet, ip.
 #
 # Docker compose file refer: 
 # https://docs.docker.com/compose/compose-file/
@@ -38,7 +38,6 @@ services:
     extra_hosts:
       - "busybox.com:172.16.238.10"
 
-# if not set, docker create a default bridge network "docker-compose-v3_default"
 networks:
   app_net:
     ipam:
