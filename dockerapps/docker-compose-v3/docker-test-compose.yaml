@@ -12,6 +12,7 @@ services:
     hostname: svc-busybox
     container_name: svc-busybox 
     volumes:
+      - ${HOME}/Downloads/tmp_files/logs:/tmp/logs
       - "testdata:/tmp/docker"
     networks:
       - test_net

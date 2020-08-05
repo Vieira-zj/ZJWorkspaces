@@ -5,10 +5,10 @@ version: "3"
 
 services:
   sonarqube:
-    image: sonarqube
+    image: sonarqube:7.9.3-community
     container_name: sonarqube
     networks:
-      - cicd
+      - cicd_net
     volumes:
       - "/usr/share/zoneinfo/Asia/Shanghai:/etc/localtime"
       - "$SONARQUBE_HOME/conf:/opt/sonarqube/conf"
@@ -20,6 +20,6 @@ services:
     stop_grace_period: 1m
 
 networks:
-  cicd:
+  cicd_net:
     driver: bridge
 
