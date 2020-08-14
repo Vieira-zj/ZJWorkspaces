@@ -1,10 +1,21 @@
 import json
+import logging
+
 from flask import Flask, request
 from flask import make_response
 
 from data import select_user_by_name, select_all_users, update_user_by_name, db_clearup
-from service import is_auth
-from utils import string_encode, string_decode, is_token_valid, create_response_allow
+from service import (
+    is_auth,
+    is_token_valid,
+    get_request_data,
+    create_response_allow,
+    build_ok_json_response,
+    build_forbidden_json_response,
+)
+from utils import string_encode, string_decode
+
+logger = logging.getLogger(__name__)
 
 count = 0
 app = Flask(__name__)
@@ -25,27 +36,13 @@ def login():
     if request.method == "OPTIONS":
         return create_response_allow()
 
-    ret_json = {}
     resp = create_response_allow()
-
-    print(request.path)
-    print(request.headers)
-    user = json.loads(request.stream.read())
-    print(user)
+    user = json.loads(get_request_data(request))
     if is_auth(user["name"], user["password"]):
-        ret_json["code"] = "0"
-        ret_json["status"] = "ok"
-        ret_json["msg"] = ""
-        resp.status_code = 200
+        resp = build_ok_json_response(resp)
         resp.set_cookie("user-token", string_encode("|".join(list(user.values()))))
     else:
-        ret_json["code"] = "499"
-        ret_json["status"] = "failed"
-        ret_json["msg"] = "auth forbidden"
-        resp.status_code = 403
-
-    resp.headers["Content-Type"] = "application/json; charset=utf-8"
-    resp.set_data(json.dumps(ret_json))
+        resp = build_forbidden_json_response(resp)
     return resp
 
 
@@ -54,28 +51,14 @@ def get_user():
     if request.method == "OPTIONS":
         return create_response_allow()
 
-    ret_json = {}
     resp = create_response_allow()
-
     token = request.cookies.get("user-token")
     if is_token_valid(token):
-        ret_json["code"] = "499"
-        ret_json["status"] = "failed"
-        ret_json["msg"] = "auth forbidden"
-        resp.set_data(json.dumps(ret_json))
-        resp.status_code = 403
-        return resp
+        return build_forbidden_json_response(resp)
 
-    req = json.loads(request.stream.read())
+    req = json.loads(get_request_data(request))
     user = select_user_by_name(req["name"])
-    ret_json["code"] = "0"
-    ret_json["status"] = "ok"
-    ret_json["msg"] = ""
-    ret_json["user"] = user
-
-    resp.status_code = 200
-    resp.headers["Content-Type"] = "application/json; charset=utf-8"
-    resp.set_data(json.dumps(ret_json))
+    build_ok_json_response(resp, {"key": "user", "value": user})
     return resp
 
 
@@ -84,27 +67,14 @@ def get_users():
     if request.method == "OPTIONS":
         return create_response_allow()
 
-    ret_json = {}
     resp = create_response_allow()
-
     token = request.cookies.get("user-token")
     if is_token_valid(token):
-        ret_json["code"] = "499"
-        ret_json["status"] = "failed"
-        ret_json["msg"] = "auth forbidden"
-        resp.set_data(json.dumps(ret_json))
-        resp.status_code = 403
-        return resp
+        return build_forbidden_json_response(resp)
 
+    get_request_data(request)
     users = select_all_users()
-    ret_json["code"] = "0"
-    ret_json["status"] = "ok"
-    ret_json["msg"] = ""
-    ret_json["users"] = users
-
-    resp.status_code = 200
-    resp.headers["Content-Type"] = "application/json; charset=utf-8"
-    resp.set_data(json.dumps(ret_json))
+    resp = build_ok_json_response(resp, {"key": "users", "value": users})
     return resp
 
 
@@ -115,22 +85,11 @@ def edit_user():
 
     token = request.cookies.get("user-token")
     if is_token_valid(token):
-        ret_json["code"] = "499"
-        ret_json["status"] = "failed"
-        ret_json["msg"] = "auth forbidden"
-        resp.set_data(json.dumps(ret_json))
-        resp.status_code = 403
-        return resp
+        return build_forbidden_json_response(resp)
 
-    req = json.loads(request.stream.read())
+    req = json.loads(get_request_data(request))
     update_user_by_name(req["name"], req["data"])
-
-    ret_json["code"] = "0"
-    ret_json["status"] = "ok"
-    ret_json["msg"] = ""
-
-    resp.status_code = 200
-    resp.set_data(json.dumps(ret_json))
+    resp = build_ok_json_response(resp)
     return resp
 
 

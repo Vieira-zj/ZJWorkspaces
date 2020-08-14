@@ -1,10 +1,33 @@
 # login_backend
 
-> login backend
+> login backend base on Flask.
 
-requirement: <https://confluence.shopee.io/display/FSTDP/1.+Entry+Task>
+## db mysql
 
-# apis specification
+Create database and init users data in mysql.
+
+```sql
+SHOW DATABASES;
+SHOW CREATE DATABASE test;
+
+CREATE TABLE `users` (
+  `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL COMMENT 'user name',
+  `nickname` varchar(32) NOT NULL COMMENT 'user nickname',
+  `password` varchar(128) NOT NULL COMMENT 'user password',
+  `issuperuser` char(1) NOT NULL DEFAULT 'n' COMMENT 'is super user',
+  `picture` varchar(128) NOT NULL DEFAULT ' ' COMMENT 'user profile picture address'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+SHOW CREATE TABLE users;
+
+INSERT INTO users (name, nickname, password, issuperuser) VALUES ('name01', 'nick01', 'test', 'n');
+SELECT * FROM users;
+
+DROP TABLE users;
+```
+
+
+## apis specification
 
 - `/`
 

@@ -1,12 +1,10 @@
 # login_frontend
 
-> login frontend
+> login frontend base on Vue and ElementUI.
 
-requirement: <https://confluence.shopee.io/display/FSTDP/1.+Entry+Task>
+## Build Setup
 
-# Build Setup
-
-``` bash
+```sh
 # install dependencies
 npm install
 
