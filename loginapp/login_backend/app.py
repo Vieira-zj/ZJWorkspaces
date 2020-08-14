@@ -8,6 +8,7 @@ from data import select_user_by_name, select_many_users, update_user_by_name, db
 from service import (
     is_auth,
     is_token_valid,
+    get_username_from_token,
     get_request_data,
     create_response_allow,
     build_ok_json_response,
@@ -58,7 +59,7 @@ def get_user():
     req = json.loads(req_str)
     resp = create_response_allow()
     token = request.headers.get("Authorization", "")
-    if is_token_valid(token):
+    if not is_token_valid(token):
         return build_forbidden_json_response(resp)
 
     user = select_user_by_name(req["name"])
@@ -75,7 +76,7 @@ def get_users():
     req = json.loads(req_str)
     resp = create_response_allow()
     token = request.headers.get("Authorization", "")
-    if token is None or is_token_valid(token):
+    if not is_token_valid(token):
         return build_forbidden_json_response(resp)
 
     row_count, users = select_many_users(int(req["start"]), int(req["offset"]))
@@ -87,16 +88,39 @@ def get_users():
     return resp
 
 
-@app.route("/edituser", methods=["POST"])
+@app.route("/edituser", methods=["POST", "OPTIONS"])
 def edit_user():
+    req_str = get_request_data(request)
+    if request.method == "OPTIONS":
+        return create_response_allow()
+
     resp = create_response_allow()
     token = request.headers.get("Authorization", "")
-    if is_token_valid(token):
+    if not is_token_valid(token):
         return build_forbidden_json_response(resp)
 
-    req = json.loads(get_request_data(request))
+    req = json.loads(req_str)
     update_user_by_name(req["name"], req["data"])
     resp = build_ok_json_response(resp)
+    return resp
+
+
+@app.route("/issuperuser", methods=["GET", "OPTIONS"])
+def is_super_user():
+    get_request_data(request)
+    if request.method == "OPTIONS":
+        return create_response_allow()
+
+    resp = create_response_allow()
+    token = request.headers.get("Authorization", "")
+    if not is_token_valid(token):
+        return build_forbidden_json_response(resp)
+
+    user_name = get_username_from_token(token)
+    user = select_user_by_name(user_name)
+    resp = build_ok_json_response(
+        resp, {"key": "issuperuser", "value": user["issuperuser"]}
+    )
     return resp
 
 

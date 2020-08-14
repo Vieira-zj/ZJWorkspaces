@@ -24,7 +24,7 @@ export default new Router({
       component: Users
     },
     {
-      path: '/edit',
+      path: '/edit/:name',
       name: 'edit',
       component: UserEdit
     }

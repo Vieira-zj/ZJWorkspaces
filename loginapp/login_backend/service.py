@@ -19,7 +19,12 @@ def is_token_valid(token: str) -> bool:
     if token is None or len(token) == 0:
         return False
     text = string_decode(token)
-    return len(text.split("|")) != 2
+    return len(text.split("|")) == 2
+
+
+def get_username_from_token(token: str) -> str:
+    text = string_decode(token)
+    return text.split("|")[0]
 
 
 def get_request_data(request):

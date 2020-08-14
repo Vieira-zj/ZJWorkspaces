@@ -36,9 +36,9 @@
         <el-pagination
           align="center"
           layout="prev, pager, next"
-          :page-size="10"
-          :total="usersCount"
           :current-page="1"
+          :page-size="pageSize"
+          :total="usersCount"
           @current-change="currentChange"
         ></el-pagination>
       </div>
@@ -72,28 +72,27 @@ export default {
   data() {
     return {
       usersCount: 0,
+      pageSize: 10,
       usersList: []
     };
   },
   mounted() {
-    let c = global_.fnGetCookie("user-token");
-
     let vm = this;
     this.$axios({
       method: "POST",
       url: "http://127.0.0.1:12340/getusers",
-      headers: { Authorization: c },
+      headers: { Authorization: global_.fnGetCookie("user-token") },
       data: {
         start: "0",
         offset: "10"
       }
     })
       .then(resp => {
-        this.usersCount = parseInt(resp.data.count, 10);
+        vm.usersCount = parseInt(resp.data.count, 10);
         let users = resp.data.users;
         for (let i = 0; i < users.length; i++) {
           let user = users[i];
-          this.usersList.push({
+          vm.usersList.push({
             userName: user.name,
             nickName: user.nickname,
             isSuperUser: user.issuperuser
@@ -106,12 +105,35 @@ export default {
   },
   methods: {
     handleEdit(row) {
-      console.log("edit user:", row);
-      this.$router.push("/edit");
+      this.$router.push("/edit/" + row.userName);
     },
     currentChange(currentPage) {
-      console.log("page:", currentPage);
-      // TODO:
+      let vm = this;
+      this.$axios({
+        method: "POST",
+        url: "http://127.0.0.1:12340/getusers",
+        headers: { Authorization: global_.fnGetCookie("user-token") },
+        data: {
+          start: ((currentPage - 1) * vm.pageSize).toString(),
+          offset: vm.pageSize
+        }
+      })
+        .then(resp => {
+          vm.usersCount = parseInt(resp.data.count, 10);
+          vm.usersList.splice(0, vm.usersList.length);
+          let users = resp.data.users;
+          for (let i = 0; i < users.length; i++) {
+            let user = users[i];
+            vm.usersList.push({
+              userName: user.name,
+              nickName: user.nickname,
+              isSuperUser: user.issuperuser
+            });
+          }
+        })
+        .catch(err => {
+          global_.fnErrorHandler(vm, err);
+        });
     }
   }
 };

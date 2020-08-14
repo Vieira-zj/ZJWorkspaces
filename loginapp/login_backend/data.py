@@ -21,6 +21,8 @@ def init_insert_users(idx_start, idx_end):
         "INSERT INTO users (%s)" % ",".join(db_users_cols[1:-1])
         + " VALUES ('name%s', 'nick%s', 'test%s', '%s');"
     )
+
+    db.ping(reconnect=True)
     for i in range(idx_start, idx_end):
         sql = raw % (i, i, i, "n")
         try:
@@ -34,6 +36,7 @@ def init_insert_users(idx_start, idx_end):
 def select_many_users(start=0, many=100):
     db_users_cols = ["name", "nickname", "issuperuser", "picture"]
     sql = "select %s from users" % ",".join(db_users_cols)
+    db.ping(reconnect=True)
     cursor.execute(sql)
     cursor.scroll(start, mode="absolute")
     results = cursor.fetchmany(many)
@@ -60,6 +63,8 @@ def select_user_by_name(user_name, is_include_password=False):
             user_name,
         )
     logger.debug(sql)
+
+    db.ping(reconnect=True)
     cursor.execute(sql)
     results = cursor.fetchall()
 
@@ -75,7 +80,9 @@ def update_user_by_name(user_name, fields):
     kv_list = [f"{k}='{v}'" for k, v in fields.items()]
     sql = "update users set %s where name = '%s'" % (",".join(kv_list), user_name)
     logger.debug(sql)
+
     try:
+        db.ping(reconnect=True)
         cursor.execute(sql)
         db.commit()
     except:
@@ -97,4 +104,4 @@ if __name__ == "__main__":
     for row in results:
         print(row)
 
-    # print(select_user_by_name("name11"))
+    print(select_user_by_name("name11", is_include_password=True))

@@ -118,7 +118,7 @@ export default {
           if (response.data.navigation == "users") {
             vm.$router.push("/users");
           } else {
-            vm.$router.push("/edit");
+            vm.$router.push("/edit/" + vm.user.name);
           }
         })
         .catch(err => {
