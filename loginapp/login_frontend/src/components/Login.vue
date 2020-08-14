@@ -71,6 +71,8 @@
 </template>
 
 <script>
+import global_ from "./Global";
+
 export default {
   name: "login",
   data() {
@@ -111,11 +113,16 @@ export default {
         })
         .then(response => {
           console.log("login success");
-          // vm.$router.push("/users");
+          console.log("cookie:", document.cookie);
+
+          if (response.data.navigation == "users") {
+            vm.$router.push("/users");
+          } else {
+            vm.$router.push("/edit");
+          }
         })
         .catch(err => {
-          console.error(err);
-          vm.$message.error("用户名或密码不正确！");
+          global_.fnErrorHandler(vm, err);
         });
     }
   }

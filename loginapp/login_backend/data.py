@@ -1,4 +1,7 @@
+import logging
 import pymysql
+
+logger = logging.getLogger(__name__)
 
 db = pymysql.connect(
     host="localhost",
@@ -11,12 +14,11 @@ db = pymysql.connect(
 
 cursor = db.cursor()
 
-db_users_cols = ("id", "name", "nickname", "password", "issuperuser")
-
 
 def init_insert_users(idx_start, idx_end):
+    db_users_cols = ("name", "nickname", "password", "issuperuser")
     raw = (
-        "INSERT INTO users (%s)" % ",".join(db_users_cols[1:])
+        "INSERT INTO users (%s)" % ",".join(db_users_cols[1:-1])
         + " VALUES ('name%s', 'nick%s', 'test%s', '%s');"
     )
     for i in range(idx_start, idx_end):
@@ -25,22 +27,41 @@ def init_insert_users(idx_start, idx_end):
             cursor.execute(sql)
             db.commit()
         except:
-            print("insert failed, and rollback!")
+            logger.error("insert failed, and rollback!")
             db.rollback()
 
 
-def select_all_users(limit=30):
-    sql = f"select * from users limit {limit}"
+def select_many_users(start=0, many=100):
+    db_users_cols = ["name", "nickname", "issuperuser", "picture"]
+    sql = "select %s from users" % ",".join(db_users_cols)
     cursor.execute(sql)
-    results = cursor.fetchall()
-    return tuple() if results is None or len(results) == 0 else results
+    cursor.scroll(start, mode="absolute")
+    results = cursor.fetchmany(many)
+
+    if results is None or len(results) == 0:
+        return cursor.rowcount, list()
+
+    ret = []
+    for row in results:
+        ret.append(dict(zip(db_users_cols, row)))
+    return cursor.rowcount, ret
 
 
-def select_user_by_name(user_name):
-    sql = "select * from users where name = '%s'" % (user_name)
+def select_user_by_name(user_name, is_include_password=False):
+    sql = ""
+    db_users_cols = []
+    if is_include_password:
+        db_users_cols = ("id", "name", "nickname", "password", "issuperuser", "picture")
+        sql = "select * from users where name = '%s'" % (user_name)
+    else:
+        db_users_cols = ["name", "nickname", "issuperuser", "picture"]
+        sql = "select %s from users where name = '%s'" % (
+            ",".join(db_users_cols),
+            user_name,
+        )
+    logger.debug(sql)
     cursor.execute(sql)
     results = cursor.fetchall()
-    # print(results)
 
     if results is None or len(results) == 0:
         return {}
@@ -53,12 +74,12 @@ def select_user_by_name(user_name):
 def update_user_by_name(user_name, fields):
     kv_list = [f"{k}='{v}'" for k, v in fields.items()]
     sql = "update users set %s where name = '%s'" % (",".join(kv_list), user_name)
-    # print(sql)
+    logger.debug(sql)
     try:
         cursor.execute(sql)
         db.commit()
     except:
-        print("update failed, and rollback!")
+        logger.error("update failed, and rollback!")
         db.rollback()
 
 
@@ -71,8 +92,9 @@ if __name__ == "__main__":
 
     # init_insert_users(20, 30)
 
-    results = select_all_users()
+    count, results = select_many_users(10, 5)
+    print("row count:", count)
     for row in results:
         print(row)
 
-    print(select_user_by_name("name11"))
+    # print(select_user_by_name("name11"))

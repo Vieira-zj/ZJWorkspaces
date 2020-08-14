@@ -4,7 +4,7 @@ import logging
 from flask import Flask, request
 from flask import make_response
 
-from data import select_user_by_name, select_all_users, update_user_by_name, db_clearup
+from data import select_user_by_name, select_many_users, update_user_by_name, db_clearup
 from service import (
     is_auth,
     is_token_valid,
@@ -33,13 +33,16 @@ def health():
 
 @app.route("/login", methods=["POST", "OPTIONS"])
 def login():
+    req = get_request_data(request)
     if request.method == "OPTIONS":
         return create_response_allow()
 
     resp = create_response_allow()
-    user = json.loads(get_request_data(request))
-    if is_auth(user["name"], user["password"]):
-        resp = build_ok_json_response(resp)
+    user = json.loads(req)
+    db_user = select_user_by_name(user["name"], is_include_password=True)
+    if is_auth(user, db_user):
+        nav_path = "users" if db_user["issuperuser"] == "y" else "edit"
+        resp = build_ok_json_response(resp, {"key": "navigation", "value": nav_path})
         resp.set_cookie("user-token", string_encode("|".join(list(user.values()))))
     else:
         resp = build_forbidden_json_response(resp)
@@ -48,42 +51,46 @@ def login():
 
 @app.route("/getuser", methods=["POST", "OPTIONS"])
 def get_user():
+    req_str = get_request_data(request)
     if request.method == "OPTIONS":
         return create_response_allow()
 
+    req = json.loads(req_str)
     resp = create_response_allow()
-    token = request.cookies.get("user-token")
+    token = request.headers.get("Authorization", "")
     if is_token_valid(token):
         return build_forbidden_json_response(resp)
 
-    req = json.loads(get_request_data(request))
     user = select_user_by_name(req["name"])
     build_ok_json_response(resp, {"key": "user", "value": user})
     return resp
 
 
-@app.route("/getusers", methods=["GET", "OPTIONS"])
+@app.route("/getusers", methods=["POST", "OPTIONS"])
 def get_users():
+    req_str = get_request_data(request)
     if request.method == "OPTIONS":
         return create_response_allow()
 
+    req = json.loads(req_str)
     resp = create_response_allow()
-    token = request.cookies.get("user-token")
-    if is_token_valid(token):
+    token = request.headers.get("Authorization", "")
+    if token is None or is_token_valid(token):
         return build_forbidden_json_response(resp)
 
-    get_request_data(request)
-    users = select_all_users()
-    resp = build_ok_json_response(resp, {"key": "users", "value": users})
+    row_count, users = select_many_users(int(req["start"]), int(req["offset"]))
+    resp = build_ok_json_response(
+        resp,
+        {"key": "count", "value": str(row_count)},
+        {"key": "users", "value": users},
+    )
     return resp
 
 
 @app.route("/edituser", methods=["POST"])
 def edit_user():
-    ret_json = {}
     resp = create_response_allow()
-
-    token = request.cookies.get("user-token")
+    token = request.headers.get("Authorization", "")
     if is_token_valid(token):
         return build_forbidden_json_response(resp)
 

@@ -8,6 +8,8 @@ import axios from 'axios'
 import router from './router'
 
 Vue.config.productionTip = false
+// 允许携带cookie, 解决跨域cookie丢失问题
+axios.defaults.withCredentials = true
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
 

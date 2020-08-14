@@ -60,7 +60,8 @@ response (set cookie user-token):
 {
   "code": "0",
   "status": "ok",
-  "msg": ""
+  "msg": "",
+  "navigation": ""
 }
 ```
 
@@ -94,7 +95,7 @@ response:
 test:
 
 ```sh
-curl -v http://127.0.0.1:12340/getusers -H "Cookie:user-token=bmFtZTEwfHRlc3QxMA=="
+curl -v -X POST http://127.0.0.1:12340/getusers -H "Cookie:user-token=bmFtZTEwfHRlc3QxMA==" -d '{"start": "10", "offset": "5"}'
 ```
 
 response:
@@ -104,7 +105,15 @@ response:
   "code": "0",
   "status": "ok",
   "msg": "",
-  "users": []
+  "count": "20",
+  "users": [
+    {
+      "name": "name20",
+      "nickname": "nick20",
+      "issuperuser": "y",
+      "picture": " "
+    }
+  ]
 }
 ```
 
