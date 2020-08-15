@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 
 from flask import Flask, request
 from flask import make_response
@@ -11,15 +12,17 @@ from service import (
     get_username_from_token,
     get_request_data,
     create_response_allow,
+    build_json_response,
     build_ok_json_response,
     build_forbidden_json_response,
 )
-from utils import string_encode, string_decode
+from utils import string_encode, string_decode, is_valid_file_type
 
 logger = logging.getLogger(__name__)
 
 count = 0
 app = Flask(__name__)
+app.config["upload_dir"] = os.path.join(os.getcwd(), "upload_files")
 
 
 @app.route("/")
@@ -123,6 +126,49 @@ def is_super_user():
         resp, {"key": "issuperuser", "value": user["issuperuser"]}
     )
     return resp
+
+
+@app.route("/uploadpic", methods=["POST", "OPTIONS"])
+def upload_pic():
+    get_request_data(request)
+    if request.method == "OPTIONS":
+        return create_response_allow()
+
+    resp = create_response_allow()
+    token = request.headers.get("Authorization", "")
+    if not is_token_valid(token):
+        return build_forbidden_json_response(resp)
+
+    if "file" not in request.files:
+        ret_json = {}
+        ret_json["code"] = "499"
+        ret_json["status"] = "failed"
+        ret_json["msg"] = "no file part included!"
+        return build_json_response(resp, 406, ret_json)
+
+    upload_file = request.files["file"]
+    if upload_file is None or upload_file.filename == "":
+        ret_json = {}
+        ret_json["code"] = "499"
+        ret_json["status"] = "failed"
+        ret_json["msg"] = "no file selected!"
+        return build_json_response(resp, 406, ret_json)
+
+    if not is_valid_file_type(upload_file.filename):
+        ret_json = {}
+        ret_json["code"] = "499"
+        ret_json["status"] = "failed"
+        ret_json["msg"] = "upload file type not supported!"
+        return build_json_response(resp, 406, ret_json)
+
+    upload_file.save(os.path.join(app.config["upload_dir"], upload_file.filename))
+    resp = build_ok_json_response(resp, {"key": "msg", "value": "upload file success"})
+    return resp
+
+
+@app.route("/downloadpic", methods=["POST", "OPTIONS"])
+def download_pic():
+    pass
 
 
 if __name__ == "__main__":

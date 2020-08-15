@@ -155,21 +155,24 @@ response:
 test:
 
 ```sh
-curl  -F "filename=@/path/file.tar.gz" "http://localhost:12340/uploadpic"
+curl -v -XPOST -H "Authorization: bmFtZTEwfHRlc3QxMA==" -F "file=@/tmp/user01.jpeg" "http://localhost:12340/uploadpic"
 ```
 
 response:
 
 ```json
+{
+  "code": "0",
+  "status": "ok",
+  "msg": "upload file success"
+}
 ```
 
-- `getpic`
+- `downloadpic`
 
-request:
+test:
 
-```json
-{
-}
+```sh
 ```
 
 response:

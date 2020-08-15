@@ -1,4 +1,4 @@
-import json, logging
+import base64, json, logging, os
 from flask import make_response
 
 from data import select_user_by_name
@@ -39,10 +39,20 @@ def get_request_data(request):
     if query is not None and len(query) > 0:
         logger.debug("| Query: " + query.decode(encoding="utf-8"))
 
+    if "file" in request.files:
+        logger.debug("|" + "*" * 60)
+        return ""
+
     data = request.stream.read()
     if data is not None and len(data) > 0:
         logger.debug("| Data:")
-        logger.debug("|    " + data.decode(encoding="utf-8"))
+        try:
+            logger.debug("|    " + data.decode(encoding="utf-8"))
+        except UnicodeDecodeError as err:
+            logger.info(err)
+            logger.debug(
+                "|    " + base64.b64encode(data[:128]).decode(encoding="utf-8")
+            )
 
     logger.debug("|" + "*" * 60)
     return data
@@ -60,6 +70,13 @@ def create_response_allow():
     return resp
 
 
+def build_json_response(resp, status_code, ret_json):
+    resp.status_code = status_code
+    resp.headers["Content-Type"] = "application/json; charset=utf-8"
+    resp.set_data(json.dumps(ret_json))
+    return resp
+
+
 def build_ok_json_response(resp, *data):
     ret_json = {}
     ret_json["code"] = "0"
@@ -68,11 +85,7 @@ def build_ok_json_response(resp, *data):
     for item in data:
         if item is not None and len(item) > 0:
             ret_json[item["key"]] = item["value"]
-    resp.set_data(json.dumps(ret_json))
-
-    resp.status_code = 200
-    resp.headers["Content-Type"] = "application/json; charset=utf-8"
-    return resp
+    return build_json_response(resp, 200, ret_json)
 
 
 def build_forbidden_json_response(resp):
@@ -80,12 +93,8 @@ def build_forbidden_json_response(resp):
     ret_json["code"] = "499"
     ret_json["status"] = "failed"
     ret_json["msg"] = "auth forbidden"
-    resp.set_data(json.dumps(ret_json))
-
-    resp.status_code = 403
-    resp.headers["Content-Type"] = "application/json; charset=utf-8"
-    return resp
+    return build_json_response(resp, 403, ret_json)
 
 
 if __name__ == "__main__":
-    pass
+    print(os.getcwd())
