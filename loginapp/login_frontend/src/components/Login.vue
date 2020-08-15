@@ -97,7 +97,7 @@ export default {
     },
     login() {
       console.log("login info:", JSON.stringify(this.user));
-      if (this.user.name.length == 0 || this.user.password == 0) {
+      if (this.user.name.length === 0 || this.user.password === 0) {
         this.$message.error("输入用户名或密码为空！");
         return;
       } else if (this.user.password.length < 6) {
@@ -115,8 +115,9 @@ export default {
           console.log("login success");
           console.log("cookie:", document.cookie);
 
-          if (response.data.navigation == "users") {
+          if (response.data.issuperuser === "y") {
             vm.$router.push("/users");
+            global_.fnSetIsSuperUser(true);
           } else {
             vm.$router.push("/edit/" + vm.user.name);
           }

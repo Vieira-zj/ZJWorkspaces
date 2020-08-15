@@ -1,17 +1,26 @@
 <template>
   <div>
     <div id="nav">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>
-          <router-link to="/login">登录</router-link>
-        </el-breadcrumb-item>
-        <el-breadcrumb-item v-if="isCurSuperUser">
-          <router-link to="/users">用户列表</router-link>
-        </el-breadcrumb-item>
-        <el-breadcrumb-item>
-          <router-link to="/edit">用户信息</router-link>
-        </el-breadcrumb-item>
-      </el-breadcrumb>
+      <div style="float:left">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>
+            <router-link to="/login">登录</router-link>
+          </el-breadcrumb-item>
+          <el-breadcrumb-item v-if="isCurSuperUser">
+            <router-link to="/users">用户列表</router-link>
+          </el-breadcrumb-item>
+          <el-breadcrumb-item>
+            <router-link to="/edit">用户信息</router-link>
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+      <div style="float:right">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>
+            <router-link to="/login" @click.native="onLogout">退出</router-link>
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
     </div>
     <div id="user_edit">
       <h1 style="text-align: center;">用 户 信 息</h1>
@@ -75,6 +84,7 @@ export default {
     };
   },
   mounted() {
+    this.isCurSuperUser = global_.fnGetIsSuperUser();
     let vm = this;
     this.$axios({
       method: "POST",
@@ -83,30 +93,14 @@ export default {
       data: {
         name: vm.$route.params.name
       }
-    })
-      .then(resp => {
-        let loadUser = resp.data.user;
-        vm.user = {
-          userName: loadUser.name,
-          nickName: loadUser.nickname,
-          isSuperUser: loadUser.issuperuser == "y" ? true : false
-        };
-
-        this.$axios({
-          method: "GET",
-          url: "http://127.0.0.1:12340/issuperuser",
-          headers: { Authorization: global_.fnGetCookie("user-token") }
-        })
-          .then(resp => {
-            vm.isCurSuperUser = resp.data.issuperuser === "y" ? true : false;
-          })
-          .catch(err => {
-            global_.fnErrorHandler(vm, err);
-          });
-      })
-      .catch(err => {
-        global_.fnErrorHandler(vm, err);
-      });
+    }).then(resp => {
+      let loadUser = resp.data.user;
+      vm.user = {
+        userName: loadUser.name,
+        nickName: loadUser.nickname,
+        isSuperUser: loadUser.issuperuser === "y" ? true : false
+      };
+    });
   },
   methods: {
     onSubmit() {
@@ -134,6 +128,10 @@ export default {
     },
     onCancel() {
       this.$router.back(-1);
+    },
+    onLogout() {
+      console.log("logout");
+      global_.fnClearCookie("user-token");
     }
   }
 };

@@ -1,16 +1,24 @@
 <template>
   <div>
     <div id="nav">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>
-          <router-link to="/login">登录</router-link>
-        </el-breadcrumb-item>
-        <el-breadcrumb-item>
-          <router-link to="/users">用户列表</router-link>
-        </el-breadcrumb-item>
-      </el-breadcrumb>
+      <div style="float:left">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>
+            <router-link to="/login">登录</router-link>
+          </el-breadcrumb-item>
+          <el-breadcrumb-item>
+            <router-link to="/users">用户列表</router-link>
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+      <div style="float:right">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>
+            <router-link to="/login" @click.native="onLogout">退出</router-link>
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
     </div>
-    <el-divider></el-divider>
     <div id="users">
       <div style="margin-bottom: 20px">
         <span>
@@ -53,17 +61,17 @@ let mockUsers = [
   {
     userName: "name01",
     nickName: "nick01",
-    isSuperUser: global_.fnIsSuperUser(true)
+    isSuperUser: global_.fnIsSuperUserCn(true)
   },
   {
     userName: "name02",
     nickName: "nick02",
-    isSuperUser: global_.fnIsSuperUser(false)
+    isSuperUser: global_.fnIsSuperUserCn(false)
   },
   {
     userName: "name03",
     nickName: "nick03",
-    isSuperUser: global_.fnIsSuperUser(false)
+    isSuperUser: global_.fnIsSuperUserCn(false)
   }
 ];
 

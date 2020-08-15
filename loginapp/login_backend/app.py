@@ -42,8 +42,9 @@ def login():
     user = json.loads(req)
     db_user = select_user_by_name(user["name"], is_include_password=True)
     if is_auth(user, db_user):
-        nav_path = "users" if db_user["issuperuser"] == "y" else "edit"
-        resp = build_ok_json_response(resp, {"key": "navigation", "value": nav_path})
+        resp = build_ok_json_response(
+            resp, {"key": "issuperuser", "value": db_user["issuperuser"]}
+        )
         resp.set_cookie("user-token", string_encode("|".join(list(user.values()))))
     else:
         resp = build_forbidden_json_response(resp)

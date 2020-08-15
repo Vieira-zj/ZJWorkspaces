@@ -61,7 +61,7 @@ response (set cookie user-token):
   "code": "0",
   "status": "ok",
   "msg": "",
-  "navigation": ""
+  "issuperuser": "y"
 }
 ```
 
@@ -152,11 +152,10 @@ response:
 
 - `/uploadpic`
 
-request:
+test:
 
-```json
-{
-}
+```sh
+curl  -F "filename=@/path/file.tar.gz" "http://localhost:12340/uploadpic"
 ```
 
 response:

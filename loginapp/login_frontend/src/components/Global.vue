@@ -1,5 +1,15 @@
 <script>
-let fnIsSuperUser = function(flag) {
+let IsSuperUser = false;
+
+let fnSetIsSuperUser = function(flag) {
+  IsSuperUser = flag;
+};
+
+let fnGetIsSuperUser = function() {
+  return IsSuperUser;
+};
+
+let fnIsSuperUserCn = function(flag) {
   return flag ? "是" : "否";
 };
 
@@ -12,10 +22,9 @@ let fnSetCookie = function(cname, cvalue, exdays) {
 
 let fnGetCookie = function(name) {
   let cookies = document.cookie.split(";");
-  console.log(cookies);
   for (let i = 0; i < cookies.length; i++) {
     let c = cookies[i];
-    while (c.charAt(0) == " ") c = c.substring(1);
+    while (c.charAt(0) === " ") c = c.substring(1);
     if (c.indexOf(name) != -1) {
       return c.substring(name.length + 1, c.length);
     }
@@ -32,7 +41,7 @@ let fnErrorHandler = function(vm, err) {
     console.log("status:", err.response.status);
     console.log("headers:", err.response.headers);
     console.log("data:", err.response.data);
-    if (err.response.status == 403) {
+    if (err.response.status === 403) {
       vm.$message.error("用户名或密码不正确！");
       return;
     }
@@ -42,7 +51,9 @@ let fnErrorHandler = function(vm, err) {
 };
 
 export default {
-  fnIsSuperUser,
+  fnSetIsSuperUser,
+  fnGetIsSuperUser,
+  fnIsSuperUserCn,
   fnSetCookie,
   fnGetCookie,
   fnClearCookie,
