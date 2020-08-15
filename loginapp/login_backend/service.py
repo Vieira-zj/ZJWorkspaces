@@ -10,8 +10,6 @@ logger = logging.getLogger(__name__)
 def is_auth(user, db_user):
     if db_user is None:
         return False
-    print(user)
-    print(db_user)
     return True if user["password"] == db_user.get("password", "") else False
 
 
@@ -27,7 +25,7 @@ def get_username_from_token(token: str) -> str:
     return text.split("|")[0]
 
 
-def get_request_data(request):
+def get_request_data(request, is_file=False):
     logger.debug("|" + "*" * 60)
     logger.debug("| Method: " + request.method)
     logger.debug("| Path: " + request.path)
@@ -38,12 +36,14 @@ def get_request_data(request):
     query = request.query_string
     if query is not None and len(query) > 0:
         logger.debug("| Query: " + query.decode(encoding="utf-8"))
+    # logger.debug("| Query: " + "&".join([f"{k}={v}" for k, v in request.args.items()]))
 
-    if "file" in request.files:
+    if is_file:
         logger.debug("|" + "*" * 60)
         return ""
 
-    data = request.stream.read()
+    # data = request.stream.read()
+    data = request.get_data()
     if data is not None and len(data) > 0:
         logger.debug("| Data:")
         try:
@@ -58,8 +58,9 @@ def get_request_data(request):
     return data
 
 
-def create_response_allow():
-    resp = make_response()
+def create_response_allow(resp=None):
+    if resp is None:
+        resp = make_response()
     resp.headers["Access-Control-Allow-Origin"] = "http://localhost:8080"
     resp.headers[
         "Access-Control-Allow-Headers"

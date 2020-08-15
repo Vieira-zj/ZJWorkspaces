@@ -173,6 +173,7 @@ response:
 test:
 
 ```sh
+curl -v "http://127.0.0.1:12340/downloadpic/user01.jpeg" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -o "user02.jpeg"
 ```
 
 response:

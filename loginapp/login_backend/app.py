@@ -3,7 +3,7 @@ import logging
 import os
 
 from flask import Flask, request
-from flask import make_response
+from flask import make_response, send_from_directory
 
 from data import select_user_by_name, select_many_users, update_user_by_name, db_clearup
 from service import (
@@ -130,7 +130,7 @@ def is_super_user():
 
 @app.route("/uploadpic", methods=["POST", "OPTIONS"])
 def upload_pic():
-    get_request_data(request)
+    get_request_data(request, is_file=True)
     if request.method == "OPTIONS":
         return create_response_allow()
 
@@ -166,9 +166,20 @@ def upload_pic():
     return resp
 
 
-@app.route("/downloadpic", methods=["POST", "OPTIONS"])
-def download_pic():
-    pass
+@app.route("/downloadpic/<filename>", methods=["GET", "OPTIONS"])
+def download_pic(filename):
+    get_request_data(request)
+    if request.method == "OPTIONS":
+        return create_response_allow()
+
+    token = request.headers.get("Authorization", "")
+    if not is_token_valid(token):
+        resp = create_response_allow()
+        return build_forbidden_json_response(resp)
+
+    resp = send_from_directory(app.config["upload_dir"], filename, as_attachment=True)
+    resp = create_response_allow(resp)
+    return resp
 
 
 if __name__ == "__main__":
