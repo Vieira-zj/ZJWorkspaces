@@ -87,25 +87,39 @@ export default {
   mounted() {
     let vm = this;
     this.$axios({
-      method: "POST",
-      url: "http://127.0.0.1:12340/getusers",
-      headers: { Authorization: global_.fnGetCookie("user-token") },
-      data: {
-        start: "0",
-        offset: "10"
-      }
+      method: "GET",
+      url: "http://127.0.0.1:12340/issuperuser",
+      headers: { Authorization: global_.fnGetCookie("user-token") }
     })
       .then(resp => {
-        vm.usersCount = parseInt(resp.data.count, 10);
-        let users = resp.data.users;
-        for (let i = 0; i < users.length; i++) {
-          let user = users[i];
-          vm.usersList.push({
-            userName: user.name,
-            nickName: user.nickname,
-            isSuperUser: user.issuperuser
-          });
+        if (resp.data.issuperuser !== "y") {
+          this.$message.error("没有权限访问用户数据！");
+          return;
         }
+        this.$axios({
+          method: "POST",
+          url: "http://127.0.0.1:12340/getusers",
+          headers: { Authorization: global_.fnGetCookie("user-token") },
+          data: {
+            start: "0",
+            offset: "10"
+          }
+        })
+          .then(resp => {
+            vm.usersCount = parseInt(resp.data.count, 10);
+            let users = resp.data.users;
+            for (let i = 0; i < users.length; i++) {
+              let user = users[i];
+              vm.usersList.push({
+                userName: user.name,
+                nickName: user.nickname,
+                isSuperUser: user.issuperuser
+              });
+            }
+          })
+          .catch(err => {
+            global_.fnErrorHandler(vm, err);
+          });
       })
       .catch(err => {
         global_.fnErrorHandler(vm, err);

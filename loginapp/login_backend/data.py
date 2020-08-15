@@ -85,7 +85,8 @@ def update_user_by_name(user_name, fields):
         db.ping(reconnect=True)
         cursor.execute(sql)
         db.commit()
-    except:
+    except Exception as err:
+        logger.error(err)
         logger.error("update failed, and rollback!")
         db.rollback()
 

@@ -75,7 +75,11 @@ export default {
   name: "userEdit",
   data() {
     return {
-      user: {},
+      user: {
+        userName: "",
+        nickName: "",
+        isSuperUser: false
+      },
       img: {
         fit: "fill",
         url: "/static/user01.jpeg"
@@ -93,14 +97,18 @@ export default {
       data: {
         name: vm.$route.params.name
       }
-    }).then(resp => {
-      let loadUser = resp.data.user;
-      vm.user = {
-        userName: loadUser.name,
-        nickName: loadUser.nickname,
-        isSuperUser: loadUser.issuperuser === "y" ? true : false
-      };
-    });
+    })
+      .then(resp => {
+        let loadUser = resp.data.user;
+        vm.user = {
+          userName: loadUser.name,
+          nickName: loadUser.nickname,
+          isSuperUser: loadUser.issuperuser === "y" ? true : false
+        };
+      })
+      .catch(err => {
+        global_.fnErrorHandler(vm, err);
+      });
   },
   methods: {
     onSubmit() {
@@ -112,7 +120,8 @@ export default {
         data: {
           name: vm.$route.params.name,
           data: {
-            nickname: vm.user.nickName
+            nickname: vm.user.nickName,
+            issuperuser: vm.user.isSuperUser ? "y" : "n"
           }
         }
       })

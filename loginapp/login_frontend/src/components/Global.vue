@@ -42,7 +42,7 @@ let fnErrorHandler = function(vm, err) {
     console.log("headers:", err.response.headers);
     console.log("data:", err.response.data);
     if (err.response.status === 403) {
-      vm.$message.error("用户名或密码不正确！");
+      vm.$message.error("授权失败，用户名或密码不正确！");
       return;
     }
   }
