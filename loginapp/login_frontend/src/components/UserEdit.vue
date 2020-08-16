@@ -3,21 +3,17 @@
     <div id="nav">
       <div style="float:left">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item>
-            <router-link to="/login">登录</router-link>
-          </el-breadcrumb-item>
-          <el-breadcrumb-item v-if="isCurSuperUser">
-            <router-link to="/users">用户列表</router-link>
-          </el-breadcrumb-item>
-          <el-breadcrumb-item>
-            <router-link to="/edit">用户信息</router-link>
-          </el-breadcrumb-item>
+          <el-breadcrumb-item to="/login">登录</el-breadcrumb-item>
+          <el-breadcrumb-item to="/users" v-if="isCurSuperUser"
+            >用户列表</el-breadcrumb-item
+          >
+          <el-breadcrumb-item to="/edit">用户信息</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div style="float:right">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item>
-            <router-link to="/login" @click.native="onLogout">退出</router-link>
+          <el-breadcrumb-item to="/login" @click="onLogout"
+            >退出
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -35,8 +31,10 @@
             :fit="img.fit"
           ></el-image>
           <el-upload
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="http://localhost:12340/uploadpic"
+            :headers="uploadHeaders"
+            :show-file-list="false"
+            :before-upload="onBeforeUpload"
           >
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">
@@ -54,7 +52,12 @@
           <el-switch v-model="user.isSuperUser"></el-switch>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">提交</el-button>
+          <el-button
+            type="primary"
+            :disabled="!isCurSuperUser"
+            @click="onSubmit"
+            >提交</el-button
+          >
           <el-button @click="onCancel">取消</el-button>
         </el-form-item>
       </el-form>
@@ -84,10 +87,13 @@ export default {
         fit: "fill",
         url: "/static/user01.jpeg"
       },
-      isCurSuperUser: false
+      isCurSuperUser: false,
+      uploadHeaders: {
+        Authorization: "test"
+      }
     };
   },
-  mounted() {
+  created() {
     this.isCurSuperUser = global_.fnGetIsSuperUser();
     let vm = this;
     this.$axios({
@@ -111,6 +117,14 @@ export default {
       });
   },
   methods: {
+    onBeforeUpload(file) {
+      // before file upload hook
+      console.log("upload file:", file.name);
+      this.uploadHeaders = {
+        Authorization: global_.fnGetCookie("user-token"),
+        "Specified-User": this.user.userName
+      };
+    },
     onSubmit() {
       let vm = this;
       this.$axios({

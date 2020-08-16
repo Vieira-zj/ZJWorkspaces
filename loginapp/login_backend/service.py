@@ -16,8 +16,12 @@ def is_auth(user, db_user):
 def is_token_valid(token: str) -> bool:
     if token is None or len(token) == 0:
         return False
-    text = string_decode(token)
-    return len(text.split("|")) == 2
+
+    try:
+        text = string_decode(token)
+    except:
+        return False
+    return text.find("|") > -1 and len(text.split("|")) == 2
 
 
 def get_username_from_token(token: str) -> str:
@@ -64,7 +68,7 @@ def create_response_allow(resp=None):
     resp.headers["Access-Control-Allow-Origin"] = "http://localhost:8080"
     resp.headers[
         "Access-Control-Allow-Headers"
-    ] = "Accept,Origin,Content-Type,Authorization"
+    ] = "Accept,Origin,Content-Type,Authorization,Specified-User"
     resp.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
     resp.headers["Access-Control-Allow-Credentials"] = "true"
     resp.headers["Access-Control-Max-Age"] = "3600"
@@ -98,4 +102,8 @@ def build_forbidden_json_response(resp):
 
 
 if __name__ == "__main__":
-    print(os.getcwd())
+    try:
+        print(os.getcwd())
+        raise ValueError("mock error")
+    except:
+        print("catch error")

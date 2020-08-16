@@ -84,7 +84,7 @@ export default {
       usersList: []
     };
   },
-  mounted() {
+  created() {
     let vm = this;
     this.$axios({
       method: "GET",

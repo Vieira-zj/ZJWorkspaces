@@ -16,7 +16,13 @@ from service import (
     build_ok_json_response,
     build_forbidden_json_response,
 )
-from utils import string_encode, string_decode, is_valid_file_type
+from utils import (
+    string_encode,
+    string_decode,
+    get_file_type,
+    is_valid_file_type,
+    create_random_str,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -161,7 +167,13 @@ def upload_pic():
         ret_json["msg"] = "upload file type not supported!"
         return build_json_response(resp, 406, ret_json)
 
-    upload_file.save(os.path.join(app.config["upload_dir"], upload_file.filename))
+    # save upload file
+    file_name = create_random_str(12) + "." + get_file_type(upload_file.filename)
+    upload_file.save(os.path.join(app.config["upload_dir"], file_name))
+    # save file meta info to users
+    user_name = request.headers.get("Specified-User")
+    update_user_by_name(user_name, {"picture": file_name})
+
     resp = build_ok_json_response(resp, {"key": "msg", "value": "upload file success"})
     return resp
 

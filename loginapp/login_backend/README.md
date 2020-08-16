@@ -51,7 +51,7 @@ response:
 test:
 
 ```sh
-curl -v -X POST "http://127.0.0.1:12340/login" -d '{"name": "name10", "password": "test10"}'
+curl -v -XPOST "http://127.0.0.1:12340/login" -d '{"name": "name10", "password": "test10"}'
 ```
 
 response (set cookie user-token):
@@ -70,7 +70,7 @@ response (set cookie user-token):
 test:
 
 ```sh
-curl -v -X POST "http://127.0.0.1:12340/getuser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d '{"name": "name20"}'
+curl -v -XPOST "http://127.0.0.1:12340/getuser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d '{"name": "name20"}'
 ```
 
 response:
@@ -95,7 +95,7 @@ response:
 test:
 
 ```sh
-curl -v -X POST "http://127.0.0.1:12340/getusers" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d '{"start": "10", "offset": "5"}'
+curl -v -XPOST "http://127.0.0.1:12340/getusers" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d '{"start": "10", "offset": "5"}'
 ```
 
 response:
@@ -122,7 +122,7 @@ response:
 test:
 
 ```sh
-curl -v -X POST "http://127.0.0.1:12340/edituser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d \
+curl -v -XPOST "http://127.0.0.1:12340/edituser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d \
   '{"name": "name11", "data": {"nickname": "new_nick", "issuperuser": "y", "picture": "/static/user01.jpeg"}}'
 ```
 
@@ -155,7 +155,8 @@ response:
 test:
 
 ```sh
-curl -v -XPOST -H "Authorization: bmFtZTEwfHRlc3QxMA==" -F "file=@/tmp/user01.jpeg" "http://localhost:12340/uploadpic"
+curl -v -XPOST -H "Authorization: bmFtZTEwfHRlc3QxMA==" -H "Specified-User: name22" \
+  -F "file=@/tmp/user01.jpeg" "http://localhost:12340/uploadpic"
 ```
 
 response:
@@ -178,5 +179,6 @@ curl -v "http://127.0.0.1:12340/downloadpic/user01.jpeg" -H "Authorization: bmFt
 
 response:
 
-```json
+```text
+HTTP/1.0 200 OK
 ```
