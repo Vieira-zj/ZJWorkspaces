@@ -156,6 +156,10 @@ export default {
         .catch(err => {
           global_.fnErrorHandler(vm, err);
         });
+    },
+    onLogout() {
+      console.log("logout");
+      global_.fnClearCookie("user-token");
     }
   }
 };

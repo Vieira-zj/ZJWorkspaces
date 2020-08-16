@@ -120,6 +120,7 @@ export default {
             global_.fnSetIsSuperUser(true);
           } else {
             vm.$router.push("/edit/" + vm.user.name);
+            global_.fnSetIsSuperUser(false);
           }
         })
         .catch(err => {

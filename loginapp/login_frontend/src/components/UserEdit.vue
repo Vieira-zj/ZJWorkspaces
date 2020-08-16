@@ -26,17 +26,24 @@
                width="100px"
                height="100px"> -->
           <el-image
+            :fit="imgProps.fit"
+            :src="imgProps.url"
             style="width: 100px; height: 100px"
-            :src="img.url"
-            :fit="img.fit"
-          ></el-image>
+          >
+            <div slot="error" class="image-slot el-image__error">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
           <el-upload
             action="http://localhost:12340/uploadpic"
             :headers="uploadHeaders"
             :show-file-list="false"
             :before-upload="onBeforeUpload"
+            :on-success="onSuccessUpload"
           >
-            <el-button size="small" type="primary">点击上传</el-button>
+            <el-button size="small" type="primary" :disabled="!isCurSuperUser"
+              >点击上传</el-button
+            >
             <div slot="tip" class="el-upload__tip">
               只能上传jpg/png文件，且不超过500kb
             </div>
@@ -78,23 +85,26 @@ export default {
   name: "userEdit",
   data() {
     return {
+      isCurSuperUser: false,
       user: {
         userName: "",
         nickName: "",
-        isSuperUser: false
+        isSuperUser: false,
+        picture: ""
       },
-      img: {
+      imgProps: {
         fit: "fill",
-        url: "/static/user01.jpeg"
+        url: ""
       },
-      isCurSuperUser: false,
       uploadHeaders: {
-        Authorization: "test"
+        Authorization: ""
       }
     };
   },
   created() {
     this.isCurSuperUser = global_.fnGetIsSuperUser();
+    console.log("is current super user:", this.isCurSuperUser);
+
     let vm = this;
     this.$axios({
       method: "POST",
@@ -106,10 +116,21 @@ export default {
     })
       .then(resp => {
         let loadUser = resp.data.user;
+        console.log("load user:", loadUser);
         vm.user = {
           userName: loadUser.name,
           nickName: loadUser.nickname,
-          isSuperUser: loadUser.issuperuser === "y" ? true : false
+          isSuperUser: loadUser.issuperuser === "y" ? true : false,
+          picture: loadUser.picture
+        };
+
+        if (Boolean(loadUser.picture)) {
+          vm.imgProps.url =
+            "http://127.0.0.1:12340/downloadpic/" + loadUser.picture;
+        }
+        vm.uploadHeaders = {
+          Authorization: global_.fnGetCookie("user-token"),
+          "Specified-User": loadUser.name
         };
       })
       .catch(err => {
@@ -118,12 +139,12 @@ export default {
   },
   methods: {
     onBeforeUpload(file) {
-      // before file upload hook
-      console.log("upload file:", file.name);
-      this.uploadHeaders = {
-        Authorization: global_.fnGetCookie("user-token"),
-        "Specified-User": this.user.userName
-      };
+      this.uploadHeaders["X-Test"] = "uploadfile_" + file.name;
+    },
+    onSuccessUpload(response, file, fileList) {
+      console.log("upload file success");
+      this.imgProps.url =
+        "http://127.0.0.1:12340/downloadpic/" + response.filename;
     },
     onSubmit() {
       let vm = this;

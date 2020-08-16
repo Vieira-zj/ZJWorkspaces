@@ -68,7 +68,7 @@ def create_response_allow(resp=None):
     resp.headers["Access-Control-Allow-Origin"] = "http://localhost:8080"
     resp.headers[
         "Access-Control-Allow-Headers"
-    ] = "Accept,Origin,Content-Type,Authorization,Specified-User"
+    ] = "Accept,Origin,Content-Type,Authorization,Specified-User,X-Test"
     resp.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
     resp.headers["Access-Control-Allow-Credentials"] = "true"
     resp.headers["Access-Control-Max-Age"] = "3600"

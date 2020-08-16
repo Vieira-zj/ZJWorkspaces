@@ -170,11 +170,15 @@ def upload_pic():
     # save upload file
     file_name = create_random_str(12) + "." + get_file_type(upload_file.filename)
     upload_file.save(os.path.join(app.config["upload_dir"], file_name))
-    # save file meta info to users
+    # save file meta info to db
     user_name = request.headers.get("Specified-User")
     update_user_by_name(user_name, {"picture": file_name})
 
-    resp = build_ok_json_response(resp, {"key": "msg", "value": "upload file success"})
+    resp = build_ok_json_response(
+        resp,
+        {"key": "msg", "value": "upload file success"},
+        {"key": "filename", "value": file_name},
+    )
     return resp
 
 
@@ -184,11 +188,7 @@ def download_pic(filename):
     if request.method == "OPTIONS":
         return create_response_allow()
 
-    token = request.headers.get("Authorization", "")
-    if not is_token_valid(token):
-        resp = create_response_allow()
-        return build_forbidden_json_response(resp)
-
+    # no auth token check
     resp = send_from_directory(app.config["upload_dir"], filename, as_attachment=True)
     resp = create_response_allow(resp)
     return resp

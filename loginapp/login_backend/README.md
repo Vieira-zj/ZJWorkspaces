@@ -85,7 +85,8 @@ response:
     "name": "name20",
     "nickname": "nick20",
     "password": "test20",
-    "issuperuser": "y"
+    "issuperuser": "y",
+    "picture": " "
   }
 }
 ```
@@ -165,7 +166,8 @@ response:
 {
   "code": "0",
   "status": "ok",
-  "msg": "upload file success"
+  "msg": "upload file success",
+  "filename": "6e03231d18c7.jpeg"
 }
 ```
 
