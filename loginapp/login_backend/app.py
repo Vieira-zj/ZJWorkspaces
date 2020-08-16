@@ -5,7 +5,13 @@ import os
 from flask import Flask, request
 from flask import make_response, send_from_directory
 
-from data import select_user_by_name, select_many_users, update_user_by_name, db_clearup
+from data import (
+    select_user_by_name,
+    select_many_users,
+    insert_new_user,
+    update_user_by_name,
+    db_clearup,
+)
 from service import (
     is_auth,
     is_token_valid,
@@ -98,6 +104,27 @@ def get_users():
     return resp
 
 
+@app.route("/newuser", methods=["POST", "OPTIONS"])
+def new_user():
+    req_str = get_request_data(request)
+    if request.method == "OPTIONS":
+        return create_response_allow()
+
+    resp = create_response_allow()
+    user = json.loads(req_str)
+    try:
+        insert_new_user(user)
+    except Exception as err:
+        ret_json = {}
+        ret_json["code"] = "499"
+        ret_json["status"] = "failed"
+        ret_json["msg"] = str(err)
+        return build_json_response(resp, 200, ret_json)
+
+    resp = build_ok_json_response(resp)
+    return resp
+
+
 @app.route("/edituser", methods=["POST", "OPTIONS"])
 def edit_user():
     req_str = get_request_data(request)
@@ -110,7 +137,15 @@ def edit_user():
         return build_forbidden_json_response(resp)
 
     req = json.loads(req_str)
-    update_user_by_name(req["name"], req["data"])
+    try:
+        update_user_by_name(req["name"], req["data"])
+    except Exception as err:
+        ret_json = {}
+        ret_json["code"] = "499"
+        ret_json["status"] = "failed"
+        ret_json["msg"] = str(err)
+        return build_json_response(resp, 200, ret_json)
+
     resp = build_ok_json_response(resp)
     return resp
 
@@ -150,7 +185,7 @@ def upload_pic():
         ret_json["code"] = "499"
         ret_json["status"] = "failed"
         ret_json["msg"] = "no file part included!"
-        return build_json_response(resp, 406, ret_json)
+        return build_json_response(resp, 200, ret_json)
 
     upload_file = request.files["file"]
     if upload_file is None or upload_file.filename == "":
@@ -158,21 +193,28 @@ def upload_pic():
         ret_json["code"] = "499"
         ret_json["status"] = "failed"
         ret_json["msg"] = "no file selected!"
-        return build_json_response(resp, 406, ret_json)
+        return build_json_response(resp, 200, ret_json)
 
     if not is_valid_file_type(upload_file.filename):
         ret_json = {}
         ret_json["code"] = "499"
         ret_json["status"] = "failed"
         ret_json["msg"] = "upload file type not supported!"
-        return build_json_response(resp, 406, ret_json)
+        return build_json_response(resp, 200, ret_json)
 
     # save upload file
     file_name = create_random_str(12) + "." + get_file_type(upload_file.filename)
     upload_file.save(os.path.join(app.config["upload_dir"], file_name))
     # save file meta info to db
     user_name = request.headers.get("Specified-User")
-    update_user_by_name(user_name, {"picture": file_name})
+    try:
+        update_user_by_name(user_name, {"picture": file_name})
+    except Exception as err:
+        ret_json = {}
+        ret_json["code"] = "499"
+        ret_json["status"] = "failed"
+        ret_json["msg"] = str(err)
+        return build_json_response(resp, 200, ret_json)
 
     resp = build_ok_json_response(
         resp,

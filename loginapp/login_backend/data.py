@@ -29,7 +29,7 @@ def init_insert_users(idx_start, idx_end):
             cursor.execute(sql)
             db.commit()
         except:
-            logger.error("insert failed, and rollback!")
+            logger.error("users init failed, and rollback!")
             db.rollback()
 
 
@@ -76,7 +76,32 @@ def select_user_by_name(user_name, is_include_password=False):
         raise Exception(f"Error: dulplicated records for name:{user_name}")
 
 
+def insert_new_user(fields_dict):
+    user = select_user_by_name(fields_dict["name"])
+    if len(user) != 0:
+        raise Exception("user:[%s] is exsit!" % fields_dict["name"])
+
+    keys = ",".join(fields_dict.keys())
+    values = ",".join(["'%s'" % v for v in fields_dict.values()])
+    sql = "insert into users (%s) values (%s)" % (keys, values)
+    logger.debug(sql)
+
+    try:
+        db.ping(reconnect=True)
+        cursor.execute(sql)
+        db.commit()
+    except Exception as err:
+        logger.error(err)
+        logger.error("insert failed, and rollback!")
+        db.rollback()
+        raise err
+
+
 def update_user_by_name(user_name, fields):
+    user = select_user_by_name(fields["name"])
+    if len(user) <= 0:
+        raise Exception("user:[%s] is not exist!" % fields["name"])
+
     kv_list = [f"{k}='{v}'" for k, v in fields.items()]
     sql = "update users set %s where name = '%s'" % (",".join(kv_list), user_name)
     logger.debug(sql)
@@ -89,6 +114,7 @@ def update_user_by_name(user_name, fields):
         logger.error(err)
         logger.error("update failed, and rollback!")
         db.rollback()
+        raise err
 
 
 def db_clearup():
@@ -100,9 +126,12 @@ if __name__ == "__main__":
 
     # init_insert_users(20, 30)
 
-    count, results = select_many_users(10, 5)
-    print("row count:", count)
-    for row in results:
-        print(row)
+    # count, results = select_many_users(10, 5)
+    # print("row count:", count)
+    # for row in results:
+    #     print(row)
 
-    print(select_user_by_name("name11", is_include_password=True))
+    # print(select_user_by_name("name11", is_include_password=True))
+
+    user = {"name": "name30", "nickname": "nick30", "password": "test30"}
+    insert_new_user(user)

@@ -118,13 +118,27 @@ response:
 }
 ```
 
+- `/newuser`
+
+test:
+
+```sh
+curl -v -XPOST "http://127.0.0.1:12340/newuser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d \
+  '{"name": "name31", "nickname": "nick31", "issuperuser": "n", "password": "test31"}'
+```
+
+response:
+
+```json
+```
+
 - `/edituser`
 
 test:
 
 ```sh
 curl -v -XPOST "http://127.0.0.1:12340/edituser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d \
-  '{"name": "name11", "data": {"nickname": "new_nick", "issuperuser": "y", "picture": "/static/user01.jpeg"}}'
+  '{"name": "name11", "data": {"nickname": "new_nick", "issuperuser": "n"'
 ```
 
 response:

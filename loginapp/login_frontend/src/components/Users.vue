@@ -27,11 +27,11 @@
         </span>
       </div>
       <el-table :data="usersList" stripe border style="width: 100%">
-        <el-table-column prop="userName" label="用户名" width="180">
+        <el-table-column prop="userName" label="用户名" width="250">
         </el-table-column>
-        <el-table-column prop="nickName" label="昵称" width="180">
+        <el-table-column prop="nickName" label="昵称" width="250">
         </el-table-column>
-        <el-table-column prop="isSuperUser" label="管理员"> </el-table-column>
+        <el-table-column prop="isSuperUser" label="超极权限"></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button @click="handleEdit(scope.row)" type="text" size="small"
@@ -61,17 +61,17 @@ let mockUsers = [
   {
     userName: "name01",
     nickName: "nick01",
-    isSuperUser: global_.fnIsSuperUserCn(true)
+    isSuperUser: global_.fnIsSuperUserCn("y")
   },
   {
     userName: "name02",
     nickName: "nick02",
-    isSuperUser: global_.fnIsSuperUserCn(false)
+    isSuperUser: global_.fnIsSuperUserCn("n")
   },
   {
     userName: "name03",
     nickName: "nick03",
-    isSuperUser: global_.fnIsSuperUserCn(false)
+    isSuperUser: global_.fnIsSuperUserCn("n")
   }
 ];
 
@@ -113,7 +113,7 @@ export default {
               vm.usersList.push({
                 userName: user.name,
                 nickName: user.nickname,
-                isSuperUser: user.issuperuser
+                isSuperUser: global_.fnIsSuperUserCn(user.issuperuser)
               });
             }
           })

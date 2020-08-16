@@ -10,7 +10,7 @@ let fnGetIsSuperUser = function() {
 };
 
 let fnIsSuperUserCn = function(flag) {
-  return flag ? "是" : "否";
+  return flag === "y" ? "是" : "否";
 };
 
 let fnSetCookie = function(cname, cvalue, exdays) {
