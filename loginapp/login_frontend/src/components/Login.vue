@@ -9,7 +9,7 @@
     </div>
     <div id="login">
       <h1 style="text-align: center;">登 录 页 面</h1>
-      <el-form ref="form" :model="user">
+      <el-form ref="form" :model="user" :rules="rules">
         <el-form-item style="text-align: center;">
           <el-link :type="getPrimary(isID)" @click="isID = true">
             账户密码登录
@@ -19,7 +19,7 @@
             手机号登录
           </el-link>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="name">
           <el-input
             v-model="user.name"
             :placeholder="getNamePlaceHolder()"
@@ -27,7 +27,7 @@
             maxlength="20"
           ></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input
             v-model="user.password"
             :placeholder="getPwdPlaceHolder()"
@@ -56,14 +56,9 @@
           <i class="el-icon-position"></i>
           <i class="el-icon-connection"></i>
           <i class="el-icon-eleme"></i>
-          <el-link
-            type="primary"
-            href="https://element.eleme.io"
-            target="_blank"
-            style="float: right;"
+          <el-link type="primary" style="float: right;" href="#/register1"
+            >注册账户</el-link
           >
-            注册账户
-          </el-link>
         </el-form-item>
       </el-form>
     </div>
@@ -81,6 +76,10 @@ export default {
         name: "",
         password: ""
       },
+      rules: {
+        name: [{ required: true, message: "请输入", trigger: "blur" }],
+        password: [{ required: true, message: "请输入", trigger: "blur" }]
+      },
       auto: false,
       isID: true
     };
@@ -97,7 +96,7 @@ export default {
     },
     login() {
       console.log("login info:", JSON.stringify(this.user));
-      if (this.user.name.length === 0 || this.user.password === 0) {
+      if (!Boolean(this.user.name) || !Boolean(this.user.password)) {
         this.$message.error("输入用户名或密码为空！");
         return;
       } else if (this.user.password.length < 6) {

@@ -98,9 +98,9 @@ def insert_new_user(fields_dict):
 
 
 def update_user_by_name(user_name, fields):
-    user = select_user_by_name(fields["name"])
+    user = select_user_by_name(user_name)
     if len(user) <= 0:
-        raise Exception("user:[%s] is not exist!" % fields["name"])
+        raise Exception("user:[%s] is not exist!" % user_name)
 
     kv_list = [f"{k}='{v}'" for k, v in fields.items()]
     sql = "update users set %s where name = '%s'" % (",".join(kv_list), user_name)

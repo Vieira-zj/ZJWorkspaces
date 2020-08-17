@@ -119,7 +119,7 @@ def new_user():
         ret_json["code"] = "499"
         ret_json["status"] = "failed"
         ret_json["msg"] = str(err)
-        return build_json_response(resp, 200, ret_json)
+        return build_json_response(resp, 400, ret_json)
 
     resp = build_ok_json_response(resp)
     return resp
@@ -144,7 +144,7 @@ def edit_user():
         ret_json["code"] = "499"
         ret_json["status"] = "failed"
         ret_json["msg"] = str(err)
-        return build_json_response(resp, 200, ret_json)
+        return build_json_response(resp, 400, ret_json)
 
     resp = build_ok_json_response(resp)
     return resp
@@ -185,7 +185,7 @@ def upload_pic():
         ret_json["code"] = "499"
         ret_json["status"] = "failed"
         ret_json["msg"] = "no file part included!"
-        return build_json_response(resp, 200, ret_json)
+        return build_json_response(resp, 400, ret_json)
 
     upload_file = request.files["file"]
     if upload_file is None or upload_file.filename == "":
@@ -193,14 +193,14 @@ def upload_pic():
         ret_json["code"] = "499"
         ret_json["status"] = "failed"
         ret_json["msg"] = "no file selected!"
-        return build_json_response(resp, 200, ret_json)
+        return build_json_response(resp, 400, ret_json)
 
     if not is_valid_file_type(upload_file.filename):
         ret_json = {}
         ret_json["code"] = "499"
         ret_json["status"] = "failed"
         ret_json["msg"] = "upload file type not supported!"
-        return build_json_response(resp, 200, ret_json)
+        return build_json_response(resp, 400, ret_json)
 
     # save upload file
     file_name = create_random_str(12) + "." + get_file_type(upload_file.filename)
@@ -214,7 +214,7 @@ def upload_pic():
         ret_json["code"] = "499"
         ret_json["status"] = "failed"
         ret_json["msg"] = str(err)
-        return build_json_response(resp, 200, ret_json)
+        return build_json_response(resp, 400, ret_json)
 
     resp = build_ok_json_response(
         resp,

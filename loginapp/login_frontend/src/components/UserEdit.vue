@@ -18,7 +18,7 @@
         </el-breadcrumb>
       </div>
     </div>
-    <div id="user_edit">
+    <div id="user_form">
       <h1 style="text-align: center;">用 户 信 息</h1>
       <el-form ref="form" :model="user" label-width="80px">
         <el-form-item label="用户头像">
@@ -182,7 +182,7 @@ export default {
 </script>
 
 <style scoped>
-#user_edit {
+#user_form {
   position: absolute;
   top: 30%;
   left: 50%;

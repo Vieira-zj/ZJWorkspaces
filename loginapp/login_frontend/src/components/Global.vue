@@ -38,16 +38,19 @@ let fnClearCookie = function(name) {
 
 let fnErrorHandler = function(vm, err) {
   if (err.response) {
-    console.log("status:", err.response.status);
-    console.log("headers:", err.response.headers);
-    console.log("data:", err.response.data);
+    console.error("status:", err.response.status);
+    console.error("headers:", err.response.headers);
+    console.error("data:", err.response.data);
     if (err.response.status === 403) {
       vm.$message.error("授权失败，用户名或密码不正确！");
-      return;
+    } else {
+      vm.$message.error(
+        `[Error]: code:${err.response.data.code} message:${err.response.data.msg}`
+      );
     }
+    return;
   }
-  console.log(err);
-  vm.$message.error("服务器遇到错误！");
+  console.error(err);
 };
 
 export default {

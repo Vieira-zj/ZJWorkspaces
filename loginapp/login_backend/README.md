@@ -124,7 +124,7 @@ test:
 
 ```sh
 curl -v -XPOST "http://127.0.0.1:12340/newuser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d \
-  '{"name": "name31", "nickname": "nick31", "issuperuser": "n", "password": "test31"}'
+  '{"name": "name33", "nickname": "nick33", "issuperuser": "n", "password": "test33"}'
 ```
 
 response:
@@ -170,7 +170,7 @@ response:
 test:
 
 ```sh
-curl -v -XPOST -H "Authorization: bmFtZTEwfHRlc3QxMA==" -H "Specified-User: name22" \
+curl -v -XPOST -H "Authorization: bmFtZTEwfHRlc3QxMA==" -H "Specified-User: namex1" \
   -F "file=@/tmp/user01.jpeg" "http://localhost:12340/uploadpic"
 ```
 
