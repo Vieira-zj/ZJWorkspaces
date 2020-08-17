@@ -81,8 +81,7 @@ export default {
     },
     onSuccessUpload(response, file, fileList) {
       console.log("upload file success");
-      this.imgProps.url =
-        "http://127.0.0.1:12340/downloadpic/" + response.filename;
+      this.imgProps.url = global_.host + "/downloadpic/" + response.filename;
     }
   }
 };

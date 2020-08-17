@@ -88,7 +88,7 @@ export default {
     let vm = this;
     this.$axios({
       method: "GET",
-      url: "http://127.0.0.1:12340/issuperuser",
+      url: global_.host + "/issuperuser",
       headers: { Authorization: global_.fnGetCookie("user-token") }
     })
       .then(resp => {
@@ -98,7 +98,7 @@ export default {
         }
         this.$axios({
           method: "POST",
-          url: "http://127.0.0.1:12340/getusers",
+          url: global_.host + "/getusers",
           headers: { Authorization: global_.fnGetCookie("user-token") },
           data: {
             start: "0",
@@ -133,7 +133,7 @@ export default {
       let vm = this;
       this.$axios({
         method: "POST",
-        url: "http://127.0.0.1:12340/getusers",
+        url: global_.host + "/getusers",
         headers: { Authorization: global_.fnGetCookie("user-token") },
         data: {
           start: ((currentPage - 1) * vm.pageSize).toString(),

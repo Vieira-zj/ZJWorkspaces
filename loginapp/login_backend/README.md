@@ -1,12 +1,13 @@
 # login_backend
 
-> login backend base on Flask.
+> login demo backend base on Flask and pymysql.
 
-## db mysql
+## db
 
 Create database and init users data in mysql.
 
 ```sql
+-- create
 SHOW DATABASES;
 SHOW CREATE DATABASE test;
 
@@ -20,12 +21,21 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 SHOW CREATE TABLE users;
 
+-- prepare data
 INSERT INTO users (name, nickname, password, issuperuser) VALUES ('name01', 'nick01', 'test', 'n');
 SELECT * FROM users;
 
+-- clearup
+UPDATE users SET picture = "";
 DROP TABLE users;
 ```
 
+## project
+
+- app.py: api接口层
+- service.py: 服务层
+- data.py: 数据层，使用mysql数据库
+- utils.py: 工具类
 
 ## apis specification
 
@@ -124,12 +134,17 @@ test:
 
 ```sh
 curl -v -XPOST "http://127.0.0.1:12340/newuser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d \
-  '{"name": "name33", "nickname": "nick33", "issuperuser": "n", "password": "test33"}'
+  '{"name": "name34", "nickname": "nick34", "issuperuser": "n", "password": "test34"}'
 ```
 
 response:
 
 ```json
+{
+  "code": "0",
+  "status": "ok",
+  "msg": ""
+}
 ```
 
 - `/edituser`
@@ -162,7 +177,12 @@ curl -v "http://127.0.0.1:12340/issuperuser" -H "Authorization: bmFtZTEwfHRlc3Qx
 response:
 
 ```json
-
+{
+  "code": "0",
+  "status": "ok",
+  "msg": "",
+  "issuperuser": "y"
+}
 ```
 
 - `/uploadpic`

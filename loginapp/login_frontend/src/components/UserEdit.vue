@@ -108,7 +108,7 @@ export default {
     let vm = this;
     this.$axios({
       method: "POST",
-      url: "http://127.0.0.1:12340/getuser",
+      url: global_.host + "/getuser",
       headers: { Authorization: global_.fnGetCookie("user-token") },
       data: {
         name: vm.$route.params.name
@@ -125,8 +125,7 @@ export default {
         };
 
         if (Boolean(loadUser.picture)) {
-          vm.imgProps.url =
-            "http://127.0.0.1:12340/downloadpic/" + loadUser.picture;
+          vm.imgProps.url = global_.host + "/downloadpic/" + loadUser.picture;
         }
         vm.uploadHeaders = {
           Authorization: global_.fnGetCookie("user-token"),
@@ -143,14 +142,13 @@ export default {
     },
     onSuccessUpload(response, file, fileList) {
       console.log("upload file success");
-      this.imgProps.url =
-        "http://127.0.0.1:12340/downloadpic/" + response.filename;
+      this.imgProps.url = global_.host + "/downloadpic/" + response.filename;
     },
     onSubmit() {
       let vm = this;
       this.$axios({
         method: "POST",
-        url: "http://127.0.0.1:12340/edituser",
+        url: global_.host + "/edituser",
         headers: { Authorization: global_.fnGetCookie("user-token") },
         data: {
           name: vm.$route.params.name,

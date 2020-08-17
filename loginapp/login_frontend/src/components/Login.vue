@@ -106,7 +106,7 @@ export default {
 
       let vm = this;
       this.$axios
-        .post("http://localhost:12340/login", {
+        .post(global_.host + "/login", {
           name: vm.user.name,
           password: vm.user.password
         })
@@ -115,11 +115,11 @@ export default {
           console.log("cookie:", document.cookie);
 
           if (response.data.issuperuser === "y") {
-            vm.$router.push("/users");
             global_.fnSetIsSuperUser(true);
+            vm.$router.push("/users");
           } else {
-            vm.$router.push("/edit/" + vm.user.name);
             global_.fnSetIsSuperUser(false);
+            vm.$router.push("/edit/" + vm.user.name);
           }
         })
         .catch(err => {

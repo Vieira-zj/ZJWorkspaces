@@ -22,7 +22,7 @@ def get_file_type(file_name: str) -> str:
 
 
 def is_valid_file_type(file_name: str) -> bool:
-    # type "txt" for text
+    # type "txt" for test
     valid_types = ("png", "jpeg", "txt")
     return file_name.find(".") > -1 and get_file_type(file_name) in valid_types
 

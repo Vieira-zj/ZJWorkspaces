@@ -39,9 +39,10 @@ app.config["upload_dir"] = os.path.join(os.getcwd(), "upload_files")
 
 @app.route("/")
 def health():
-    ret = {}
     global count
     count += 1
+
+    ret = {}
     ret["count"] = count
     ret["status"] = "ok"
     return json.dumps(ret)
@@ -60,7 +61,9 @@ def login():
         resp = build_ok_json_response(
             resp, {"key": "issuperuser", "value": db_user["issuperuser"]}
         )
-        resp.set_cookie("user-token", string_encode("|".join(list(user.values()))))
+        # issue: https://support.google.com/chrome/thread/34237768?hl=en
+        # https://dormousehole.readthedocs.io/en/latest/api.html#response-objects
+        resp.set_cookie("user-token", string_encode("|".join(list(user.values()))), samesite=None)
     else:
         resp = build_forbidden_json_response(resp)
     return resp
@@ -237,7 +240,6 @@ def download_pic(filename):
 
 
 if __name__ == "__main__":
-
     is_debug = True
     try:
         app.run(debug=is_debug, port=12340)

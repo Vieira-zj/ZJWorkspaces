@@ -70,17 +70,20 @@ export default {
       ) {
         this.$message.error("输入用户名或密码为空！");
         return;
-      } else if (this.user.password1.length < 6) {
+      }
+      if (this.user.password1.length < 6) {
         this.$message.error("输入密码长度不能小于6！");
         return;
-      } else if (this.user.password1 !== this.user.password2) {
+      }
+      if (this.user.password1 !== this.user.password2) {
         this.$message.error("两次输入密码不一致！");
+        return;
       }
 
       let vm = this;
       this.$axios({
         method: "POST",
-        url: "http://127.0.0.1:12340/newuser",
+        url: global_.host + "/newuser",
         headers: { Authorization: global_.fnGetCookie("user-token") },
         data: {
           name: vm.user.userName,
@@ -89,7 +92,6 @@ export default {
         }
       })
         .then(resp => {
-          console.log(resp);
           console.log("register user success");
           vm.$router.push("/register2/" + vm.user.userName);
         })

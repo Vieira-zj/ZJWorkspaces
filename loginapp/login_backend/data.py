@@ -118,8 +118,10 @@ def update_user_by_name(user_name, fields):
 
 
 def db_clearup():
-    cursor.close()
-    db.close()
+    if cursor:
+        cursor.close()
+    if db:
+        db.close()
 
 
 if __name__ == "__main__":

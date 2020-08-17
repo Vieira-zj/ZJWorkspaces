@@ -1,4 +1,5 @@
 <script>
+let host = "http://localhost:12340";
 let IsSuperUser = false;
 
 let fnSetIsSuperUser = function(flag) {
@@ -54,6 +55,7 @@ let fnErrorHandler = function(vm, err) {
 };
 
 export default {
+  host,
   fnSetIsSuperUser,
   fnGetIsSuperUser,
   fnIsSuperUserCn,
