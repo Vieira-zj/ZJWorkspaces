@@ -1,10 +1,11 @@
 import logging
 import pymysql
+import os
 
 logger = logging.getLogger(__name__)
 
 db = pymysql.connect(
-    host="localhost",
+    host=os.getenv("MYSQL"),
     port=3306,
     user="root",
     password="example",

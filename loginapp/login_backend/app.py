@@ -63,7 +63,9 @@ def login():
         )
         # issue: https://support.google.com/chrome/thread/34237768?hl=en
         # https://dormousehole.readthedocs.io/en/latest/api.html#response-objects
-        resp.set_cookie("user-token", string_encode("|".join(list(user.values()))), samesite=None)
+        resp.set_cookie(
+            "user-token", string_encode("|".join(list(user.values()))), samesite=None
+        )
     else:
         resp = build_forbidden_json_response(resp)
     return resp
@@ -240,8 +242,16 @@ def download_pic(filename):
 
 
 if __name__ == "__main__":
-    is_debug = True
+    is_product = True if os.getenv("FLASK_ENV") == "prod" else False
     try:
-        app.run(debug=is_debug, port=12340)
+        if is_product:
+            from wsgiref.simple_server import make_server
+
+            server = make_server("0.0.0.0", 12340, app)
+            server.serve_forever()
+            app.run()
+        else:
+            is_debug = False
+            app.run(debug=is_debug, port=12340)
     finally:
         db_clearup()

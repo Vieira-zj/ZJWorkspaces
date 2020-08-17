@@ -1,12 +1,12 @@
-# Create at 2020-08-13, build mysql + admin instance.
+# Create at 2020-08-13, build vue frontend + flask backend + mysql + admin instance.
 # Use root/example as user/password credentials
 #
 version: '3.1'
 
 services:
-  db:
+  mysql:
     image: mysql
-    container_name: db
+    container_name: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -22,3 +22,14 @@ services:
     restart: always
     ports:
       - 8089:8080
+    depends_on:
+      - mysql
+
+  backend:
+    image: login-backend:v1
+    container_name: backend
+    ports:
+      - 12340:12340
+    depends_on:
+      - mysql
+    # command: sh -c "while true; do echo 'hello'; sleep 10; done;"

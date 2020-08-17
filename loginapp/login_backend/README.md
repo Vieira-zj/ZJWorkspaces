@@ -44,7 +44,7 @@ DROP TABLE users;
 test:
 
 ```sh
-curl -v http://127.0.0.1:12340/
+curl -v "http://127.0.0.1:12340/"
 ```
 
 response:
