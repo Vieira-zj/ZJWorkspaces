@@ -2,7 +2,7 @@
   <div>
     <div id="nav">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item to="/login">登录</el-breadcrumb-item>
+        <el-breadcrumb-item>登录</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div id="user_form">

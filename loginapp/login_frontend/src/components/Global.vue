@@ -1,13 +1,21 @@
 <script>
 let host = "http://localhost:12340";
-let IsSuperUser = false;
 
 let fnSetIsSuperUser = function(flag) {
-  IsSuperUser = flag;
+  // TODO: use vuex instead of sessionStorage for global var
+  sessionStorage.setItem("IsSuperUser", flag);
 };
 
 let fnGetIsSuperUser = function() {
-  return IsSuperUser;
+  return sessionStorage.getItem("IsSuperUser") === "true" ? true : false;
+};
+
+let fnSetLogonUserName = function(name) {
+  sessionStorage.setItem("LogonUserName", name);
+};
+
+let fnGetLogonUserName = function() {
+  return sessionStorage.getItem("LogonUserName");
 };
 
 let fnIsSuperUserCn = function(flag) {
@@ -58,6 +66,8 @@ export default {
   host,
   fnSetIsSuperUser,
   fnGetIsSuperUser,
+  fnSetLogonUserName,
+  fnGetLogonUserName,
   fnIsSuperUserCn,
   fnSetCookie,
   fnGetCookie,

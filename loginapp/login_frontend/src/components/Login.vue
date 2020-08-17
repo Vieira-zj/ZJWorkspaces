@@ -2,9 +2,7 @@
   <div>
     <div id="nav">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item>
-          <router-link to="/login">登录</router-link>
-        </el-breadcrumb-item>
+        <el-breadcrumb-item>登录</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div id="login">
@@ -38,7 +36,6 @@
         <el-form-item>
           <el-checkbox v-model="auto">自动登录</el-checkbox>
           <el-link
-            type="primary"
             href="https://element.eleme.io"
             target="_blank"
             style="float: right;"
@@ -56,9 +53,7 @@
           <i class="el-icon-position"></i>
           <i class="el-icon-connection"></i>
           <i class="el-icon-eleme"></i>
-          <el-link type="primary" style="float: right;" href="#/register1"
-            >注册账户</el-link
-          >
+          <el-link style="float: right;" href="#/register1">注册账户</el-link>
         </el-form-item>
       </el-form>
     </div>
@@ -114,6 +109,7 @@ export default {
           console.log("login success");
           console.log("cookie:", document.cookie);
 
+          global_.fnSetLogonUserName(vm.user.name);
           if (response.data.issuperuser === "y") {
             global_.fnSetIsSuperUser(true);
             vm.$router.push("/users");

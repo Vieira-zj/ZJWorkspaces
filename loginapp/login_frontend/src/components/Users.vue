@@ -3,18 +3,16 @@
     <div id="nav">
       <div style="float:left">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item>
-            <router-link to="/login">登录</router-link>
-          </el-breadcrumb-item>
-          <el-breadcrumb-item>
-            <router-link to="/users">用户列表</router-link>
-          </el-breadcrumb-item>
+          <el-breadcrumb-item to="/login">登录 </el-breadcrumb-item>
+          <el-breadcrumb-item>用户列表</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div style="float:right">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <router-link to="/login" @click.native="onLogout">退出</router-link>
+            <router-link to="/login" id="logout_link" @click="onLogout"
+              >退出</router-link
+            >
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>

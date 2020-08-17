@@ -7,13 +7,15 @@
           <el-breadcrumb-item to="/users" v-if="isCurSuperUser"
             >用户列表</el-breadcrumb-item
           >
-          <el-breadcrumb-item to="/edit">用户信息</el-breadcrumb-item>
+          <el-breadcrumb-item>用户信息</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div style="float:right">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item to="/login" @click="onLogout"
-            >退出
+          <el-breadcrumb-item>
+            <router-link to="/login" id="logout_link" @click="onLogout"
+              >退出</router-link
+            >
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -55,6 +57,12 @@
         <el-form-item label="用户昵称">
           <el-input v-model="user.nickName"></el-input>
         </el-form-item>
+        <el-form-item label="用户密码" prop="password1">
+          <el-input v-model="user.password1" show-password></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="password2">
+          <el-input v-model="user.password2" show-password></el-input>
+        </el-form-item>
         <el-form-item label="管理员">
           <el-switch v-model="user.isSuperUser"></el-switch>
         </el-form-item>
@@ -90,7 +98,9 @@ export default {
         userName: "",
         nickName: "",
         isSuperUser: false,
-        picture: ""
+        picture: "",
+        password1: "",
+        password2: ""
       },
       imgProps: {
         fit: "fill",
@@ -105,6 +115,14 @@ export default {
     this.isCurSuperUser = global_.fnGetIsSuperUser();
     console.log("is current super user:", this.isCurSuperUser);
 
+    if (
+      !this.isCurSuperUser &&
+      this.$route.params.name !== global_.fnGetLogonUserName()
+    ) {
+      this.$message.error("没有权限访问用户数据！");
+      return;
+    }
+
     let vm = this;
     this.$axios({
       method: "POST",
@@ -117,6 +135,7 @@ export default {
       .then(resp => {
         let loadUser = resp.data.user;
         console.log("load user:", loadUser);
+
         vm.user = {
           userName: loadUser.name,
           nickName: loadUser.nickname,
@@ -145,6 +164,15 @@ export default {
       this.imgProps.url = global_.host + "/downloadpic/" + response.filename;
     },
     onSubmit() {
+      if (this.user.password1.length < 6) {
+        this.$message.error("输入密码长度不能小于6！");
+        return;
+      }
+      if (this.user.password1 !== this.user.password2) {
+        this.$message.error("两次输入密码不一致！");
+        return;
+      }
+
       let vm = this;
       this.$axios({
         method: "POST",
@@ -154,7 +182,8 @@ export default {
           name: vm.$route.params.name,
           data: {
             nickname: vm.user.nickName,
-            issuperuser: vm.user.isSuperUser ? "y" : "n"
+            issuperuser: vm.user.isSuperUser ? "y" : "n",
+            password: vm.user.password1
           }
         }
       })
