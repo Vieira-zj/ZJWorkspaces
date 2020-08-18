@@ -42,6 +42,7 @@ if [[ $1 == "main" ]]; then
   # login url: http://logindemo.zj.com:8080
   cp_app
   docker-compose -f login-demo-compose.yaml up -d
+  sleep 2
   cp_dist
 fi
 

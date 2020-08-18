@@ -3,7 +3,7 @@ import logging
 import os
 
 from flask import Flask, request
-from flask import make_response, send_from_directory
+from flask import send_from_directory
 
 from data import (
     select_user_by_name,

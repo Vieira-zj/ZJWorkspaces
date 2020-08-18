@@ -135,7 +135,7 @@ export default {
         headers: { Authorization: global_.fnGetCookie("user-token") },
         data: {
           start: ((currentPage - 1) * vm.pageSize).toString(),
-          offset: vm.pageSize
+          offset: vm.pageSize.toString()
         }
       })
         .then(resp => {

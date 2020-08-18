@@ -27,4 +27,4 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 - Register1.vue: 第一步注册页面
 - Register2.vue: 第二步注册页面
 - Users.vue: 用户列表页
-- Users.vue: 用户信息编辑页面
+- UserEdit.vue: 用户信息编辑页面
