@@ -1,4 +1,4 @@
-# Create at 2020-08-13, build vue frontend + flask backend + mysql + admin instance.
+# Create at 2020-08-13, build vue frontend + flask backend + mysql + admin demo env.
 # Use root/example as user/password credentials
 #
 version: '3.1'
@@ -13,8 +13,8 @@ services:
       MYSQL_ROOT_PASSWORD: example
     volumes:
       - ${HOME}/Downloads/tmps/docker_vols/mysql:/var/lib/mysql
-    ports:
-      - 3306:3306
+    # ports:
+    #   - 3306:3306
 
   adminer:
     image: adminer
@@ -34,7 +34,16 @@ services:
       - db
     environment:
       - MYSQL=db
-      - FLASK_ENV=test
+      - FLASK_ENV=prod
     volumes:
       - ${HOME}/Downloads/tmps/docker_vols/backend:/app
     command: [/bin/bash, -c, sleep 3 && cd /app && python app.py]
+
+  frontend:
+    image: nginx
+    container_name: frontend
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - backend
