@@ -65,13 +65,14 @@ def get_request_data(request, is_file=False):
 def create_response_allow(resp=None):
     if resp is None:
         resp = make_response()
-    resp.headers["Access-Control-Allow-Origin"] = "http://localhost:8080"
-    resp.headers[
-        "Access-Control-Allow-Headers"
-    ] = "Accept,Origin,Content-Type,Authorization,Specified-User,X-Test"
-    resp.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
-    resp.headers["Access-Control-Allow-Credentials"] = "true"
-    resp.headers["Access-Control-Max-Age"] = "3600"
+    if os.getenv("FLASK_ENV") != "prod":
+        resp.headers["Access-Control-Allow-Origin"] = "http://localhost:8080"
+        resp.headers[
+            "Access-Control-Allow-Headers"
+        ] = "Accept,Origin,Content-Type,Authorization,Specified-User,X-Test"
+        resp.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
+        resp.headers["Access-Control-Allow-Credentials"] = "true"
+        resp.headers["Access-Control-Max-Age"] = "3600"
     return resp
 
 

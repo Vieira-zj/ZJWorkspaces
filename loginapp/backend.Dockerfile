@@ -1,12 +1,14 @@
+# build Pymysql + Flask env.
+#
 FROM rackspacedot/python37
 
-WORKDIR /app
-ADD ./login_backend /app
+# WORKDIR /app
+# ADD ./login_backend /app
 
 RUN pip install flask
 EXPOSE 12340
 
-ENV MYSQL mysql
-ENV FLASK_ENV prod
+ENV MYSQL localhost
+ENV FLASK_ENV test
 
-CMD ["/bin/bash", "-c", "sleep 3 && python app.py"]
+CMD ["/bin/bash", "-c", "while true; do echo 'hello'; sleep 10; done;"]

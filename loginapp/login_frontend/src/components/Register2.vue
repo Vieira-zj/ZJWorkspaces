@@ -25,7 +25,7 @@
             </div>
           </el-image>
           <el-upload
-            action="http://localhost:12340/uploadpic"
+            :action="uploadUrl"
             :headers="uploadHeaders"
             :show-file-list="false"
             :before-upload="onBeforeUpload"
@@ -60,6 +60,7 @@ export default {
         fit: "fill",
         url: ""
       },
+      uploadUrl: global_.host + "/uploadpic",
       uploadHeaders: {
         Authorization: ""
       }

@@ -242,16 +242,19 @@ def download_pic(filename):
 
 
 if __name__ == "__main__":
+    host = "0.0.0.0"
+    port = 12340
     is_product = True if os.getenv("FLASK_ENV") == "prod" else False
+    is_debug = True if os.getenv("IS_DEBUG") and os.getenv("IS_DEBUG") == "y" else False
+
     try:
         if is_product:
             from wsgiref.simple_server import make_server
 
-            server = make_server("0.0.0.0", 12340, app)
+            server = make_server(host, port, app)
             server.serve_forever()
             app.run()
         else:
-            is_debug = False
-            app.run(debug=is_debug, port=12340)
+            app.run(host=host, debug=is_debug, port=port)
     finally:
         db_clearup()

@@ -1,5 +1,6 @@
 <script>
-let host = "http://localhost:12340";
+let host = "http://localhost:12340"; // test
+// let host = "http://logindemo.zj.com:8080"; // prod
 
 let fnSetIsSuperUser = function(flag) {
   // TODO: use vuex instead of sessionStorage for global var

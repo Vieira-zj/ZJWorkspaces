@@ -37,15 +37,13 @@
             </div>
           </el-image>
           <el-upload
-            action="http://localhost:12340/uploadpic"
+            :action="uploadUrl"
             :headers="uploadHeaders"
             :show-file-list="false"
             :before-upload="onBeforeUpload"
             :on-success="onSuccessUpload"
           >
-            <el-button size="small" type="primary" :disabled="!isCurSuperUser"
-              >点击上传</el-button
-            >
+            <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">
               只能上传jpg/png文件，且不超过500kb
             </div>
@@ -64,15 +62,13 @@
           <el-input v-model="user.password2" show-password></el-input>
         </el-form-item>
         <el-form-item label="管理员">
-          <el-switch v-model="user.isSuperUser"></el-switch>
+          <el-switch
+            v-model="user.isSuperUser"
+            :disabled="!isCurSuperUser"
+          ></el-switch>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            :disabled="!isCurSuperUser"
-            @click="onSubmit"
-            >提交</el-button
-          >
+          <el-button type="primary" @click="onSubmit">提交</el-button>
           <el-button @click="onCancel">取消</el-button>
         </el-form-item>
       </el-form>
@@ -106,6 +102,7 @@ export default {
         fit: "fill",
         url: ""
       },
+      uploadUrl: global_.host + "/uploadpic",
       uploadHeaders: {
         Authorization: ""
       }
@@ -164,13 +161,15 @@ export default {
       this.imgProps.url = global_.host + "/downloadpic/" + response.filename;
     },
     onSubmit() {
-      if (this.user.password1.length < 6) {
-        this.$message.error("输入密码长度不能小于6！");
-        return;
-      }
-      if (this.user.password1 !== this.user.password2) {
-        this.$message.error("两次输入密码不一致！");
-        return;
+      if (Boolean(this.user.password1)) {
+        if (this.user.password1.length < 6) {
+          this.$message.error("输入密码长度不能小于6！");
+          return;
+        }
+        if (this.user.password1 !== this.user.password2) {
+          this.$message.error("两次输入密码不一致！");
+          return;
+        }
       }
 
       let vm = this;
