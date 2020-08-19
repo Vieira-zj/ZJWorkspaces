@@ -79,6 +79,8 @@ export default {
     },
     onBeforeUpload(file) {
       console.log("upload file:", file.name);
+      this.uploadHeaders["X-Test"] =
+        "uploadfile_" + global_.fnToUnicode(file.name);
     },
     onSuccessUpload(response, file, fileList) {
       console.log("upload file success");

@@ -65,6 +65,12 @@ let fnErrorHandler = function(vm, err) {
   console.error(err);
 };
 
+let fnToUnicode = function(text) {
+  return escape(text)
+    .replace(/%/g, "\\")
+    .toLowerCase();
+};
+
 export default {
   host,
   fnSetIsSuperUser,
@@ -75,6 +81,7 @@ export default {
   fnSetCookie,
   fnGetCookie,
   fnClearCookie,
-  fnErrorHandler
+  fnErrorHandler,
+  fnToUnicode
 };
 </script>
