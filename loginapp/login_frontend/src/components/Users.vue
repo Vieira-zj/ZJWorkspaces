@@ -3,14 +3,14 @@
     <div id="nav">
       <div style="float:left">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item to="/login">登录 </el-breadcrumb-item>
+          <el-breadcrumb-item to="/login">登录</el-breadcrumb-item>
           <el-breadcrumb-item>用户列表</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div style="float:right">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <router-link to="/login" id="logout_link" @click="onLogout"
+            <router-link to="/login" id="logout_link" @click.native="onLogout"
               >退出</router-link
             >
           </el-breadcrumb-item>
@@ -24,7 +24,13 @@
           <i class="el-icon-user"></i>
         </span>
       </div>
-      <el-table :data="usersList" stripe border style="width: 100%">
+      <el-table
+        v-loading="loading"
+        :data="usersList"
+        stripe
+        border
+        style="width: 100%"
+      >
         <el-table-column prop="userName" label="用户名" width="250">
         </el-table-column>
         <el-table-column prop="nickName" label="昵称" width="250">
@@ -79,10 +85,12 @@ export default {
     return {
       usersCount: 0,
       pageSize: 10,
-      usersList: []
+      usersList: [],
+      loading: true
     };
   },
   created() {
+    console.log("cookie:", global_.fnGetCookie("user-token"));
     let vm = this;
     this.$axios({
       method: "GET",
@@ -114,13 +122,16 @@ export default {
                 isSuperUser: global_.fnIsSuperUserCn(user.issuperuser)
               });
             }
+            vm.loading = false;
           })
           .catch(err => {
             global_.fnErrorHandler(vm, err);
+            vm.loading = false;
           });
       })
       .catch(err => {
         global_.fnErrorHandler(vm, err);
+        vm.loading = false;
       });
   },
   methods: {
@@ -128,6 +139,7 @@ export default {
       this.$router.push("/edit/" + row.userName);
     },
     currentChange(currentPage) {
+      this.loading = true;
       let vm = this;
       this.$axios({
         method: "POST",
@@ -149,14 +161,15 @@ export default {
               nickName: user.nickname,
               isSuperUser: user.issuperuser
             });
+            vm.loading = false;
           }
         })
         .catch(err => {
           global_.fnErrorHandler(vm, err);
+          vm.loading = false;
         });
     },
     onLogout() {
-      console.log("logout");
       global_.fnClearCookie("user-token");
     }
   }

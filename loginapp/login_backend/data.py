@@ -19,12 +19,14 @@ cursor = db.cursor()
 def init_insert_users(idx_start, idx_end):
     db_users_cols = ("name", "nickname", "password", "issuperuser")
     raw = (
-        "INSERT INTO users (%s)" % ",".join(db_users_cols[1:-1])
+        "INSERT INTO users (%s)" % ",".join(db_users_cols)
         + " VALUES ('name%s', 'nick%s', 'test%s', '%s');"
     )
 
     db.ping(reconnect=True)
     for i in range(idx_start, idx_end):
+        if i % 10000 == 0:
+            logger.debug("insert rows: " + str(i))
         sql = raw % (i, i, i, "n")
         try:
             cursor.execute(sql)
@@ -127,7 +129,7 @@ def db_clearup():
 
 if __name__ == "__main__":
 
-    # init_insert_users(20, 30)
+    init_insert_users(1000, 100 * 1000)
 
     # count, results = select_many_users(10, 5)
     # print("row count:", count)
@@ -136,5 +138,5 @@ if __name__ == "__main__":
 
     # print(select_user_by_name("name11", is_include_password=True))
 
-    user = {"name": "name30", "nickname": "nick30", "password": "test30"}
-    insert_new_user(user)
+    # user = {"name": "name30", "nickname": "nick30", "password": "test30"}
+    # insert_new_user(user)

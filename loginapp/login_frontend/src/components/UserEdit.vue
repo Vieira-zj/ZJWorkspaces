@@ -13,7 +13,7 @@
       <div style="float:right">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <router-link to="/login" id="logout_link" @click="onLogout"
+            <router-link to="/login" id="logout_link" @click.native="onLogout"
               >退出</router-link
             >
           </el-breadcrumb-item>
@@ -200,7 +200,6 @@ export default {
       this.$router.back(-1);
     },
     onLogout() {
-      console.log("logout");
       global_.fnClearCookie("user-token");
     }
   }
