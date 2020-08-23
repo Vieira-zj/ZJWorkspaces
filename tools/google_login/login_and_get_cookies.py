@@ -1,3 +1,4 @@
+# codeing:utf-8
 import sys
 import chromedriver_binary
 
@@ -12,6 +13,9 @@ def google_login_and_return_cookies(url, port):
     pip install selenium
     pip install chromedriver-binary==84.0.4147.30.0
     注：chromedriver版本号与本地chrome浏览器版本号一致
+
+    url: 要访问的页面地址
+    port: chrome浏览器remote debug端口
     '''
     caps = {
         'browserName': 'chrome',

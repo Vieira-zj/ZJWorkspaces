@@ -12,8 +12,8 @@
 #!/bin/bash
 set -eu
 
-url=$1
-port=$2
+url=$1 # 要访问的页面地址
+port=$2 # 本地一个大于1024并且未被占用的端口
 
 chrome_path="/Applications/Google Chrome.app/Contents/MacOS/"
 if [[ ! -d ${chrome_path} ]]; then
