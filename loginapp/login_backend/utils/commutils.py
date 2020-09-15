@@ -1,3 +1,5 @@
+# coding: utf-8
+import os
 import base64
 import logging
 import uuid
@@ -6,6 +8,11 @@ logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s - %(levelname)s: %(message)s"
 )
 logger = logging.getLogger(__name__)
+
+
+def get_project_path() -> str:
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.dirname(cur_dir)
 
 
 def string_encode(text: str) -> str:
@@ -37,6 +44,8 @@ def create_random_str(length=8):
 
 
 if __name__ == "__main__":
+    print(get_project_path())
+
     str_encode = string_encode("hello")
     print(str_encode)
     str_decode = string_decode(str_encode)

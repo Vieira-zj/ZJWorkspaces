@@ -1,32 +1,14 @@
-import base64, json, logging, os
-from flask import make_response
+# coding: utf-8
+import base64
+import logging
+import json
+import os
 
-from data import select_user_by_name
-from utils import string_decode
+from flask import make_response
 
 logger = logging.getLogger(__name__)
 
-
-def is_auth(user, db_user):
-    if db_user is None:
-        return False
-    return True if user["password"] == db_user.get("password", "") else False
-
-
-def is_token_valid(token: str) -> bool:
-    if token is None or len(token) == 0:
-        return False
-
-    try:
-        text = string_decode(token)
-    except:
-        return False
-    return text.find("|") > -1 and len(text.split("|")) == 2
-
-
-def get_username_from_token(token: str) -> str:
-    text = string_decode(token)
-    return text.split("|")[0]
+front_endpoint = "http://localhost:8080"
 
 
 def get_request_data(request, is_file=False):
@@ -66,7 +48,7 @@ def create_response_allow(resp=None):
     if resp is None:
         resp = make_response()
     if os.getenv("FLASK_ENV") != "prod":
-        resp.headers["Access-Control-Allow-Origin"] = "http://localhost:8080"
+        resp.headers["Access-Control-Allow-Origin"] = front_endpoint
         resp.headers[
             "Access-Control-Allow-Headers"
         ] = "Accept,Origin,Content-Type,Authorization,Specified-User,X-Test"
@@ -87,7 +69,7 @@ def build_ok_json_response(resp, *data):
     ret_json = {}
     ret_json["code"] = "0"
     ret_json["status"] = "ok"
-    ret_json["msg"] = ""
+    ret_json["message"] = ""
     for item in data:
         if item is not None and len(item) > 0:
             ret_json[item["key"]] = item["value"]
@@ -98,13 +80,6 @@ def build_forbidden_json_response(resp):
     ret_json = {}
     ret_json["code"] = "499"
     ret_json["status"] = "failed"
-    ret_json["msg"] = "auth forbidden"
+    ret_json["message"] = "auth forbidden"
     return build_json_response(resp, 403, ret_json)
 
-
-if __name__ == "__main__":
-    try:
-        print(os.getcwd())
-        raise ValueError("mock error")
-    except:
-        print("catch error")
