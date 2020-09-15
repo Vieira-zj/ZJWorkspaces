@@ -9,6 +9,9 @@ from utils import DBUtils
 from services import UserService
 
 
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s - %(levelname)s: %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)

@@ -4,9 +4,6 @@ import base64
 import logging
 import uuid
 
-logging.basicConfig(
-    level=logging.DEBUG, format="%(asctime)s - %(levelname)s: %(message)s"
-)
 logger = logging.getLogger(__name__)
 
 
@@ -34,7 +31,7 @@ def is_valid_file_type(file_name: str) -> bool:
     return file_name.find(".") > -1 and get_file_type(file_name) in valid_types
 
 
-def create_random_str(length=8):
+def create_random_str(length=8) -> str:
     if length > 32:
         raise ValueError("string length must be less than 32!")
 

@@ -4,6 +4,10 @@ import pymysql
 
 
 class DBUtils(object):
+    """
+    mysql connections.
+    """
+
     _db = pymysql.connect(
         host=os.getenv("MYSQL"),
         port=13306,
@@ -28,4 +32,3 @@ class DBUtils(object):
             cls._cursor.close()
         if cls._db:
             cls._db.close()
-

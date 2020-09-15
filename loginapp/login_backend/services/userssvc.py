@@ -37,7 +37,7 @@ class UserService(object):
 
     @preHandler
     def ping(self, request):
-        # include request header: "Content-Type: application/json"
+        # if use get_json(), must set request header: "Content-Type: application/json"
         logger.debug("receive json:" + str(request.get_json()))
         self.count += 1
         resp = httputils.create_response_allow()

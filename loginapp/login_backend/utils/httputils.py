@@ -18,7 +18,7 @@ def log_request_data(request, is_file=False):
     logger.debug("| Path: " + request.path)
     logger.debug("| Headers:")
     for k, v in request.headers.items():
-        logger.debug("|    %s: %s" % (k, v))
+        logger.debug("|\t%s: %s" % (k, v))
 
     query = request.query_string
     if query is not None and len(query) > 0:
@@ -34,12 +34,10 @@ def log_request_data(request, is_file=False):
     if data is not None and len(data) > 0:
         logger.debug("| Data:")
         try:
-            logger.debug("|    " + data.decode(encoding="utf-8"))
+            logger.debug("|\t" + data.decode(encoding="utf-8"))
         except UnicodeDecodeError as err:
             logger.info(err)
-            logger.debug(
-                "|    " + base64.b64encode(data[:128]).decode(encoding="utf-8")
-            )
+            logger.debug("|\t" + base64.b64encode(data[:128]).decode(encoding="utf-8"))
     logger.debug("|" + "*" * 60)
 
 
@@ -89,4 +87,3 @@ def build_forbidden_json_response(resp):
     ret_json["status"] = "failed"
     ret_json["message"] = "auth forbidden"
     return build_json_response(resp, 403, ret_json)
-

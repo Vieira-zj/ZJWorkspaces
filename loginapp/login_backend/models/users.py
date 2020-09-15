@@ -11,6 +11,10 @@ logger = logging.getLogger(__name__)
 
 
 class Users(object):
+    """
+    db:test table:users
+    """
+
     def __init__(self):
         self._db = DBUtils.getDBConnection()
         self._cursor = DBUtils.getDBCursor()
