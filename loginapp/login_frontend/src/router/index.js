@@ -1,10 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/Login'
-import Users from '@/components/Users'
-import Register1 from '@/components/Register1'
-import Register2 from '@/components/Register2'
-import UserEdit from '@/components/UserEdit'
 
 Vue.use(Router)
 
@@ -13,32 +8,32 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Login
+      component: () => import('@/views/login')
     },
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: () => import('@/views/login')
     },
     {
       path: '/users',
       name: 'users',
-      component: Users
+      component: () => import('@/views/users-list')
     },
     {
       path: '/register1',
       name: 'register1',
-      component: Register1
+      component: () => import('@/views/register1')
     },
     {
       path: '/register2/:name',
       name: 'register2',
-      component: Register2
+      component: () => import('@/views/register2')
     },
     {
       path: '/edit/:name',
       name: 'edit',
-      component: UserEdit
+      component: () => import('@/views/user-edit')
     }
   ]
 })

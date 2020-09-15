@@ -1,5 +1,5 @@
 {
-  "name": "login_frontend",
+  "name": "login-frontend",
   "version": "1.0.0",
   "description": "login frontend",
   "author": "zhengjin <jin.zheng@shopee.com>",
@@ -13,7 +13,8 @@
     "axios": "^0.19.2",
     "element-ui": "^2.13.2",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -60,5 +61,17 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "eslintConfig": {
+    "extends": "enough",
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "rules": {
+      "space-before-function-paren": "off",
+      "no-console": "off",
+      "no-undef": "warn"
+    }
+  }
 }

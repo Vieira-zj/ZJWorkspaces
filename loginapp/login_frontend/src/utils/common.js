@@ -1,29 +1,28 @@
-<script>
 // let host = "http://localhost:12340"; // test
 let host = "http://logindemo.zj.com:8080/api"; // prod
 
-let fnSetIsSuperUser = function(flag) {
+let fnSetIsSuperUser = function (flag) {
   // TODO: use vuex instead of sessionStorage for global var
   sessionStorage.setItem("IsSuperUser", flag);
 };
 
-let fnGetIsSuperUser = function() {
+let fnGetIsSuperUser = function () {
   return sessionStorage.getItem("IsSuperUser") === "true" ? true : false;
 };
 
-let fnSetLogonUserName = function(name) {
+let fnSetLogonUserName = function (name) {
   sessionStorage.setItem("LogonUserName", name);
 };
 
-let fnGetLogonUserName = function() {
+let fnGetLogonUserName = function () {
   return sessionStorage.getItem("LogonUserName");
 };
 
-let fnIsSuperUserCn = function(flag) {
+let fnIsSuperUserCn = function (flag) {
   return flag === "y" ? "是" : "否";
 };
 
-let fnSetCookie = function(cname, cvalue, exdays) {
+let fnSetCookie = function (cname, cvalue, exdays) {
   if (exdays > 0) {
     let d = new Date();
     d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
@@ -32,7 +31,7 @@ let fnSetCookie = function(cname, cvalue, exdays) {
   document.cookie = `${cname}=${cvalue};${exdays}`;
 };
 
-let fnGetCookie = function(name) {
+let fnGetCookie = function (name) {
   let cookies = document.cookie.split(";");
   for (let i = 0; i < cookies.length; i++) {
     let c = cookies[i];
@@ -44,11 +43,11 @@ let fnGetCookie = function(name) {
   return "";
 };
 
-let fnClearCookie = function(name) {
+let fnClearCookie = function (name) {
   fnSetCookie(name, "", -1);
 };
 
-let fnErrorHandler = function(vm, err) {
+let fnErrorHandler = function (vm, err) {
   if (err.response) {
     console.error("status:", err.response.status);
     console.error("headers:", err.response.headers);
@@ -65,7 +64,7 @@ let fnErrorHandler = function(vm, err) {
   console.error(err);
 };
 
-let fnToUnicode = function(text) {
+let fnToUnicode = function (text) {
   return escape(text)
     .replace(/%/g, "\\")
     .toLowerCase();
@@ -84,4 +83,3 @@ export default {
   fnErrorHandler,
   fnToUnicode
 };
-</script>

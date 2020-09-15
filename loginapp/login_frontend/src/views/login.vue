@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import global_ from "./Global";
+import global_ from "@/utils/common";
 
 export default {
   name: "login",

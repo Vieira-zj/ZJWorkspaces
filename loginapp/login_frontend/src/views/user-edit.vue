@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import global_ from "./Global";
+import global_ from "@/utils/common";
 
 let mockUser = {
   userName: "name01",
