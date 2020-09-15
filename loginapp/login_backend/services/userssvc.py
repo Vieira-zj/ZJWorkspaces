@@ -13,6 +13,21 @@ from utils import common, httputils
 logger = logging.getLogger(__name__)
 
 
+def preHandler(func):
+    def _deco(*args, **kwargs):
+        """
+        args[0]: self
+        args[1]: request
+        """
+        request = args[1]
+        httputils.log_request_data(request)
+        if request.method == "OPTIONS":
+            return httputils.create_option_response_allow()
+        return func(*args, **kwargs)
+
+    return _deco
+
+
 class UserService(object):
     count = 0
 
@@ -20,27 +35,27 @@ class UserService(object):
         self._app = app
         self._users = Users()
 
-    def ping(self):
+    @preHandler
+    def ping(self, request):
+        # include request header: "Content-Type: application/json"
+        logger.debug("receive json:" + str(request.get_json()))
         self.count += 1
-
-        ret = {}
-        ret["count"] = self.count
-        ret["status"] = "ok"
-        return json.dumps(ret)
-
-    def login(self, request):
-        req = httputils.get_request_data(request)
-        if request.method == "OPTIONS":
-            return httputils.create_response_allow()
-
         resp = httputils.create_response_allow()
-        user = json.loads(req)
+        httputils.build_ok_json_response(
+            resp, status="ok", count=str(self.count),
+        )
+        return resp
+
+    @preHandler
+    def login(self, request):
+        resp = httputils.create_response_allow()
+        user = request.get_json()
         db_user = self._users.selectOneUserByName(
             user["name"], is_include_password=True
         )
         if self._isAuth(user, db_user):
             resp = httputils.build_ok_json_response(
-                resp, {"key": "issuperuser", "value": db_user["issuperuser"]}
+                resp, issuperuser=db_user["issuperuser"]
             )
             # issue: https://support.google.com/chrome/thread/34237768?hl=en
             # https://dormousehole.readthedocs.io/en/latest/api.html#response-objects
@@ -53,49 +68,36 @@ class UserService(object):
             resp = httputils.build_forbidden_json_response(resp)
         return resp
 
+    @preHandler
     def getUser(self, request):
-        req_str = httputils.get_request_data(request)
-        if request.method == "OPTIONS":
-            return httputils.create_response_allow()
-
-        req = json.loads(req_str)
+        req_obj = request.get_json()
         resp = httputils.create_response_allow()
         token = request.headers.get("Authorization", "")
         if not self._isTokenValid(token):
             return httputils.build_forbidden_json_response(resp)
 
-        user = self._users.selectOneUserByName(req["name"])
-        httputils.build_ok_json_response(resp, {"key": "user", "value": user})
+        user = self._users.selectOneUserByName(req_obj["name"])
+        httputils.build_ok_json_response(resp, user=user)
         return resp
 
+    @preHandler
     def getUsers(self, request):
-        req_str = httputils.get_request_data(request)
-        if request.method == "OPTIONS":
-            return httputils.create_response_allow()
-
-        req = json.loads(req_str)
+        req_obj = request.get_json()
         resp = httputils.create_response_allow()
         token = request.headers.get("Authorization", "")
         if not self._isTokenValid(token):
             return httputils.build_forbidden_json_response(resp)
 
         row_count, users = self._users.selectMultipleUsers(
-            int(req["start"]), int(req["offset"])
+            int(req_obj["start"]), int(req_obj["offset"])
         )
-        resp = httputils.build_ok_json_response(
-            resp,
-            {"key": "count", "value": str(row_count)},
-            {"key": "users", "value": users},
-        )
+        resp = httputils.build_ok_json_response(resp, count=str(row_count), users=users)
         return resp
 
+    @preHandler
     def newUser(self, request):
-        req_str = httputils.get_request_data(request)
-        if request.method == "OPTIONS":
-            return httputils.create_response_allow()
-
         resp = httputils.create_response_allow()
-        user = json.loads(req_str)
+        user = request.get_json()
         try:
             self._users.insertANewUser(user)
         except Exception as err:
@@ -108,19 +110,16 @@ class UserService(object):
         resp = httputils.build_ok_json_response(resp)
         return resp
 
+    @preHandler
     def editUser(self, request):
-        req_str = httputils.get_request_data(request)
-        if request.method == "OPTIONS":
-            return httputils.create_response_allow()
-
         resp = httputils.create_response_allow()
         token = request.headers.get("Authorization", "")
         if not self._isTokenValid(token):
             return httputils.build_forbidden_json_response(resp)
 
-        req = json.loads(req_str)
+        req_obj = request.get_json()
         try:
-            self._users.updateUserByName(req["name"], req["data"])
+            self._users.updateUserByName(req_obj["name"], req_obj["data"])
         except Exception as err:
             ret_json = {}
             ret_json["code"] = "499"
@@ -131,11 +130,8 @@ class UserService(object):
         resp = httputils.build_ok_json_response(resp)
         return resp
 
+    @preHandler
     def isSuperUser(self, request):
-        httputils.get_request_data(request)
-        if request.method == "OPTIONS":
-            return httputils.create_response_allow()
-
         resp = httputils.create_response_allow()
         token = request.headers.get("Authorization", "")
         if not self._isTokenValid(token):
@@ -143,16 +139,11 @@ class UserService(object):
 
         user_name = self._getUsernameFromToken(token)
         user = self._users.selectOneUserByName(user_name)
-        resp = httputils.build_ok_json_response(
-            resp, {"key": "issuperuser", "value": user["issuperuser"]}
-        )
+        resp = httputils.build_ok_json_response(resp, issuperuser=user["issuperuser"])
         return resp
 
+    @preHandler
     def uploadPic(self, request):
-        httputils.get_request_data(request, is_file=True)
-        if request.method == "OPTIONS":
-            return httputils.create_response_allow()
-
         resp = httputils.create_response_allow()
         token = request.headers.get("Authorization", "")
         if not self._isTokenValid(token):
@@ -199,17 +190,12 @@ class UserService(object):
             return httputils.build_json_response(resp, 400, ret_json)
 
         resp = httputils.build_ok_json_response(
-            resp,
-            {"key": "msg", "value": "upload file success"},
-            {"key": "filename", "value": file_name},
+            resp, msg="upload file success", filename=file_name
         )
         return resp
 
+    @preHandler
     def downloadPic(self, request, filename):
-        httputils.get_request_data(request)
-        if request.method == "OPTIONS":
-            return httputils.create_response_allow()
-
         # no auth token check
         resp = send_from_directory(
             self._app.config["upload_dir"], filename, as_attachment=True

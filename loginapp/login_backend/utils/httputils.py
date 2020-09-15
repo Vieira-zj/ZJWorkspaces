@@ -8,10 +8,11 @@ from flask import make_response
 
 logger = logging.getLogger(__name__)
 
+# front_endpoint = "*"
 front_endpoint = "http://localhost:8080"
 
 
-def get_request_data(request, is_file=False):
+def log_request_data(request, is_file=False):
     logger.debug("|" + "*" * 60)
     logger.debug("| Method: " + request.method)
     logger.debug("| Path: " + request.path)
@@ -39,12 +40,18 @@ def get_request_data(request, is_file=False):
             logger.debug(
                 "|    " + base64.b64encode(data[:128]).decode(encoding="utf-8")
             )
-
     logger.debug("|" + "*" * 60)
-    return data
 
 
 def create_response_allow(resp=None):
+    if resp is None:
+        resp = make_response()
+    if os.getenv("FLASK_ENV") != "prod":
+        resp.headers["Access-Control-Allow-Origin"] = front_endpoint
+    return resp
+
+
+def create_option_response_allow(resp=None):
     if resp is None:
         resp = make_response()
     if os.getenv("FLASK_ENV") != "prod":
@@ -65,14 +72,14 @@ def build_json_response(resp, status_code, ret_json):
     return resp
 
 
-def build_ok_json_response(resp, *data):
+def build_ok_json_response(resp, **kwargs):
     ret_json = {}
     ret_json["code"] = "0"
     ret_json["status"] = "ok"
     ret_json["message"] = ""
-    for item in data:
-        if item is not None and len(item) > 0:
-            ret_json[item["key"]] = item["value"]
+    for k, v in kwargs.items():
+        if v is not None and len(v) > 0:
+            ret_json[k] = v
     return build_json_response(resp, 200, ret_json)
 
 

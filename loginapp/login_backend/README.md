@@ -30,12 +30,12 @@ UPDATE users SET picture = "";
 DROP TABLE users;
 ```
 
-## project
+## project 目录
 
 - app.py: api接口层
-- service.py: 服务层
-- data.py: 数据层，使用mysql数据库
-- utils.py: 工具类
+- services: 服务层
+- models: 数据层，使用mysql数据库
+- utils: 工具类
 
 ## apis specification
 
@@ -44,15 +44,18 @@ DROP TABLE users;
 test:
 
 ```sh
-curl -v "http://127.0.0.1:12340/"
+curl -v "http://127.0.0.1:12340/" | jq .
+curl -v "http://localhost:12340/ping" -d '{"value":"text"}' -H "Content-Type: application/json" | jq .
 ```
 
 response:
 
 ```json
 {
-  "count": "3",
-  "status": "ok"
+  "code": "0",
+  "status": "ok",
+  "message": "",
+  "count": "1"
 }
 ```
 
@@ -61,7 +64,8 @@ response:
 test:
 
 ```sh
-curl -v -XPOST "http://127.0.0.1:12340/login" -d '{"name": "name10", "password": "test10"}'
+curl -v -XPOST "http://127.0.0.1:12340/login" -H "Content-Type: application/json" \
+  -d '{"name": "name10", "password": "test10"}' | jq .
 ```
 
 response (set cookie user-token):
@@ -80,7 +84,8 @@ response (set cookie user-token):
 test:
 
 ```sh
-curl -v -XPOST "http://127.0.0.1:12340/getuser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d '{"name": "name20"}'
+curl -v -XPOST "http://127.0.0.1:12340/getuser" -H "Authorization: bmFtZTEwfHRlc3QxMA=="\
+  -H "Content-Type: application/json" -d '{"name": "name20"}' | jq .
 ```
 
 response:
@@ -106,7 +111,8 @@ response:
 test:
 
 ```sh
-curl -v -XPOST "http://127.0.0.1:12340/getusers" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d '{"start": "10", "offset": "5"}'
+curl -v -XPOST "http://127.0.0.1:12340/getusers" -H "Authorization: bmFtZTEwfHRlc3QxMA==" \
+  -H "Content-Type: application/json" -d '{"start": "10", "offset": "5"}' | jq .
 ```
 
 response:
@@ -133,8 +139,9 @@ response:
 test:
 
 ```sh
-curl -v -XPOST "http://127.0.0.1:12340/newuser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d \
-  '{"name": "name34", "nickname": "nick34", "issuperuser": "n", "password": "test34"}'
+curl -v -XPOST "http://127.0.0.1:12340/newuser" \
+  -H "Content-Type: application/json" -H "Authorization: bmFtZTEwfHRlc3QxMA==" \
+  -d '{"name": "name34", "nickname": "nick34", "issuperuser": "n", "password": "test34"}'
 ```
 
 response:
@@ -152,8 +159,9 @@ response:
 test:
 
 ```sh
-curl -v -XPOST "http://127.0.0.1:12340/edituser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -d \
-  '{"name": "name11", "data": {"nickname": "new_nick", "issuperuser": "n"'
+curl -v -XPOST "http://127.0.0.1:12340/edituser" \
+  -H "Content-Type: application/json" -H "Authorization: bmFtZTEwfHRlc3QxMA==" \
+  -d '{"name": "name11", "data": {"nickname": "new_nick", "issuperuser": "n"}}' | jq .
 ```
 
 response:
@@ -171,7 +179,8 @@ response:
 test:
 
 ```sh
-curl -v "http://127.0.0.1:12340/issuperuser" -H "Authorization: bmFtZTEwfHRlc3QxMA=="
+curl -v "http://127.0.0.1:12340/issuperuser" \
+  -H "Content-Type: application/json" -H "Authorization: bmFtZTEwfHRlc3QxMA==" | jq .
 ```
 
 response:
@@ -210,7 +219,7 @@ response:
 test:
 
 ```sh
-curl -v "http://127.0.0.1:12340/downloadpic/user01.jpeg" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -o "user02.jpeg"
+curl -v "http://127.0.0.1:12340/downloadpic/user01.jpeg" -H "Authorization: bmFtZTEwfHRlc3QxMA==" -o "user01.jpeg"
 ```
 
 response:

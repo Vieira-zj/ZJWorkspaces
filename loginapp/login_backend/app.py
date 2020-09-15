@@ -18,9 +18,14 @@ app.config["port"] = 12340
 service = UserService(app)
 
 
-@app.route("/")
-def health():
-    return service.ping()
+@app.route("/", methods=["GET", "POST", "OPTIONS"])
+def home():
+    return service.ping(request)
+
+
+@app.route("/ping", methods=["GET", "POST", "OPTIONS"])
+def ping():
+    return service.ping(request)
 
 
 @app.route("/login", methods=["POST", "OPTIONS"])
