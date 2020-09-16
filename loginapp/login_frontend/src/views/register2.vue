@@ -47,7 +47,8 @@
 </template>
 
 <script>
-import global_ from "@/utils/common";
+import { getUserToken } from "@/utils/auth";
+import { toUnicode } from "@/utils/global";
 
 export default {
   name: "register_step2",
@@ -60,7 +61,7 @@ export default {
         fit: "fill",
         url: ""
       },
-      uploadUrl: global_.host + "/uploadpic",
+      uploadUrl: process.env.VUE_APP_BASE_API + "/uploadpic",
       uploadHeaders: {
         Authorization: ""
       }
@@ -68,7 +69,7 @@ export default {
   },
   created() {
     this.uploadHeaders = {
-      Authorization: global_.fnGetCookie("user-token"),
+      Authorization: getUserToken("user-token"),
       "Specified-User": this.$route.params.name
     };
   },
@@ -79,12 +80,12 @@ export default {
     },
     onBeforeUpload(file) {
       console.log("upload file:", file.name);
-      this.uploadHeaders["X-Test"] =
-        "uploadfile_" + global_.fnToUnicode(file.name);
+      this.uploadHeaders["X-Test"] = "uploadfile_" + toUnicode(file.name);
     },
     onSuccessUpload(response, file, fileList) {
       console.log("upload file success");
-      this.imgProps.url = global_.host + "/downloadpic/" + response.filename;
+      this.imgProps.url =
+        process.env.VUE_APP_BASE_API + "/downloadpic/" + response.filename;
     }
   }
 };

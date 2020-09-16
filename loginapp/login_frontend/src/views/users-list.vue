@@ -59,23 +59,24 @@
 </template>
 
 <script>
-import global_ from "@/utils/common";
+import { getUserToken, removeUserToken } from "@/utils/auth";
+import { isSuperUserCn, errorHandler } from "@/utils/global";
 
 let mockUsers = [
   {
     userName: "name01",
     nickName: "nick01",
-    isSuperUser: global_.fnIsSuperUserCn("y")
+    isSuperUser: isSuperUserCn("y")
   },
   {
     userName: "name02",
     nickName: "nick02",
-    isSuperUser: global_.fnIsSuperUserCn("n")
+    isSuperUser: isSuperUserCn("n")
   },
   {
     userName: "name03",
     nickName: "nick03",
-    isSuperUser: global_.fnIsSuperUserCn("n")
+    isSuperUser: isSuperUserCn("n")
   }
 ];
 
@@ -90,12 +91,12 @@ export default {
     };
   },
   created() {
-    console.log("cookie:", global_.fnGetCookie("user-token"));
+    console.log("cookie:", getUserToken());
     let vm = this;
     this.$axios({
       method: "GET",
-      url: global_.host + "/issuperuser",
-      headers: { Authorization: global_.fnGetCookie("user-token") }
+      url: process.env.VUE_APP_BASE_API + "/issuperuser",
+      headers: { Authorization: getUserToken() }
     })
       .then(resp => {
         if (resp.data.issuperuser !== "y") {
@@ -104,8 +105,8 @@ export default {
         }
         this.$axios({
           method: "POST",
-          url: global_.host + "/getusers",
-          headers: { Authorization: global_.fnGetCookie("user-token") },
+          url: process.env.VUE_APP_BASE_API + "/getusers",
+          headers: { Authorization: getUserToken() },
           data: {
             start: "0",
             offset: "10"
@@ -119,18 +120,18 @@ export default {
               vm.usersList.push({
                 userName: user.name,
                 nickName: user.nickname,
-                isSuperUser: global_.fnIsSuperUserCn(user.issuperuser)
+                isSuperUser: isSuperUserCn(user.issuperuser)
               });
             }
             vm.loading = false;
           })
           .catch(err => {
-            global_.fnErrorHandler(vm, err);
+            errorHandler(vm, err);
             vm.loading = false;
           });
       })
       .catch(err => {
-        global_.fnErrorHandler(vm, err);
+        errorHandler(vm, err);
         vm.loading = false;
       });
   },
@@ -143,8 +144,8 @@ export default {
       let vm = this;
       this.$axios({
         method: "POST",
-        url: global_.host + "/getusers",
-        headers: { Authorization: global_.fnGetCookie("user-token") },
+        url: process.env.VUE_APP_BASE_API + "/getusers",
+        headers: { Authorization: getUserToken() },
         data: {
           start: ((currentPage - 1) * vm.pageSize).toString(),
           offset: vm.pageSize.toString()
@@ -165,12 +166,12 @@ export default {
           }
         })
         .catch(err => {
-          global_.fnErrorHandler(vm, err);
+          errorHandler(vm, err);
           vm.loading = false;
         });
     },
     onLogout() {
-      global_.fnClearCookie("user-token");
+      removeUserToken();
     }
   }
 };

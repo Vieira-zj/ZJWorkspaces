@@ -38,7 +38,8 @@
 </template>
 
 <script>
-import global_ from "@/utils/common";
+import { getUserToken } from "@/utils/auth";
+import { errorHandler } from "@/utils/global";
 
 export default {
   name: "register_step1",
@@ -84,8 +85,8 @@ export default {
       let vm = this;
       this.$axios({
         method: "POST",
-        url: global_.host + "/newuser",
-        headers: { Authorization: global_.fnGetCookie("user-token") },
+        url: process.env.VUE_APP_BASE_API + "/newuser",
+        headers: { Authorization: getUserToken() },
         data: {
           name: vm.user.userName,
           nickname: vm.user.nickName,
@@ -97,7 +98,7 @@ export default {
           vm.$router.push("/register2/" + vm.user.userName);
         })
         .catch(err => {
-          global_.fnErrorHandler(vm, err);
+          errorHandler(vm, err);
         });
     },
     onCancel() {

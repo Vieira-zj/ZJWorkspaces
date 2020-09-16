@@ -75,6 +75,7 @@ response (set cookie user-token):
   "code": "0",
   "status": "ok",
   "msg": "",
+  "name": "name10",
   "issuperuser": "y"
 }
 ```
@@ -174,13 +175,12 @@ response:
 }
 ```
 
-- `issuperuser`
+- `/issuperuser`
 
 test:
 
 ```sh
-curl -v "http://127.0.0.1:12340/issuperuser" \
-  -H "Content-Type: application/json" -H "Authorization: bmFtZTEwfHRlc3QxMA==" | jq .
+curl -v "http://127.0.0.1:12340/issuperuser" -H "Authorization: bmFtZTEwfHRlc3QxMA==" | jq .
 ```
 
 response:

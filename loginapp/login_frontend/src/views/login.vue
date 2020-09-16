@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import global_ from "@/utils/common";
+import { errorHandler } from "@/utils/global";
 
 export default {
   name: "login",
@@ -100,26 +100,18 @@ export default {
       }
 
       let vm = this;
-      this.$axios
-        .post(global_.host + "/login", {
+      vm.$store
+        .dispatch("users/login", {
           name: vm.user.name,
           password: vm.user.password
         })
-        .then(response => {
-          console.log("login success");
-          console.log("cookie:", document.cookie);
-
-          global_.fnSetLogonUserName(vm.user.name);
-          if (response.data.issuperuser === "y") {
-            global_.fnSetIsSuperUser(true);
-            vm.$router.push("/users");
-          } else {
-            global_.fnSetIsSuperUser(false);
-            vm.$router.push("/edit/" + vm.user.name);
-          }
+        .then(() => {
+          vm.$store.state.users.isSuperUser
+            ? vm.$router.push("/users")
+            : vm.$router.push("/edit/" + vm.user.name);
         })
         .catch(err => {
-          global_.fnErrorHandler(vm, err);
+          errorHandler(vm, err);
         });
     }
   }

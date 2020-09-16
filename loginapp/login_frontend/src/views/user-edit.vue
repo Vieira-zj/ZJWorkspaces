@@ -77,7 +77,8 @@
 </template>
 
 <script>
-import global_ from "@/utils/common";
+import { getUserToken, removeUserToken } from "@/utils/auth";
+import { errorHandler, toUnicode } from "@/utils/global";
 
 let mockUser = {
   userName: "name01",
@@ -102,19 +103,19 @@ export default {
         fit: "fill",
         url: ""
       },
-      uploadUrl: global_.host + "/uploadpic",
+      uploadUrl: process.env.VUE_APP_BASE_API + "/uploadpic",
       uploadHeaders: {
         Authorization: ""
       }
     };
   },
   created() {
-    this.isCurSuperUser = global_.fnGetIsSuperUser();
+    this.isCurSuperUser = this.$store.state.users.isSuperUser;
     console.log("is current super user:", this.isCurSuperUser);
 
     if (
       !this.isCurSuperUser &&
-      this.$route.params.name !== global_.fnGetLogonUserName()
+      this.$route.params.name !== this.$store.state.users.logonUserName
     ) {
       this.$message.error("没有权限访问用户数据！");
       return;
@@ -123,8 +124,8 @@ export default {
     let vm = this;
     this.$axios({
       method: "POST",
-      url: global_.host + "/getuser",
-      headers: { Authorization: global_.fnGetCookie("user-token") },
+      url: process.env.VUE_APP_BASE_API + "/getuser",
+      headers: { Authorization: getUserToken() },
       data: {
         name: vm.$route.params.name
       }
@@ -141,26 +142,27 @@ export default {
         };
 
         if (Boolean(loadUser.picture)) {
-          vm.imgProps.url = global_.host + "/downloadpic/" + loadUser.picture;
+          vm.imgProps.url =
+            process.env.VUE_APP_BASE_API + "/downloadpic/" + loadUser.picture;
         }
         vm.uploadHeaders = {
-          Authorization: global_.fnGetCookie("user-token"),
+          Authorization: getUserToken,
           "Specified-User": loadUser.name
         };
       })
       .catch(err => {
-        global_.fnErrorHandler(vm, err);
+        errorHandler(vm, err);
       });
   },
   methods: {
     onBeforeUpload(file) {
       console.log("upload file:", file.name);
-      this.uploadHeaders["X-Test"] =
-        "uploadfile_" + global_.fnToUnicode(file.name);
+      this.uploadHeaders["X-Test"] = "uploadfile_" + toUnicode(file.name);
     },
     onSuccessUpload(response, file, fileList) {
       console.log("upload file success");
-      this.imgProps.url = global_.host + "/downloadpic/" + response.filename;
+      this.imgProps.url =
+        process.env.VUE_APP_BASE_API + "/downloadpic/" + response.filename;
     },
     onSubmit() {
       if (Boolean(this.user.password1)) {
@@ -177,8 +179,8 @@ export default {
       let vm = this;
       this.$axios({
         method: "POST",
-        url: global_.host + "/edituser",
-        headers: { Authorization: global_.fnGetCookie("user-token") },
+        url: process.env.VUE_APP_BASE_API + "/edituser",
+        headers: { Authorization: getUserToken() },
         data: {
           name: vm.$route.params.name,
           data: {
@@ -195,14 +197,14 @@ export default {
           });
         })
         .catch(err => {
-          global_.fnErrorHandler(vm, err);
+          errorHandler(vm, err);
         });
     },
     onCancel() {
       this.$router.back(-1);
     },
     onLogout() {
-      global_.fnClearCookie("user-token");
+      removeUserToken;
     }
   }
 };

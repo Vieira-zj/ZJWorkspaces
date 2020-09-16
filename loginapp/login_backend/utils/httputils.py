@@ -46,6 +46,7 @@ def create_response_allow(resp=None):
         resp = make_response()
     if os.getenv("FLASK_ENV") != "prod":
         resp.headers["Access-Control-Allow-Origin"] = front_endpoint
+        resp.headers["Access-Control-Allow-Credentials"] = "true" # cookie
     return resp
 
 
@@ -59,7 +60,7 @@ def create_option_response_allow(resp=None):
         ] = "Accept,Origin,Content-Type,Authorization,Specified-User,X-Test"
         resp.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
         resp.headers["Access-Control-Allow-Credentials"] = "true"
-        resp.headers["Access-Control-Max-Age"] = "3600"
+        # resp.headers["Access-Control-Max-Age"] = "3600"
     return resp
 
 

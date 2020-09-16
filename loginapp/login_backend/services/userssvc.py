@@ -55,12 +55,12 @@ class UserService(object):
         )
         if self._isAuth(user, db_user):
             resp = httputils.build_ok_json_response(
-                resp, issuperuser=db_user["issuperuser"]
+                resp, name=db_user["name"], issuperuser=db_user["issuperuser"]
             )
             # issue: https://support.google.com/chrome/thread/34237768?hl=en
             # https://dormousehole.readthedocs.io/en/latest/api.html#response-objects
             resp.set_cookie(
-                "user-token",
+                "User-Token",
                 common.string_encode("|".join(list(user.values()))),
                 samesite=None,
             )
