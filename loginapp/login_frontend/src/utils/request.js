@@ -11,7 +11,7 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
-    let token = store.state.users.userToken
+    let token = store.state.users.authToken
     if (token) {
       config.headers['Authorization'] = token
       config.headers['Content-Type'] = 'application/json'

@@ -6,7 +6,7 @@
         <el-breadcrumb-item>注册</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div id="user_form">
+    <div id="user-form">
       <div>
         <el-steps :align-center="true" :active="1">
           <el-step title="用户信息"></el-step>
@@ -39,7 +39,7 @@
 
 <script>
 import { getUserToken } from "@/utils/auth";
-import { errorHandler } from "@/utils/global";
+import { showErrorMessage } from "@/utils/global";
 
 export default {
   name: "register_step1",
@@ -70,15 +70,15 @@ export default {
         !Boolean(this.user.password1) ||
         !Boolean(this.user.password2)
       ) {
-        this.$message.error("输入用户名或密码为空！");
+        showErrorMessage("输入用户名或密码为空！");
         return;
       }
       if (this.user.password1.length < 6) {
-        this.$message.error("输入密码长度不能小于6！");
+        showErrorMessage("输入密码长度不能小于6！");
         return;
       }
       if (this.user.password1 !== this.user.password2) {
-        this.$message.error("两次输入密码不一致！");
+        showErrorMessage("两次输入密码不一致！");
         return;
       }
 
@@ -89,12 +89,12 @@ export default {
         password: vm.user.password1
       };
       this.$store
-        .dispatch("users/register1", registerData)
+        .dispatch("users/register", registerData)
         .then(() => {
-          vm.$router.push("/register2/" + vm.user.userName);
+          vm.$router.push("/register2");
         })
         .catch(err => {
-          // handle default
+          console.error(err);
         });
     },
     onCancel() {
@@ -105,7 +105,7 @@ export default {
 </script>
 
 <style scoped>
-#user_form {
+#user-form {
   position: absolute;
   top: 30%;
   left: 50%;

@@ -26,7 +26,7 @@ export default new Router({
       component: () => import('@/views/register1')
     },
     {
-      path: '/register2/:name',
+      path: '/register2',
       name: 'register2',
       component: () => import('@/views/register2')
     },

@@ -77,8 +77,8 @@
 </template>
 
 <script>
-import { getUserToken, removeUserToken } from "@/utils/auth";
-import { errorHandler, toUnicode } from "@/utils/global";
+import { removeUserToken } from "@/utils/auth";
+import { showErrorMessage, toUnicode } from "@/utils/global";
 
 let mockUser = {
   userName: "name01",
@@ -117,23 +117,16 @@ export default {
       !this.isCurSuperUser &&
       this.$route.params.name !== this.$store.state.users.logonUserName
     ) {
-      this.$message.error("没有权限访问用户数据！");
+      showErrorMessage("没有权限访问用户数据！");
       return;
     }
 
     let vm = this;
-    this.$axios({
-      method: "POST",
-      url: process.env.VUE_APP_BASE_API + "/getuser",
-      headers: { Authorization: getUserToken() },
-      data: {
+    this.$store
+      .dispatch("users/getUser", {
         name: vm.$route.params.name
-      }
-    })
-      .then(resp => {
-        let loadUser = resp.data.user;
-        console.log("load user:", loadUser);
-
+      })
+      .then(loadUser => {
         vm.user = {
           userName: loadUser.name,
           nickName: loadUser.nickname,
@@ -146,12 +139,12 @@ export default {
             process.env.VUE_APP_BASE_API + "/downloadpic/" + loadUser.picture;
         }
         vm.uploadHeaders = {
-          Authorization: getUserToken,
+          Authorization: vm.$store.state.users.authToken,
           "Specified-User": loadUser.name
         };
       })
       .catch(err => {
-        errorHandler(vm, err);
+        console.error(err);
       });
   },
   methods: {
@@ -167,37 +160,34 @@ export default {
     onSubmit() {
       if (Boolean(this.user.password1)) {
         if (this.user.password1.length < 6) {
-          this.$message.error("输入密码长度不能小于6！");
+          showErrorMessage("输入密码长度不能小于6！");
           return;
         }
         if (this.user.password1 !== this.user.password2) {
-          this.$message.error("两次输入密码不一致！");
+          showErrorMessage("两次输入密码不一致！");
           return;
         }
       }
 
       let vm = this;
-      this.$axios({
-        method: "POST",
-        url: process.env.VUE_APP_BASE_API + "/edituser",
-        headers: { Authorization: getUserToken() },
+      let editData = {
+        name: vm.$route.params.name,
         data: {
-          name: vm.$route.params.name,
-          data: {
-            nickname: vm.user.nickName,
-            issuperuser: vm.user.isSuperUser ? "y" : "n",
-            password: vm.user.password1
-          }
+          nickname: vm.user.nickName,
+          issuperuser: vm.user.isSuperUser ? "y" : "n",
+          password: vm.user.password1
         }
-      })
-        .then(resp => {
+      };
+      this.$store
+        .dispatch("users/editUser", editData)
+        .then(() => {
           vm.$message({
             message: "用户信息修改成功",
             type: "success"
           });
         })
         .catch(err => {
-          errorHandler(vm, err);
+          console.error(err);
         });
     },
     onCancel() {

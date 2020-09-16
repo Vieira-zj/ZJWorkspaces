@@ -1,4 +1,4 @@
-import { apiLogin, apiNewUser, apiEditUser } from '@/api/users'
+import { apiLogin, apiGetUser, apiNewUser, apiEditUser } from '@/api/users'
 import { getUserToken } from '@/utils/auth'
 
 const state = {
@@ -30,9 +30,9 @@ const actions = {
     return new Promise((resolve, reject) => {
       apiLogin(userData)
         .then(respData => {
-          console.log('login success')
-          commit('setLogonUserName', respData.name)
-          commit('setIsSuperUser', respData.issuperuser === 'y' ? true : false)
+          console.log('login success:', respData.user)
+          commit('setLogonUserName', respData.user.name)
+          commit('setIsSuperUser', respData.user.issuperuser === 'y' ? true : false)
           commit('setAuthToken')
           console.log('token cookie:', state.authToken)
           resolve()
@@ -42,12 +42,12 @@ const actions = {
     })
   },
 
-  register1 ({ commit }, userData) {
+  register ({ commit }, userData) {
     return new Promise((resolve, reject) => {
       apiNewUser(userData)
-        .then(() => {
-          console.log('register step1 success')
-          commit('setRegisterName', userData.name)
+        .then(respData => {
+          console.log('user register success:', respData.user)
+          commit('setRegisterName', respData.user.name)
           resolve()
         }).catch(err => {
           reject(err)
@@ -55,11 +55,27 @@ const actions = {
     })
   },
 
-  editUser ({ commit }, userData) {
+  getUser ({ }, userData) {
     return new Promise((resolve, reject) => {
-      apiEditUser(userData).then(() => {
+      apiGetUser(userData)
+        .then(respData => {
+          console.log("load user success:", respData.user)
+          resolve(respData.user)
+        }).catch(err => {
+          reject(err)
+        })
+    })
+  },
 
-      })
+  editUser ({ }, userData) {
+    return new Promise((resolve, reject) => {
+      apiEditUser(userData)
+        .then(respData => {
+          console.log('edit user success:', respData.user)
+          resolve()
+        }).catch(err => {
+          reject(err)
+        })
     })
   }
 }

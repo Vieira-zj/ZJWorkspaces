@@ -66,7 +66,6 @@ export default {
   },
   methods: {
     onNext() {
-      console.log("next");
       this.$router.push("/login");
     },
     onBeforeUpload(file) {

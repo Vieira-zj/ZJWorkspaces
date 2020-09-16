@@ -44,7 +44,7 @@
           </el-link>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width: 100%;" @click="login">
+          <el-button type="primary" style="width: 100%;" @click="onLogin">
             登 录
           </el-button>
         </el-form-item>
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { errorHandler } from "@/utils/global";
+import { showErrorMessage } from "@/utils/global";
 
 export default {
   name: "login",
@@ -89,30 +89,30 @@ export default {
     getPwdPlaceHolder() {
       return this.isID ? "密码" : "验证码";
     },
-    login() {
+    onLogin() {
       console.log("login info:", JSON.stringify(this.user));
       if (!Boolean(this.user.name) || !Boolean(this.user.password)) {
-        this.$message.error("输入用户名或密码为空！");
+        showErrorMessage("输入用户名或密码为空！");
         return;
       } else if (this.user.password.length < 6) {
-        this.$message.error("输入密码长度不能小于6！");
+        showErrorMessage("输入密码长度不能小于6！");
         return;
       }
 
       let vm = this;
-      vm.$store
+      this.$store
         .dispatch("users/login", {
           name: vm.user.name,
           password: vm.user.password
         })
         .then(() => {
-          users = vm.$store.state.users;
+          let users = vm.$store.state.users;
           users.isSuperUser
             ? vm.$router.push("/users")
             : vm.$router.push("/edit/" + users.logonUserName);
         })
-        .catch(() => {
-          // handle default
+        .catch(err => {
+          console.error(err);
         });
     }
   }
