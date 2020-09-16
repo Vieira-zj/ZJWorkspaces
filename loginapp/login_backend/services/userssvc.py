@@ -47,9 +47,7 @@ class UserService(object):
         logger.debug("receive json:" + str(request.get_json()))
         self.count += 1
         resp = httputils.create_response_allow()
-        httputils.build_ok_json_response(
-            resp, status="ok", count=str(self.count),
-        )
+        httputils.build_ok_json_response(resp, count=str(self.count))
         return resp
 
     @preHandler
@@ -59,10 +57,10 @@ class UserService(object):
         db_user = self._users.selectOneUserByName(
             user["name"], is_include_password=True
         )
+
         if self._isAuth(user, db_user):
-            resp = httputils.build_ok_json_response(
-                resp, name=db_user["name"], issuperuser=db_user["issuperuser"]
-            )
+            user_data = {"name": db_user["name"], "issuperuser": db_user["issuperuser"]}
+            resp = httputils.build_ok_json_response(resp, user=user_data)
             # issue: https://support.google.com/chrome/thread/34237768?hl=en
             # https://dormousehole.readthedocs.io/en/latest/api.html#response-objects
             resp.set_cookie(
@@ -82,9 +80,12 @@ class UserService(object):
         if not self._isTokenValid(token):
             return httputils.build_forbidden_json_response(resp)
 
-        user = self._users.selectOneUserByName(req_obj["name"])
-        httputils.build_ok_json_response(resp, user=user)
-        return resp
+        try:
+            user = self._users.selectOneUserByName(req_obj["name"])
+            httputils.build_ok_json_response(resp, user=user)
+            return resp
+        except Exception as e:
+            return self._dbErrorHandler(resp, e)
 
     @preHandler
     def getUsers(self, request):
@@ -106,15 +107,11 @@ class UserService(object):
         user = request.get_json()
         try:
             self._users.insertANewUser(user)
-        except Exception as err:
-            ret_json = {}
-            ret_json["code"] = "499"
-            ret_json["status"] = "failed"
-            ret_json["msg"] = str(err)
-            return httputils.build_json_response(resp, 400, ret_json)
-
-        resp = httputils.build_ok_json_response(resp)
-        return resp
+            user_data = self._users.selectOneUserByName(user["name"])
+            resp = httputils.build_ok_json_response(resp, user=user_data)
+            return resp
+        except Exception as e:
+            return self._dbErrorHandler(resp, e)
 
     @preHandler
     def editUser(self, request):
@@ -126,15 +123,11 @@ class UserService(object):
         req_obj = request.get_json()
         try:
             self._users.updateUserByName(req_obj["name"], req_obj["data"])
-        except Exception as err:
-            ret_json = {}
-            ret_json["code"] = "499"
-            ret_json["status"] = "failed"
-            ret_json["msg"] = str(err)
-            return httputils.build_json_response(resp, 400, ret_json)
-
-        resp = httputils.build_ok_json_response(resp)
-        return resp
+            user_data = self._users.selectOneUserByName(req_obj["name"])
+            resp = httputils.build_ok_json_response(resp, user=user_data)
+            return resp
+        except Exception as e:
+            return self._dbErrorHandler(resp, e)
 
     @preHandler
     def isSuperUser(self, request):
@@ -145,7 +138,8 @@ class UserService(object):
 
         user_name = self._getUsernameFromToken(token)
         user = self._users.selectOneUserByName(user_name)
-        resp = httputils.build_ok_json_response(resp, issuperuser=user["issuperuser"])
+        user_data = {"name": user["name"], "issuperuser": user["issuperuser"]}
+        resp = httputils.build_ok_json_response(resp, user=user_data)
         return resp
 
     @preHandler
@@ -197,26 +191,37 @@ class UserService(object):
         # save file meta info to db
         try:
             self._users.updateUserByName(user_name, {"picture": file_name})
-        except Exception as err:
-            ret_json = {}
-            ret_json["code"] = "499"
-            ret_json["status"] = "failed"
-            ret_json["msg"] = str(err)
-            return httputils.build_json_response(resp, 400, ret_json)
-
+        except Exception as e:
+            return self._dbErrorHandler(resp, e)
         resp = httputils.build_ok_json_response(
-            resp, msg="upload file success", filename=file_name
+            resp, message="upload file success", filename=file_name
         )
         return resp
 
     @preHandler
     def downloadPic(self, request, filename):
+        file_path = os.path.join(self._app.config["upload_dir"], filename)
+        if not os.path.exists(file_path):
+            resp = httputils.create_response_allow()
+            ret_json = {}
+            ret_json["code"] = "499"
+            ret_json["status"] = "failed"
+            ret_json["msg"] = f"download file [{filename}] not exist"
+            return httputils.build_json_response(resp, 400, ret_json)
+
         # no auth token check
         resp = send_from_directory(
             self._app.config["upload_dir"], filename, as_attachment=True
         )
         resp = httputils.create_response_allow(resp)
         return resp
+
+    def _dbErrorHandler(self, resp, err):
+        ret_json = {}
+        ret_json["code"] = "599"
+        ret_json["status"] = "failed"
+        ret_json["msg"] = str(err)
+        return httputils.build_json_response(resp, 500, ret_json)
 
     def _isAuth(self, user, db_user):
         if db_user is None:

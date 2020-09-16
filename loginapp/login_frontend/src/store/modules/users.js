@@ -1,4 +1,4 @@
-import { apiLogin, apiNewUser } from '@/api/users'
+import { apiLogin, apiNewUser, apiEditUser } from '@/api/users'
 import { getUserToken } from '@/utils/auth'
 
 const state = {
@@ -26,9 +26,9 @@ const mutations = {
 }
 
 const actions = {
-  login ({ commit, state }, userInfo) {
+  login ({ commit, state }, userData) {
     return new Promise((resolve, reject) => {
-      apiLogin(userInfo)
+      apiLogin(userData)
         .then(respData => {
           console.log('login success')
           commit('setLogonUserName', respData.name)
@@ -42,16 +42,24 @@ const actions = {
     })
   },
 
-  register1 ({ commit }, registerData) {
+  register1 ({ commit }, userData) {
     return new Promise((resolve, reject) => {
-      apiNewUser(registerData)
+      apiNewUser(userData)
         .then(() => {
           console.log('register step1 success')
-          commit('setRegisterName', registerData.name)
+          commit('setRegisterName', userData.name)
           resolve()
         }).catch(err => {
           reject(err)
         })
+    })
+  },
+
+  editUser ({ commit }, userData) {
+    return new Promise((resolve, reject) => {
+      apiEditUser(userData).then(() => {
+
+      })
     })
   }
 }

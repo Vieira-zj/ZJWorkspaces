@@ -75,8 +75,10 @@ response (set cookie user-token):
   "code": "0",
   "status": "ok",
   "message": "",
-  "name": "name10",
-  "issuperuser": "y"
+  "user": {
+    "name": "name10",
+    "issuperuser": "y"
+  }
 }
 ```
 
@@ -142,7 +144,7 @@ test:
 ```sh
 curl -v -XPOST "http://127.0.0.1:12340/newuser" \
   -H "Content-Type: application/json" -H "Authorization: bmFtZTEwfHRlc3QxMA==" \
-  -d '{"name": "name34", "nickname": "nick34", "issuperuser": "n", "password": "test34"}'
+  -d '{"name": "name19a", "nickname": "nick-19a", "issuperuser": "n", "password": "test12"}' | jq .
 ```
 
 response:
@@ -151,7 +153,13 @@ response:
 {
   "code": "0",
   "status": "ok",
-  "message": ""
+  "message": "",
+  "user": {
+    "name": "name19a",
+    "nickname": "nick-19a",
+    "issuperuser": "n",
+    "picture": " "
+  }
 }
 ```
 
@@ -162,7 +170,7 @@ test:
 ```sh
 curl -v -XPOST "http://127.0.0.1:12340/edituser" \
   -H "Content-Type: application/json" -H "Authorization: bmFtZTEwfHRlc3QxMA==" \
-  -d '{"name": "name11", "data": {"nickname": "new_nick", "issuperuser": "n"}}' | jq .
+  -d '{"name": "name11", "data": {"nickname": "new_nick11", "issuperuser": "n"}}' | jq .
 ```
 
 response:
@@ -171,7 +179,13 @@ response:
 {
   "code": "0",
   "status": "ok",
-  "message": ""
+  "message": "",
+  "user": {
+    "name": "name11",
+    "nickname": "new_nick11",
+    "issuperuser": "n",
+    "picture": ""
+  }
 }
 ```
 
@@ -190,7 +204,10 @@ response:
   "code": "0",
   "status": "ok",
   "message": "",
-  "issuperuser": "y"
+  "user": {
+    "name": "name10",
+    "issuperuser": "y"
+  }
 }
 ```
 
@@ -200,7 +217,7 @@ test:
 
 ```sh
 curl -v -XPOST -H "Authorization: bmFtZTEwfHRlc3QxMA==" -H "Specified-User: namex1" \
-  -F "file=@./user01.jpeg" "http://localhost:12340/uploadpic?isauth=y"
+  -F "file=@./user01.jpeg" "http://localhost:12340/uploadpic?isauth=y" | jq .
 ```
 
 response:

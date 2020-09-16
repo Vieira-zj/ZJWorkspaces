@@ -15,3 +15,19 @@ export function apiNewUser (data) {
     data: data
   })
 }
+
+export function apiGetUser (data) {
+  return request({
+    url: process.env.VUE_APP_BASE_API + "/getuser",
+    method: "post",
+    data: data
+  })
+}
+
+export function apiEditUser (data) {
+  return request({
+    url: process.env.VUE_APP_BASE_API + "/edituser",
+    method: "post",
+    data: data
+  })
+}

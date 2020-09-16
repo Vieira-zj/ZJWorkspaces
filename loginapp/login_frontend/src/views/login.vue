@@ -106,9 +106,10 @@ export default {
           password: vm.user.password
         })
         .then(() => {
-          vm.$store.state.users.isSuperUser
+          users = vm.$store.state.users;
+          users.isSuperUser
             ? vm.$router.push("/users")
-            : vm.$router.push("/edit/" + vm.user.name);
+            : vm.$router.push("/edit/" + users.logonUserName);
         })
         .catch(() => {
           // handle default
