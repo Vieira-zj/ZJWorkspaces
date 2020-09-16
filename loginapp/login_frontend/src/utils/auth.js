@@ -2,6 +2,8 @@ import Cookie from 'js-cookie'
 
 const authKey = 'User-Token'
 
+// prefer to use js-cookie instead of document.cookie
+
 export function getUserToken () {
   return Cookie.get(authKey)
 }
@@ -14,17 +16,13 @@ export function removeUserToken () {
   return Cookie.remove(authKey)
 }
 
-// user document.cookie
+// document.cookie
 
 export function setCookie (cname, cvalue, exdays) {
-  if (exdays > 0) {
-    let d = new Date()
-    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000)
-    let expires = "expires=" + d.toUTCString()
-    document.cookie = `${cname}=${cvalue};${expires}`
-  } else {
-    document.cookie = `${cname}=${cvalue};${exdays}`
-  }
+  let d = new Date()
+  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000)
+  let expires = "expires=" + d.toUTCString()
+  document.cookie = `${cname}=${cvalue};${expires}`
 }
 
 export function getCookie (name) {
@@ -39,6 +37,12 @@ export function getCookie (name) {
   return ""
 }
 
-export function removeCookie (name) {
-  setCookie(name, "", -1)
+export function removeCookie (cname) {
+  let cvalue = getCookie(cname)
+  if (Boolean(cvalue)) {
+    let d = new Date()
+    d.setTime(d.getTime() - 1)
+    let expires = "expires=" + d.toUTCString()
+    document.cookie = `${cname}=${cvalue};${expires}`
+  }
 }

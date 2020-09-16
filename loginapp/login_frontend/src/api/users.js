@@ -1,10 +1,17 @@
 import request from '@/utils/request'
 
-export function loginRequest (data) {
+export function apiLogin (data) {
   return request({
     url: process.env.VUE_APP_BASE_API + '/login',
     method: 'post',
-    headers: { 'Content-Type': 'application/json' },
+    data: data
+  })
+}
+
+export function apiNewUser (data) {
+  return request({
+    url: process.env.VUE_APP_BASE_API + '/newuser',
+    method: 'post',
     data: data
   })
 }

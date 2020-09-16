@@ -74,7 +74,7 @@ response (set cookie user-token):
 {
   "code": "0",
   "status": "ok",
-  "msg": "",
+  "message": "",
   "name": "name10",
   "issuperuser": "y"
 }
@@ -95,7 +95,7 @@ response:
 {
   "code": "0",
   "status": "ok",
-  "msg": "",
+  "message": "",
   "user": {
     "id": 11,
     "name": "name20",
@@ -122,7 +122,7 @@ response:
 {
   "code": "0",
   "status": "ok",
-  "msg": "",
+  "message": "",
   "count": "20",
   "users": [
     {
@@ -151,7 +151,7 @@ response:
 {
   "code": "0",
   "status": "ok",
-  "msg": ""
+  "message": ""
 }
 ```
 
@@ -171,7 +171,7 @@ response:
 {
   "code": "0",
   "status": "ok",
-  "msg": ""
+  "message": ""
 }
 ```
 
@@ -189,18 +189,18 @@ response:
 {
   "code": "0",
   "status": "ok",
-  "msg": "",
+  "message": "",
   "issuperuser": "y"
 }
 ```
 
-- `/uploadpic`
+- `/uploadpic?isauth=y`
 
 test:
 
 ```sh
 curl -v -XPOST -H "Authorization: bmFtZTEwfHRlc3QxMA==" -H "Specified-User: namex1" \
-  -F "file=@/tmp/user01.jpeg" "http://localhost:12340/uploadpic"
+  -F "file=@./user01.jpeg" "http://localhost:12340/uploadpic?isauth=y"
 ```
 
 response:
@@ -209,12 +209,12 @@ response:
 {
   "code": "0",
   "status": "ok",
-  "msg": "upload file success",
+  "message": "upload file success",
   "filename": "6e03231d18c7.jpeg"
 }
 ```
 
-- `downloadpic`
+- `/downloadpic`
 
 test:
 
@@ -227,3 +227,4 @@ response:
 ```text
 HTTP/1.0 200 OK
 ```
+

@@ -72,6 +72,7 @@ def download_pic(filename):
 
 
 if __name__ == "__main__":
+
     is_product = True if os.getenv("FLASK_ENV") == "prod" else False
     is_debug = True if os.getenv("IS_DEBUG") and os.getenv("IS_DEBUG") == "y" else False
 

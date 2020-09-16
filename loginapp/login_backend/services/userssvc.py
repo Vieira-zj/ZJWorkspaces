@@ -6,7 +6,13 @@ import json
 from flask import send_from_directory
 
 project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(project_path)
+try:
+    sys.path.index(project_path)
+except ValueError:
+    sys.path.append(project_path)
+
+from utils import DBUtils
+
 from models import Users
 from utils import common, httputils
 
@@ -145,9 +151,10 @@ class UserService(object):
     @preHandler
     def uploadPic(self, request):
         resp = httputils.create_response_allow()
-        token = request.headers.get("Authorization", "")
-        if not self._isTokenValid(token):
-            return httputils.build_forbidden_json_response(resp)
+        if request.args.get("isauth", "n") == "y":
+            token = request.headers.get("Authorization", "")
+            if not self._isTokenValid(token):
+                return httputils.build_forbidden_json_response(resp)
 
         if "file" not in request.files:
             ret_json = {}
@@ -171,6 +178,14 @@ class UserService(object):
             ret_json["msg"] = "upload file type not supported!"
             return httputils.build_json_response(resp, 400, ret_json)
 
+        user_name = request.headers.get("Specified-User")
+        if user_name is None or len(user_name) == 0:
+            ret_json = {}
+            ret_json["code"] = "499"
+            ret_json["status"] = "failed"
+            ret_json["msg"] = "specified user name is empty!"
+            return httputils.build_json_response(resp, 400, ret_json)
+
         # save upload file
         file_name = (
             common.create_random_str(12)
@@ -178,8 +193,8 @@ class UserService(object):
             + common.get_file_type(upload_file.filename)
         )
         upload_file.save(os.path.join(self._app.config["upload_dir"], file_name))
+
         # save file meta info to db
-        user_name = request.headers.get("Specified-User")
         try:
             self._users.updateUserByName(user_name, {"picture": file_name})
         except Exception as err:

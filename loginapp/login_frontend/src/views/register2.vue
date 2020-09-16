@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import { getUserToken } from "@/utils/auth";
 import { toUnicode } from "@/utils/global";
 
 export default {
@@ -61,16 +60,8 @@ export default {
         fit: "fill",
         url: ""
       },
-      uploadUrl: process.env.VUE_APP_BASE_API + "/uploadpic",
-      uploadHeaders: {
-        Authorization: ""
-      }
-    };
-  },
-  created() {
-    this.uploadHeaders = {
-      Authorization: getUserToken("user-token"),
-      "Specified-User": this.$route.params.name
+      uploadUrl: process.env.VUE_APP_BASE_API + "/uploadpic?isauth=n",
+      uploadHeaders: {}
     };
   },
   methods: {
@@ -80,6 +71,9 @@ export default {
     },
     onBeforeUpload(file) {
       console.log("upload file:", file.name);
+      this.uploadHeaders[
+        "Specified-User"
+      ] = this.$store.state.users.registerName;
       this.uploadHeaders["X-Test"] = "uploadfile_" + toUnicode(file.name);
     },
     onSuccessUpload(response, file, fileList) {

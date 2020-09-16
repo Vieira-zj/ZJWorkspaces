@@ -83,22 +83,18 @@ export default {
       }
 
       let vm = this;
-      this.$axios({
-        method: "POST",
-        url: process.env.VUE_APP_BASE_API + "/newuser",
-        headers: { Authorization: getUserToken() },
-        data: {
-          name: vm.user.userName,
-          nickname: vm.user.nickName,
-          password: vm.user.password1
-        }
-      })
-        .then(resp => {
-          console.log("register user success");
+      let registerData = {
+        name: vm.user.userName,
+        nickname: vm.user.nickName,
+        password: vm.user.password1
+      };
+      this.$store
+        .dispatch("users/register1", registerData)
+        .then(() => {
           vm.$router.push("/register2/" + vm.user.userName);
         })
         .catch(err => {
-          errorHandler(vm, err);
+          // handle default
         });
     },
     onCancel() {

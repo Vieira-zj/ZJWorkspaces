@@ -4,7 +4,11 @@ import logging
 import pymysql
 
 project_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(project_path)
+try:
+    sys.path.index(project_path)
+except ValueError:
+    sys.path.append(project_path)
+
 from utils import DBUtils
 
 logger = logging.getLogger(__name__)

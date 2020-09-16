@@ -110,8 +110,8 @@ export default {
             ? vm.$router.push("/users")
             : vm.$router.push("/edit/" + vm.user.name);
         })
-        .catch(err => {
-          errorHandler(vm, err);
+        .catch(() => {
+          // handle default
         });
     }
   }
