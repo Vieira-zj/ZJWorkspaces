@@ -59,8 +59,8 @@
 </template>
 
 <script>
-import { getUserToken, removeUserToken } from "@/utils/auth";
-import { isSuperUserCn, errorHandler } from "@/utils/global";
+import { removeUserToken } from "@/utils/auth";
+import { isSuperUserCn, showErrorMessage } from "@/utils/global";
 
 let mockUsers = [
   {
@@ -91,47 +91,45 @@ export default {
     };
   },
   created() {
-    console.log("cookie:", getUserToken());
     let vm = this;
-    this.$axios({
-      method: "GET",
-      url: process.env.VUE_APP_BASE_API + "/issuperuser",
-      headers: { Authorization: getUserToken() }
-    })
-      .then(resp => {
-        if (resp.data.issuperuser !== "y") {
-          this.$message.error("没有权限访问用户数据！");
-          return;
-        }
-        this.$axios({
-          method: "POST",
-          url: process.env.VUE_APP_BASE_API + "/getusers",
-          headers: { Authorization: getUserToken() },
-          data: {
-            start: "0",
-            offset: "10"
+    this.$store
+      .dispatch("users/getIsSuperUser")
+      .then(() => {
+        return new Promise((resolve, reject) => {
+          if (!this.$store.state.users.isSuperUser) {
+            showErrorMessage("没有权限访问用户数据！");
+            reject();
           }
-        })
-          .then(resp => {
-            vm.usersCount = parseInt(resp.data.count, 10);
-            let users = resp.data.users;
-            for (let i = 0; i < users.length; i++) {
-              let user = users[i];
-              vm.usersList.push({
-                userName: user.name,
-                nickName: user.nickname,
-                isSuperUser: isSuperUserCn(user.issuperuser)
-              });
-            }
-            vm.loading = false;
-          })
-          .catch(err => {
-            errorHandler(vm, err);
-            vm.loading = false;
+          this.$store
+            .dispatch("users/getUsers", {
+              start: "0",
+              offset: "10"
+            })
+            .then(usersData => {
+              resolve(usersData);
+            })
+            .catch(err => {
+              reject(err);
+            });
+        });
+      })
+      .then(respData => {
+        vm.usersCount = parseInt(respData.count, 10);
+        let users = respData.users;
+        for (let i = 0; i < users.length; i++) {
+          let user = users[i];
+          vm.usersList.push({
+            userName: user.name,
+            nickName: user.nickname,
+            isSuperUser: isSuperUserCn(user.issuperuser)
           });
+        }
+        vm.loading = false;
       })
       .catch(err => {
-        errorHandler(vm, err);
+        if (Boolean(err)) {
+          console.error(err);
+        }
         vm.loading = false;
       });
   },
@@ -142,19 +140,15 @@ export default {
     currentChange(currentPage) {
       this.loading = true;
       let vm = this;
-      this.$axios({
-        method: "POST",
-        url: process.env.VUE_APP_BASE_API + "/getusers",
-        headers: { Authorization: getUserToken() },
-        data: {
+      this.$store
+        .dispatch("users/getUsers", {
           start: ((currentPage - 1) * vm.pageSize).toString(),
           offset: vm.pageSize.toString()
-        }
-      })
-        .then(resp => {
-          vm.usersCount = parseInt(resp.data.count, 10);
-          vm.usersList.splice(0, vm.usersList.length);
-          let users = resp.data.users;
+        })
+        .then(respData => {
+          vm.usersCount = parseInt(respData.count, 10);
+          vm.usersList.splice(0, vm.usersList.length); // clear
+          let users = respData.users;
           for (let i = 0; i < users.length; i++) {
             let user = users[i];
             vm.usersList.push({
@@ -166,7 +160,7 @@ export default {
           }
         })
         .catch(err => {
-          errorHandler(vm, err);
+          console.error(err);
           vm.loading = false;
         });
     },

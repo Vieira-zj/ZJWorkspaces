@@ -161,11 +161,8 @@ export default {
       if (Boolean(this.user.password1)) {
         if (this.user.password1.length < 6) {
           showErrorMessage("输入密码长度不能小于6！");
-          return;
-        }
-        if (this.user.password1 !== this.user.password2) {
+        } else if (this.user.password1 !== this.user.password2) {
           showErrorMessage("两次输入密码不一致！");
-          return;
         }
       }
 
@@ -194,7 +191,7 @@ export default {
       this.$router.back(-1);
     },
     onLogout() {
-      removeUserToken;
+      removeUserToken();
     }
   }
 };

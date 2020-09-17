@@ -1,4 +1,4 @@
-import { apiLogin, apiGetUser, apiNewUser, apiEditUser } from '@/api/users'
+import { apiLogin, apiGetUser, apiGetUsers, apiNewUser, apiEditUser, apiIsSuperUser } from '@/api/users'
 import { getUserToken } from '@/utils/auth'
 
 const state = {
@@ -42,12 +42,24 @@ const actions = {
     })
   },
 
-  register ({ commit }, userData) {
+  registerUser ({ commit }, userData) {
     return new Promise((resolve, reject) => {
       apiNewUser(userData)
         .then(respData => {
-          console.log('user register success:', respData.user)
+          console.log('register user success:', respData.user)
           commit('setRegisterName', respData.user.name)
+          resolve()
+        }).catch(err => {
+          reject(err)
+        })
+    })
+  },
+
+  editUser ({ }, userData) {
+    return new Promise((resolve, reject) => {
+      apiEditUser(userData)
+        .then(respData => {
+          console.log('edit user success:', respData.user)
           resolve()
         }).catch(err => {
           reject(err)
@@ -67,11 +79,24 @@ const actions = {
     })
   },
 
-  editUser ({ }, userData) {
+  getUsers ({ }, data) {
     return new Promise((resolve, reject) => {
-      apiEditUser(userData)
+      apiGetUsers(data)
         .then(respData => {
-          console.log('edit user success:', respData.user)
+          console.log("load users success, count:", respData.users.length)
+          resolve(respData)
+        }).catch(err => {
+          reject(err)
+        })
+    })
+  },
+
+  getIsSuperUser ({ commit }) {
+    return new Promise((resolve, reject) => {
+      apiIsSuperUser()
+        .then(respData => {
+          console.log("get user auth success:", respData.user)
+          commit('setIsSuperUser', respData.user.issuperuser === 'y' ? true : false)
           resolve()
         }).catch(err => {
           reject(err)

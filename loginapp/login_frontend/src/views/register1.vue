@@ -89,7 +89,7 @@ export default {
         password: vm.user.password1
       };
       this.$store
-        .dispatch("users/register", registerData)
+        .dispatch("users/registerUser", registerData)
         .then(() => {
           vm.$router.push("/register2");
         })
