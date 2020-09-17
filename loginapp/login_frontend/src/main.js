@@ -16,17 +16,16 @@ axios.defaults.withCredentials = true
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
 
+// router hooks
 router.beforeEach(async (to, from, next) => {
-  console.log(to.path)
-  if (to.path.startsWith('/register') || to.path == '/login') {
-    next()
-    return
-  }
+  store.commit('history/setLastPage', from.path)
 
   const token = getUserToken()
   if (token) {
-    // 解决页面刷新后vuex保存的数据重置问题
+    // fix, after page refreshed, vuex store data is clear
     await store.dispatch('user/getIsSuperUser')
+    next()
+  } else if (to.path == '/login' || to.path.startsWith('/register')) {
     next()
   } else {
     console.log('no auth, back to login')

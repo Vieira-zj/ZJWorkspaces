@@ -4,75 +4,76 @@
       <div style="float:left">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item to="/login">登录</el-breadcrumb-item>
-          <el-breadcrumb-item to="/users" v-if="isCurSuperUser"
-            >用户列表</el-breadcrumb-item
-          >
+          <el-breadcrumb-item to="/users"
+                              v-if="isCurSuperUser">用户列表</el-breadcrumb-item>
           <el-breadcrumb-item>用户信息</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div style="float:right">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <router-link to="/login" id="logout_link" @click.native="onLogout"
-              >退出</router-link
-            >
+            <router-link to="/login"
+                         id="logout_link"
+                         @click.native="onLogout">退出</router-link>
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
     </div>
-    <div id="user_form">
+    <div id="user-form">
       <h1 style="text-align: center;">用 户 信 息</h1>
-      <el-form ref="editform" :model="editform" label-width="80px">
+      <el-form ref="editform"
+               :model="editform"
+               label-width="80px">
         <el-form-item label="用户头像">
           <!-- <img src="../assets/user01.jpeg"
                width="100px"
                height="100px"> -->
-          <el-image
-            :fit="imgProps.fit"
-            :src="imgProps.url"
-            style="width: 100px; height: 100px"
-          >
-            <div slot="error" class="image-slot el-image__error">
+          <el-image :fit="imgProps.fit"
+                    :src="imgProps.url"
+                    style="width: 100px; height: 100px">
+            <div slot="error"
+                 class="image-slot el-image__error">
               <i class="el-icon-picture-outline"></i>
             </div>
           </el-image>
-          <el-upload
-            :action="uploadUrl"
-            :headers="uploadHeaders"
-            :show-file-list="false"
-            :before-upload="onBeforeUpload"
-            :on-success="onSuccessUpload"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">
+          <el-upload :action="uploadUrl"
+                     :headers="uploadHeaders"
+                     :show-file-list="false"
+                     :before-upload="onBeforeUpload"
+                     :on-success="onSuccessUpload">
+            <el-button size="small"
+                       type="primary">点击上传</el-button>
+            <div slot="tip"
+                 class="el-upload__tip">
               只能上传jpg/png文件，且不超过500kb
             </div>
           </el-upload>
         </el-form-item>
         <el-form-item label="用户姓名">
-          <el-input
-            ref="username"
-            v-model="editform.userName"
-            :disabled="true"
-          ></el-input>
+          <el-input ref="username"
+                    v-model="editform.userName"
+                    :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="用户昵称">
           <el-input v-model="editform.nickName"></el-input>
         </el-form-item>
-        <el-form-item label="用户密码" prop="password1">
-          <el-input v-model="editform.password1" show-password></el-input>
+        <el-form-item label="用户密码"
+                      prop="password1">
+          <el-input v-model="editform.password1"
+                    show-password></el-input>
         </el-form-item>
-        <el-form-item label="确认密码" prop="password2">
-          <el-input v-model="editform.password2" show-password></el-input>
+        <el-form-item label="确认密码"
+                      prop="password2">
+          <el-input v-model="editform.password2"
+                    show-password></el-input>
         </el-form-item>
         <el-form-item label="管理员">
-          <el-switch
-            v-model="editform.isSuperUser"
-            :disabled="!isCurSuperUser"
-          ></el-switch>
+          <el-switch v-model="editform.isSuperUser"
+                     :disabled="!isCurSuperUser"></el-switch>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">提交</el-button>
+          <el-button type="primary"
+                     @click="onSubmit">提交</el-button>
           <el-button @click="onCancel">取消</el-button>
         </el-form-item>
       </el-form>
@@ -81,127 +82,117 @@
 </template>
 
 <script>
-import { validatePassword, removeUserToken } from "@/utils/auth";
-import { showErrorMessage, toUnicode } from "@/utils/global";
-
-let mockUser = {
-  userName: "name01",
-  nickName: "nick01",
-  isSuperUser: false
-};
+import { validatePassword, removeUserToken } from '@/utils/auth'
+import { showErrorMessage, toUnicode } from '@/utils/global'
 
 export default {
-  name: "userEdit",
+  name: 'userEdit',
   data() {
     return {
       editform: {
-        userName: "",
-        nickName: "",
+        userName: '',
+        nickName: '',
         isSuperUser: false,
-        picture: "",
-        password1: "",
-        password2: ""
+        password1: '',
+        password2: '',
       },
       isCurSuperUser: false,
       imgProps: {
-        fit: "fill",
-        url: ""
+        fit: 'fill',
+        url: '',
       },
-      uploadUrl: process.env.VUE_APP_BASE_API + "/uploadpic",
-      uploadHeaders: {
-        Authorization: ""
-      }
-    };
+      uploadUrl: process.env.VUE_APP_BASE_API + '/uploadpic',
+      uploadHeaders: {},
+    }
   },
   created() {
-    let queryName = this.$route.params.name;
-    let user = this.$store.state.user;
-    this.isCurSuperUser = user.isSuperUser;
+    let queryName = this.$route.params.name
+    let user = this.$store.state.user
+    this.isCurSuperUser = user.isSuperUser
     if (!this.isCurSuperUser && user.logonUserName !== queryName) {
-      showErrorMessage("没有权限访问该用户数据！");
-      return;
+      showErrorMessage('没有权限访问该用户数据！')
+      return
     }
 
-    let vm = this;
+    let vm = this
     this.$store
-      .dispatch("user/getUser", queryName)
-      .then(loadUser => {
+      .dispatch('user/getUser', queryName)
+      .then((loadUser) => {
         vm.editform = {
           userName: loadUser.name,
           nickName: loadUser.nickname,
-          isSuperUser: loadUser.issuperuser === "y" ? true : false,
-          picture: loadUser.picture
-        };
-
-        if (Boolean(loadUser.picture)) {
-          vm.imgProps.url =
-            process.env.VUE_APP_BASE_API + "/downloadpic/" + loadUser.picture;
+          isSuperUser: loadUser.issuperuser === 'y' ? true : false,
         }
-        vm.uploadHeaders = {
-          Authorization: vm.$store.state.user.authToken,
-          "Specified-User": loadUser.name
-        };
+
+        let pic = loadUser.picture
+        if (Boolean(pic) && pic.trim().length > 0) {
+          vm.imgProps.url = process.env.VUE_APP_BASE_API + '/downloadpic/' + pic
+        }
       })
-      .catch(err => {
-        console.error(err);
-      });
+      .catch((err) => {
+        console.error(err)
+      })
   },
   methods: {
     onBeforeUpload(file) {
-      console.log("upload file:", file.name);
-      this.uploadHeaders["X-Test"] = "uploadfile_" + toUnicode(file.name);
+      // error: this.uploadHeaders = {}
+      this.uploadHeaders['Authorization'] = this.$store.state.user.authToken
+      this.uploadHeaders['Specified-User'] = this.$route.params.name
+      this.uploadHeaders['X-Test'] = 'uploadfile_' + toUnicode(file.name)
     },
     onSuccessUpload(response, file, fileList) {
-      console.log("upload file success");
+      console.log('upload file success:', JSON.stringify(response))
       this.imgProps.url =
-        process.env.VUE_APP_BASE_API + "/downloadpic/" + response.filename;
+        process.env.VUE_APP_BASE_API + '/downloadpic/' + response.filename
+    },
+    onErrorUpload(err, file, fileList) {
+      console.error(err)
     },
     onSubmit() {
-      // 可以为空
       if (Boolean(this.editform.password1)) {
         if (!validatePassword(this.editform.password1)) {
-          return;
+          return
         }
         if (this.editform.password1 !== this.editform.password2) {
-          showErrorMessage("两次输入密码不一致！");
-          return;
+          showErrorMessage('两次输入密码不一致！')
+          return
         }
       }
 
-      let vm = this;
       let editData = {
         name: this.$route.params.name,
         data: {
-          nickname: vm.editform.nickName,
-          issuperuser: vm.editform.isSuperUser ? "y" : "n",
-          password: vm.editform.password1
-        }
-      };
-      console.log(editData);
+          nickname: this.editform.nickName,
+          issuperuser: this.editform.isSuperUser ? 'y' : 'n',
+          password: this.editform.password1,
+        },
+      }
+      let vm = this
       this.$store
-        .dispatch("user/editUser", editData)
+        .dispatch('user/editUser', editData)
         .then(() => {
           vm.$message({
-            message: "用户信息修改成功",
-            type: "success"
-          });
+            message: '用户信息修改成功',
+            type: 'success',
+          })
         })
-        .catch(err => {
-          console.error(err);
-        });
+        .catch((err) => {
+          console.error(err)
+        })
     },
     onCancel() {
-      this.$router.back(-1);
+      let last = this.$store.state.history.lastPage
+      this.$router.back(last)
     },
     onLogout() {
-      removeUserToken();
-    }
-  }
-};
+      removeUserToken()
+    },
+  },
+}
 </script>
 
 <style scoped>
-#user_form {
+#user-form {
   position: absolute;
   top: 30%;
   left: 50%;

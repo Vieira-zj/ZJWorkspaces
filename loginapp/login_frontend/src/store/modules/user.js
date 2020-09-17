@@ -2,13 +2,11 @@ import { apiLogin, apiGetUser, apiGetUsers, apiNewUser, apiEditUser, apiIsSuperU
 import { getUserToken } from '@/utils/auth'
 
 const state = {
-  authToken: "",
-  logonUserName: "",
+  authToken: '',
+  logonUserName: '',
   isSuperUser: false,
-  registerName: "",
+  registerName: '',
 }
-
-const getters = {}
 
 const mutations = {
   setAuthToken (state) {
@@ -71,7 +69,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       apiGetUser(username)
         .then(respData => {
-          console.log("load user success:", JSON.stringify(respData.user))
+          console.log('load user success:', JSON.stringify(respData.user))
           resolve(respData.user)
         }).catch(err => {
           reject(err)
@@ -83,7 +81,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       apiGetUsers(data)
         .then(respData => {
-          console.log("load users success, count:", respData.users.length)
+          console.log('load users success, count:', respData.users.length)
           resolve(respData)
         }).catch(err => {
           reject(err)
@@ -95,7 +93,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       apiIsSuperUser()
         .then(respData => {
-          console.log("get user auth success:", JSON.stringify(respData.user))
+          console.log('get user auth success:', JSON.stringify(respData.user))
           // 刷新保存的数据
           commit('setAuthToken')
           commit('setLogonUserName', respData.user.name)
@@ -111,7 +109,6 @@ const actions = {
 export default {
   namespaced: true,
   state,
-  getters,
   mutations,
   actions
 }

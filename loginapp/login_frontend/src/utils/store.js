@@ -1,17 +1,18 @@
-// use vuex instead of sessionStorage
+// use vuex store instead of sessionStorage
 
 export function setIsSuperUser (flag) {
-  sessionStorage.setItem("IsSuperUser", flag)
+  let save = flag ? 'y' : 'n'
+  sessionStorage.setItem('IsSuperUser', save)
 }
 
 export function getIsSuperUser () {
-  return sessionStorage.getItem("IsSuperUser") === "true" ? true : false
+  return sessionStorage.getItem('IsSuperUser') === 'y' ? true : false
 }
 
 export function setLogonUserName (name) {
-  sessionStorage.setItem("LogonUserName", name)
+  sessionStorage.setItem('LogonUserName', name)
 }
 
 export function getLogonUserName () {
-  return sessionStorage.getItem("LogonUserName")
+  return sessionStorage.getItem('LogonUserName')
 }

@@ -1,12 +1,14 @@
+// use request instead of axios
+
 import axios from 'axios'
-import store from '@/store'
-import { errorHandler } from './global'
+import { respErrorHandler } from './global'
 import { getUserToken } from './auth'
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   timeout: 5000,
-  withCredentials: true, // cookie
+  // 允许携带cookie, 解决跨域cookie丢失问题
+  withCredentials: true,
 })
 
 // request interceptor
@@ -20,7 +22,7 @@ service.interceptors.request.use(
     return config
   },
   err => {
-    errorHandler(err)
+    respErrorHandler(err)
     return Promise.reject(err)
   }
 )
@@ -29,16 +31,14 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     let { data } = response
-    let retCode = data.code
-    if (retCode !== '0') {
-      let err = new Error(`code=${retCode}, message=${data.message}`)
-      errorHandler(err)
+    if (data.code !== '0') {
+      respErrorHandler({ response })
       return Promise.reject(err)
     }
     return data
   },
   err => {
-    errorHandler(err)
+    respErrorHandler(err)
     return Promise.reject(err)
   }
 )
