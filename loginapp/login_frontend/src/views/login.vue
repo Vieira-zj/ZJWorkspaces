@@ -7,7 +7,7 @@
     </div>
     <div id="login">
       <h1 style="text-align: center;">登 录 页 面</h1>
-      <el-form ref="form" :model="user" :rules="rules">
+      <el-form ref="loginform" :model="loginform" :rules="rules">
         <el-form-item style="text-align: center;">
           <el-link :type="getPrimary(isID)" @click="isID = true">
             账户密码登录
@@ -17,9 +17,10 @@
             手机号登录
           </el-link>
         </el-form-item>
-        <el-form-item prop="name">
+        <el-form-item prop="username">
           <el-input
-            v-model="user.name"
+            ref="username"
+            v-model="loginform.username"
             :placeholder="getNamePlaceHolder()"
             prefix-icon="el-icon-user"
             maxlength="20"
@@ -27,7 +28,8 @@
         </el-form-item>
         <el-form-item prop="password">
           <el-input
-            v-model="user.password"
+            ref="password"
+            v-model="loginform.password"
             :placeholder="getPwdPlaceHolder()"
             prefix-icon="el-icon-lock"
             show-password
@@ -61,23 +63,26 @@
 </template>
 
 <script>
-import { showErrorMessage } from "@/utils/global";
+import { validateName, validatePassword } from "@/utils/auth";
 
 export default {
   name: "login",
   data() {
     return {
-      user: {
-        name: "",
+      loginform: {
+        username: "",
         password: ""
       },
       rules: {
-        name: [{ required: true, message: "请输入", trigger: "blur" }],
-        password: [{ required: true, message: "请输入", trigger: "blur" }]
+        username: [{ required: true, message: "不能为空", trigger: "blur" }],
+        password: [{ required: true, message: "不能为空", trigger: "blur" }]
       },
       auto: false,
       isID: true
     };
+  },
+  mounted() {
+    this.$refs.username.focus();
   },
   methods: {
     getPrimary(flag) {
@@ -90,26 +95,25 @@ export default {
       return this.isID ? "密码" : "验证码";
     },
     onLogin() {
-      console.log("login info:", JSON.stringify(this.user));
-      if (!Boolean(this.user.name) || !Boolean(this.user.password)) {
-        showErrorMessage("输入用户名或密码为空！");
+      console.log("login info:", JSON.stringify(this.loginform));
+      if (!validateName(this.loginform.username)) {
         return;
-      } else if (this.user.password.length < 6) {
-        showErrorMessage("输入密码长度不能小于6！");
+      }
+      if (!validatePassword(this.loginform.password)) {
         return;
       }
 
       let vm = this;
       this.$store
-        .dispatch("users/login", {
-          name: vm.user.name,
-          password: vm.user.password
+        .dispatch("user/login", {
+          name: vm.loginform.username,
+          password: vm.loginform.password
         })
         .then(() => {
-          let users = vm.$store.state.users;
-          users.isSuperUser
+          let user = vm.$store.state.user;
+          user.isSuperUser
             ? vm.$router.push("/users")
-            : vm.$router.push("/edit/" + users.logonUserName);
+            : vm.$router.push("/edit/" + user.logonUserName);
         })
         .catch(err => {
           console.error(err);

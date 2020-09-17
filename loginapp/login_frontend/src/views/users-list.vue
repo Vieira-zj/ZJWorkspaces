@@ -81,37 +81,27 @@ let mockUsers = [
 ];
 
 export default {
-  name: "users",
+  name: "usersList",
   data() {
     return {
       usersCount: 0,
       pageSize: 10,
       usersList: [],
-      loading: true
+      loading: false
     };
   },
   created() {
+    if (!this.$store.state.user.isSuperUser) {
+      showErrorMessage("没有权限访问用户数据！");
+      return;
+    }
+
     let vm = this;
+    this.loading = true;
     this.$store
-      .dispatch("users/getIsSuperUser")
-      .then(() => {
-        return new Promise((resolve, reject) => {
-          if (!this.$store.state.users.isSuperUser) {
-            showErrorMessage("没有权限访问用户数据！");
-            reject();
-          }
-          this.$store
-            .dispatch("users/getUsers", {
-              start: "0",
-              offset: "10"
-            })
-            .then(usersData => {
-              resolve(usersData);
-            })
-            .catch(err => {
-              reject(err);
-            });
-        });
+      .dispatch("user/getUsers", {
+        start: "0",
+        offset: "10"
       })
       .then(respData => {
         vm.usersCount = parseInt(respData.count, 10);
@@ -138,16 +128,16 @@ export default {
       this.$router.push("/edit/" + row.userName);
     },
     currentChange(currentPage) {
-      this.loading = true;
       let vm = this;
+      this.loading = true;
       this.$store
-        .dispatch("users/getUsers", {
+        .dispatch("user/getUsers", {
           start: ((currentPage - 1) * vm.pageSize).toString(),
           offset: vm.pageSize.toString()
         })
         .then(respData => {
           vm.usersCount = parseInt(respData.count, 10);
-          vm.usersList.splice(0, vm.usersList.length); // clear
+          vm.usersList.splice(0, vm.usersList.length); // clear list
           let users = respData.users;
           for (let i = 0; i < users.length; i++) {
             let user = users[i];

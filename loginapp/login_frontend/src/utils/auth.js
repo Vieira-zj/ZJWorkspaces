@@ -1,8 +1,27 @@
 import Cookie from 'js-cookie'
+import { showErrorMessage } from './global'
 
-const authKey = 'User-Token'
+export function validateName (str) {
+  let name = str || ''
+  if (name.length < 4) {
+    showErrorMessage("输入用户名长度不能小于4！")
+    return false
+  }
+  return true
+}
+
+export function validatePassword (str) {
+  let password = str || ''
+  if (password.length < 6) {
+    showErrorMessage("输入密码长度不能小于6！");
+    return false;
+  }
+  return true;
+}
 
 // prefer to use js-cookie instead of document.cookie
+
+const authKey = 'User-Token'
 
 export function getUserToken () {
   return Cookie.get(authKey)

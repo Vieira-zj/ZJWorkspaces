@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import { errorHandler } from './global'
+import { getUserToken } from './auth'
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -11,7 +12,7 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
-    let token = store.state.users.authToken
+    let token = getUserToken()
     if (token) {
       config.headers['Authorization'] = token
       config.headers['Content-Type'] = 'application/json'

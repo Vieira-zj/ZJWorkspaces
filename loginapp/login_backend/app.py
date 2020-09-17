@@ -36,7 +36,7 @@ def login():
     return service.login(request)
 
 
-@app.route("/getuser", methods=["POST", "OPTIONS"])
+@app.route("/getuser", methods=["GET", "OPTIONS"])
 def get_user():
     return service.getUser(request)
 

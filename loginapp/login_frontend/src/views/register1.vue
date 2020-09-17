@@ -14,19 +14,24 @@
         </el-steps>
       </div>
       <h1 style="text-align: center;">用 户 信 息</h1>
-      <el-form ref="form" :model="user" :rules="formRules" label-width="80px">
+      <el-form
+        ref="registerform"
+        :model="registerform"
+        :rules="formRules"
+        label-width="80px"
+      >
         <!-- prop name must be equal to v-model bind value -->
         <el-form-item label="用户姓名" prop="userName">
-          <el-input v-model="user.userName"></el-input>
+          <el-input ref="username" v-model="registerform.userName"></el-input>
         </el-form-item>
         <el-form-item label="用户昵称">
-          <el-input v-model="user.nickName"></el-input>
+          <el-input v-model="registerform.nickName"></el-input>
         </el-form-item>
         <el-form-item label="用户密码" prop="password1">
-          <el-input v-model="user.password1" show-password></el-input>
+          <el-input v-model="registerform.password1" show-password></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="password2">
-          <el-input v-model="user.password2" show-password></el-input>
+          <el-input v-model="registerform.password2" show-password></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">下一步</el-button>
@@ -38,14 +43,14 @@
 </template>
 
 <script>
-import { getUserToken } from "@/utils/auth";
+import { validateName, validatePassword } from "@/utils/auth";
 import { showErrorMessage } from "@/utils/global";
 
 export default {
-  name: "register_step1",
+  name: "registerStep1",
   data() {
     return {
-      user: {
+      registerform: {
         userName: "",
         nickName: "",
         password1: "",
@@ -62,34 +67,31 @@ export default {
       }
     };
   },
+  mounted() {
+    this.$refs.username.focus();
+  },
   methods: {
     onSubmit() {
-      console.log("submit user:", JSON.stringify(this.user));
-      if (
-        !Boolean(this.user.userName) ||
-        !Boolean(this.user.password1) ||
-        !Boolean(this.user.password2)
-      ) {
-        showErrorMessage("输入用户名或密码为空！");
+      console.log("submit user:", JSON.stringify(this.registerform));
+      if (!validateName(this.registerform.userName)) {
         return;
       }
-      if (this.user.password1.length < 6) {
-        showErrorMessage("输入密码长度不能小于6！");
+      if (!validatePassword(this.registerform.password1)) {
         return;
       }
-      if (this.user.password1 !== this.user.password2) {
+      if (this.registerform.password1 !== this.registerform.password2) {
         showErrorMessage("两次输入密码不一致！");
         return;
       }
 
       let vm = this;
       let registerData = {
-        name: vm.user.userName,
-        nickname: vm.user.nickName,
-        password: vm.user.password1
+        name: vm.registerform.userName,
+        nickname: vm.registerform.nickName,
+        password: vm.registerform.password1
       };
       this.$store
-        .dispatch("users/registerUser", registerData)
+        .dispatch("user/registerUser", registerData)
         .then(() => {
           vm.$router.push("/register2");
         })

@@ -40,6 +40,15 @@ def create_random_str(length=8) -> str:
     return suid[:length]
 
 
+def valiate_dict_require_keys(in_dict, *keys) -> bool:
+    try:
+        for key in keys:
+            in_dict[key]
+    except KeyError:
+        return False
+    return True
+
+
 if __name__ == "__main__":
     print(get_project_path())
 

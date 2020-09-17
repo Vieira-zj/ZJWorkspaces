@@ -1,4 +1,4 @@
-import { apiLogin, apiGetUser, apiGetUsers, apiNewUser, apiEditUser, apiIsSuperUser } from '@/api/users'
+import { apiLogin, apiGetUser, apiGetUsers, apiNewUser, apiEditUser, apiIsSuperUser } from '@/api/user'
 import { getUserToken } from '@/utils/auth'
 
 const state = {
@@ -30,10 +30,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       apiLogin(userData)
         .then(respData => {
-          console.log('login success:', respData.user)
+          console.log('login success:', JSON.stringify(respData.user))
+          commit('setAuthToken')
           commit('setLogonUserName', respData.user.name)
           commit('setIsSuperUser', respData.user.issuperuser === 'y' ? true : false)
-          commit('setAuthToken')
           console.log('token cookie:', state.authToken)
           resolve()
         }).catch(err => {
@@ -46,7 +46,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       apiNewUser(userData)
         .then(respData => {
-          console.log('register user success:', respData.user)
+          console.log('register user success:', JSON.stringify(respData.user))
           commit('setRegisterName', respData.user.name)
           resolve()
         }).catch(err => {
@@ -59,7 +59,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       apiEditUser(userData)
         .then(respData => {
-          console.log('edit user success:', respData.user)
+          console.log('edit user success:', JSON.stringify(respData.user))
           resolve()
         }).catch(err => {
           reject(err)
@@ -67,11 +67,11 @@ const actions = {
     })
   },
 
-  getUser ({ }, userData) {
+  getUser ({ }, username) {
     return new Promise((resolve, reject) => {
-      apiGetUser(userData)
+      apiGetUser(username)
         .then(respData => {
-          console.log("load user success:", respData.user)
+          console.log("load user success:", JSON.stringify(respData.user))
           resolve(respData.user)
         }).catch(err => {
           reject(err)
@@ -95,7 +95,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       apiIsSuperUser()
         .then(respData => {
-          console.log("get user auth success:", respData.user)
+          console.log("get user auth success:", JSON.stringify(respData.user))
+          // 刷新保存的数据
+          commit('setAuthToken')
+          commit('setLogonUserName', respData.user.name)
           commit('setIsSuperUser', respData.user.issuperuser === 'y' ? true : false)
           resolve()
         }).catch(err => {

@@ -82,13 +82,12 @@ response (set cookie user-token):
 }
 ```
 
-- `/getuser`
+- `/getuser?name=name11`
 
 test:
 
 ```sh
-curl -v -XPOST "http://127.0.0.1:12340/getuser" -H "Authorization: bmFtZTEwfHRlc3QxMA=="\
-  -H "Content-Type: application/json" -d '{"name": "name20"}' | jq .
+curl -v "http://127.0.0.1:12340/getuser?name=name11" -H "Authorization: bmFtZTEwfHRlc3QxMA==" | jq .
 ```
 
 response:

@@ -4,15 +4,16 @@ export function apiLogin (data) {
   return request({
     url: process.env.VUE_APP_BASE_API + '/login',
     method: 'post',
-    data: data
+    data
   })
 }
 
-export function apiGetUser (data) {
+export function apiGetUser (name) {
   return request({
     url: process.env.VUE_APP_BASE_API + "/getuser",
-    method: "post",
-    data: data
+    method: "get",
+    params: { name }
+
   })
 }
 
@@ -20,7 +21,7 @@ export function apiGetUsers (data) {
   return request({
     url: process.env.VUE_APP_BASE_API + "/getusers",
     method: "post",
-    data: data
+    data
   })
 }
 
@@ -28,7 +29,7 @@ export function apiNewUser (data) {
   return request({
     url: process.env.VUE_APP_BASE_API + '/newuser',
     method: 'post',
-    data: data
+    data
   })
 }
 
@@ -36,7 +37,7 @@ export function apiEditUser (data) {
   return request({
     url: process.env.VUE_APP_BASE_API + "/edituser",
     method: "post",
-    data: data
+    data
   })
 }
 

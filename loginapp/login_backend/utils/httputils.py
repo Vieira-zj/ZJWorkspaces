@@ -46,7 +46,7 @@ def create_response_allow(resp=None):
         resp = make_response()
     if os.getenv("FLASK_ENV") != "prod":
         resp.headers["Access-Control-Allow-Origin"] = front_endpoint
-        resp.headers["Access-Control-Allow-Credentials"] = "true" # cookie
+        resp.headers["Access-Control-Allow-Credentials"] = "true"  # cookie
     return resp
 
 
@@ -88,3 +88,19 @@ def build_forbidden_json_response(resp):
     ret_json["status"] = "failed"
     ret_json["message"] = "auth forbidden"
     return build_json_response(resp, 403, ret_json)
+
+
+def build_bad_request_json_response(resp, message):
+    ret_json = {}
+    ret_json["code"] = "499"
+    ret_json["status"] = "failed"
+    ret_json["message"] = message
+    return build_json_response(resp, 400, ret_json)
+
+
+def build_db_error_json_response(resp, err):
+    ret_json = {}
+    ret_json["code"] = "599"
+    ret_json["status"] = "failed"
+    ret_json["msg"] = str(err)
+    return build_json_response(resp, 500, ret_json)

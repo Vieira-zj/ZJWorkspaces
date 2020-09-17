@@ -5,7 +5,7 @@
         <el-breadcrumb-item>登录</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div id="user_form">
+    <div id="user-form">
       <div>
         <el-steps :align-center="true" :active="2">
           <el-step title="用户信息"></el-step>
@@ -13,7 +13,7 @@
         </el-steps>
       </div>
       <h1 style="text-align: center;">用 户 信 息</h1>
-      <el-form ref="form" :model="user" label-width="80px">
+      <el-form ref="imgform" label-width="80px">
         <el-form-item label="用户头像">
           <el-image
             :fit="imgProps.fit"
@@ -50,12 +50,9 @@
 import { toUnicode } from "@/utils/global";
 
 export default {
-  name: "register_step2",
+  name: "registerStep2",
   data() {
     return {
-      user: {
-        picture: ""
-      },
       imgProps: {
         fit: "fill",
         url: ""
@@ -72,7 +69,7 @@ export default {
       console.log("upload file:", file.name);
       this.uploadHeaders[
         "Specified-User"
-      ] = this.$store.state.users.registerName;
+      ] = this.$store.state.user.registerName;
       this.uploadHeaders["X-Test"] = "uploadfile_" + toUnicode(file.name);
     },
     onSuccessUpload(response, file, fileList) {
@@ -85,7 +82,7 @@ export default {
 </script>
 
 <style scoped>
-#user_form {
+#user-form {
   position: absolute;
   top: 30%;
   left: 50%;
