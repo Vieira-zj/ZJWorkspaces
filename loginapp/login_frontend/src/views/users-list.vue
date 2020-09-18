@@ -8,13 +8,8 @@
         </el-breadcrumb>
       </div>
       <div style="float:right">
-        <el-breadcrumb separator="/">
-          <el-breadcrumb-item>
-            <router-link to="/login"
-                         id="logout_link"
-                         @click.native="onLogout">退出</router-link>
-          </el-breadcrumb-item>
-        </el-breadcrumb>
+        <el-link :underline="false"
+                 @click.native="onLogout">退出</el-link>
       </div>
     </div>
     <div id="users">
@@ -128,6 +123,7 @@ export default {
     },
     onLogout() {
       removeUserToken()
+      this.$router.push('/login')
     },
   },
 }
@@ -137,7 +133,7 @@ export default {
 #users {
   position: absolute;
   top: 10%;
-  left: 10%;
+  left: 25%;
   width: 800px;
 }
 #paging {

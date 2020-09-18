@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       loginform: {
-        username: '',
+        username: this.$store.state.user.logonUserName,
         password: '',
       },
       rules: {

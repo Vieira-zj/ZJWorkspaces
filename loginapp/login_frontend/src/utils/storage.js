@@ -1,4 +1,4 @@
-// use vuex store instead of sessionStorage
+// sessionStorage
 
 export function setIsSuperUser (flag) {
   let save = flag ? 'y' : 'n'
