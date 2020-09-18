@@ -1,10 +1,8 @@
-// use request instead of axios
-
 import axios from 'axios'
 import { respErrorHandler } from './global'
 import { getUserToken } from './auth'
 
-const service = axios.create({
+const request = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   timeout: 5000,
   // 允许携带cookie, 解决跨域cookie丢失问题
@@ -12,7 +10,7 @@ const service = axios.create({
 })
 
 // request interceptor
-service.interceptors.request.use(
+request.interceptors.request.use(
   config => {
     let token = getUserToken()
     if (token) {
@@ -28,7 +26,7 @@ service.interceptors.request.use(
 )
 
 // response interceptor
-service.interceptors.response.use(
+request.interceptors.response.use(
   response => {
     let { data } = response
     if (data.code !== '0') {
@@ -43,4 +41,4 @@ service.interceptors.response.use(
   }
 )
 
-export default service
+export default request

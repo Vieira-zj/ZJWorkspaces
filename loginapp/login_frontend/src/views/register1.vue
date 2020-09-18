@@ -98,8 +98,8 @@ export default {
       let vm = this
       this.$store
         .dispatch('user/registerUser', registerData)
-        .then(() => {
-          vm.$router.push('/register2')
+        .then((user) => {
+          vm.$router.push('/register2/' + user.name)
         })
         .catch((err) => {
           console.error(err)

@@ -5,7 +5,6 @@ const state = {
   authToken: '',
   logonUserName: '',
   isSuperUser: false,
-  registerName: '',
 }
 
 const mutations = {
@@ -18,9 +17,6 @@ const mutations = {
   setIsSuperUser (state, flag) {
     state.isSuperUser = flag
   },
-  setRegisterName (state, name) {
-    state.registerName = name
-  }
 }
 
 const actions = {
@@ -40,13 +36,12 @@ const actions = {
     })
   },
 
-  registerUser ({ commit }, userData) {
+  registerUser ({ }, userData) {
     return new Promise((resolve, reject) => {
       apiNewUser(userData)
         .then(respData => {
           console.log('register user success:', JSON.stringify(respData.user))
-          commit('setRegisterName', respData.user.name)
-          resolve()
+          resolve(respData.user)
         }).catch(err => {
           reject(err)
         })

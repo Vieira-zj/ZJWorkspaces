@@ -68,7 +68,7 @@ export default {
       this.$router.push('/login')
     },
     onBeforeUpload(file) {
-      this.uploadHeaders['Specified-User'] = this.$store.state.user.registerName
+      this.uploadHeaders['Specified-User'] = this.$route.params.name
       this.uploadHeaders['X-Test'] = 'uploadfile_' + toUnicode(file.name)
     },
     onSuccessUpload(response, file, fileList) {

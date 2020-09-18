@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import store from '@/store'
+import { getUserToken } from '@/utils/auth'
+
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -26,7 +29,7 @@ export default new Router({
       component: () => import('@/views/register1')
     },
     {
-      path: '/register2',
+      path: '/register2/:name',
       name: 'register2',
       component: () => import('@/views/register2')
     },
@@ -37,3 +40,21 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach(async (to, from, next) => {
+  store.commit('history/setLastPage', from.path)
+
+  const token = getUserToken()
+  if (token) {
+    // fix, after page refreshed, vuex store data is clear
+    await store.dispatch('user/getIsSuperUser')
+    next()
+  } else if (to.path == '/login' || to.path.startsWith('/register')) {
+    next()
+  } else {
+    console.log('no auth, back to login')
+    next('/login')
+  }
+})
+
+export default router

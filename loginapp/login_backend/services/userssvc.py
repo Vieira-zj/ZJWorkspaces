@@ -110,6 +110,10 @@ class UserService(object):
             int(req_obj["start"]), int(req_obj["offset"])
         )
         resp = httputils.build_ok_json_response(resp, count=str(row_count), users=users)
+
+        # mock wait
+        import time, random
+        time.sleep(random.randint(0, 2))
         return resp
 
     @preHandler
