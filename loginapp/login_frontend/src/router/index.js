@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import store from '@/store'
 import { getUserToken } from '@/utils/auth'
+import { getPageTitle } from '@/utils/global'
 
 Vue.use(Router)
 
@@ -11,38 +12,46 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
-      redirect: { name: 'login' }
+      redirect: { name: 'login' },
+      meta: { title: 'home' }
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/login')
+      component: () => import('@/views/login'),
+      meta: { title: 'login' }
     },
     {
       path: '/users',
       name: 'users',
-      component: () => import('@/views/users-list')
+      component: () => import('@/views/users-list'),
+      meta: { title: 'users' }
     },
     {
       path: '/register1',
       name: 'register1',
-      component: () => import('@/views/register1')
+      component: () => import('@/views/register1'),
+      meta: { title: 'register' }
     },
     {
       path: '/register2/:name',
       name: 'register2',
-      component: () => import('@/views/register2')
+      component: () => import('@/views/register2'),
+      meta: { title: 'register' }
     },
     {
       path: '/edit/:name',
       name: 'edit',
-      component: () => import('@/views/user-edit')
+      component: () => import('@/views/user-edit'),
+      meta: { title: 'edit' }
     }
   ]
 })
 
 router.beforeEach(async (to, from, next) => {
+  // console.log('router:', from.path, to.path)
   store.commit('history/setLastPage', from.path)
+  document.title = getPageTitle(to.meta.title)
 
   const token = getUserToken()
   if (token) {

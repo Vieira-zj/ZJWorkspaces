@@ -1,5 +1,12 @@
 import { Message } from 'element-ui'
 
+export function getPageTitle (pageTitle) {
+  if (pageTitle) {
+    return `${pageTitle} - ${process.env.DEFAULT_TITLE}`
+  }
+  return process.env.DEFAULT_TITLE
+}
+
 export function isSuperUserCn (flag) {
   return flag === 'y' ? '是' : '否'
 }

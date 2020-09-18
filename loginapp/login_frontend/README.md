@@ -45,7 +45,7 @@ Src:
 
 ## issue
 
-1. 路由监听使用 `watch '$route.path'` 或 router hook `beforeEach`？
+1. 路由监听使用 `watch '$route.path'` 或 router hook `beforeEach`
 
 2. 页面刷新后，vuex中保存的数据丢失
 
