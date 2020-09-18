@@ -1,4 +1,4 @@
-import { apiLogin, apiGetUser, apiGetUsers, apiNewUser, apiEditUser, apiIsSuperUser } from '@/api/user'
+import { apiLogin, apiEditUser, apiIsSuperUser } from '@/api/user'
 import { getUserToken } from '@/utils/auth'
 
 const state = {
@@ -30,54 +30,6 @@ const actions = {
           commit('setIsSuperUser', respData.user.issuperuser === 'y' ? true : false)
           console.log('token cookie:', state.authToken)
           resolve()
-        }).catch(err => {
-          reject(err)
-        })
-    })
-  },
-
-  registerUser ({ }, userData) {
-    return new Promise((resolve, reject) => {
-      apiNewUser(userData)
-        .then(respData => {
-          console.log('register user success:', JSON.stringify(respData.user))
-          resolve(respData.user)
-        }).catch(err => {
-          reject(err)
-        })
-    })
-  },
-
-  editUser ({ }, userData) {
-    return new Promise((resolve, reject) => {
-      apiEditUser(userData)
-        .then(respData => {
-          console.log('edit user success:', JSON.stringify(respData.user))
-          resolve()
-        }).catch(err => {
-          reject(err)
-        })
-    })
-  },
-
-  getUser ({ }, username) {
-    return new Promise((resolve, reject) => {
-      apiGetUser(username)
-        .then(respData => {
-          console.log('load user success:', JSON.stringify(respData.user))
-          resolve(respData.user)
-        }).catch(err => {
-          reject(err)
-        })
-    })
-  },
-
-  getUsers ({ }, data) {
-    return new Promise((resolve, reject) => {
-      apiGetUsers(data)
-        .then(respData => {
-          console.log('load users success, count:', respData.users.length)
-          resolve(respData)
         }).catch(err => {
           reject(err)
         })

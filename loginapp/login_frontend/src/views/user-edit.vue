@@ -84,6 +84,7 @@
 <script>
 import { validatePassword, removeUserToken } from '@/utils/auth'
 import { showErrorMessage, toUnicode } from '@/utils/global'
+import { apiGetUser, apiEditUser } from '@/api/user'
 
 export default {
   name: 'userEdit',
@@ -105,7 +106,7 @@ export default {
       uploadHeaders: {},
     }
   },
-  created() {
+  async created() {
     let queryName = this.$route.params.name
     let user = this.$store.state.user
     this.isCurSuperUser = user.isSuperUser
@@ -114,24 +115,22 @@ export default {
       return
     }
 
-    let vm = this
-    this.$store
-      .dispatch('user/getUser', queryName)
-      .then((loadUser) => {
-        vm.editform = {
-          userName: loadUser.name,
-          nickName: loadUser.nickname,
-          isSuperUser: loadUser.issuperuser === 'y' ? true : false,
-        }
+    try {
+      let { user } = await apiGetUser(queryName)
+      console.log('load user success:', JSON.stringify(user))
+      this.editform = {
+        userName: user.name,
+        nickName: user.nickname,
+        isSuperUser: user.issuperuser === 'y' ? true : false,
+      }
 
-        let pic = loadUser.picture
-        if (Boolean(pic) && pic.trim().length > 0) {
-          vm.imgProps.url = process.env.VUE_APP_BASE_API + '/downloadpic/' + pic
-        }
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+      let pic = user.picture
+      if (Boolean(pic) && pic.trim().length > 0) {
+        this.imgProps.url = process.env.VUE_APP_BASE_API + '/downloadpic/' + pic
+      }
+    } catch (err) {
+      console.error(err)
+    }
   },
   methods: {
     onBeforeUpload(file) {
@@ -148,7 +147,7 @@ export default {
     onErrorUpload(err, file, fileList) {
       console.error(err)
     },
-    onSubmit() {
+    async onSubmit() {
       if (Boolean(this.editform.password1)) {
         if (!validatePassword(this.editform.password1)) {
           return
@@ -167,18 +166,16 @@ export default {
           password: this.editform.password1,
         },
       }
-      let vm = this
-      this.$store
-        .dispatch('user/editUser', editData)
-        .then(() => {
-          vm.$message({
-            message: '用户信息修改成功',
-            type: 'success',
-          })
+      try {
+        let { user } = await apiEditUser(editData)
+        console.log('edit user success:', JSON.stringify(user))
+        this.$message({
+          message: '用户信息修改成功',
+          type: 'success',
         })
-        .catch((err) => {
-          console.error(err)
-        })
+      } catch (err) {
+        console.error(err)
+      }
     },
     onCancel() {
       let last = this.$store.state.history.lastPage

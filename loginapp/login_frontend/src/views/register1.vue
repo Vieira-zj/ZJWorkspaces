@@ -51,6 +51,7 @@
 <script>
 import { validateName, validatePassword } from '@/utils/auth'
 import { showErrorMessage } from '@/utils/global'
+import { apiNewUser } from '@/api/user'
 
 export default {
   name: 'registerStep1',
@@ -77,7 +78,7 @@ export default {
     this.$refs.username.focus()
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       console.log('submit user:', JSON.stringify(this.registerform))
       if (!validateName(this.registerform.userName)) {
         return
@@ -95,15 +96,13 @@ export default {
         nickname: this.registerform.nickName,
         password: this.registerform.password1,
       }
-      let vm = this
-      this.$store
-        .dispatch('user/registerUser', registerData)
-        .then((user) => {
-          vm.$router.push('/register2/' + user.name)
-        })
-        .catch((err) => {
-          console.error(err)
-        })
+      try {
+        let { user } = await apiNewUser(registerData)
+        console.log('register user success:', JSON.stringify(user))
+        this.$router.push('/register2/' + user.name)
+      } catch (err) {
+        // request aop 中已处理
+      }
     },
     onCancel() {
       this.$router.push('/login')

@@ -64,6 +64,7 @@
 <script>
 import { removeUserToken } from '@/utils/auth'
 import { isSuperUserCn, showErrorMessage } from '@/utils/global'
+import { apiGetUsers } from '@/api/user'
 
 export default {
   name: 'usersList',
@@ -75,27 +76,22 @@ export default {
       loading: false,
     }
   },
-  created() {
+  async created() {
     if (!this.$store.state.user.isSuperUser) {
       showErrorMessage('没有权限访问用户数据！')
       return
     }
 
-    let vm = this
     this.loading = true
-    this.$store
-      .dispatch('user/getUsers', {
-        start: '0',
-        offset: '10',
-      })
-      .then((respData) => {
-        vm.updateUserList(respData)
-        vm.loading = false
-      })
-      .catch((err) => {
-        console.error(err)
-        vm.loading = false
-      })
+    try {
+      let respData = await apiGetUsers({ start: '0', offset: '10' })
+      console.log('load users success')
+      this.updateUserList(respData)
+      this.loading = false
+    } catch (err) {
+      console.error(err)
+      this.loading = false
+    }
   },
   methods: {
     updateUserList(respData) {
@@ -116,22 +112,19 @@ export default {
     onEdit(row) {
       this.$router.push('/edit/' + row.userName)
     },
-    onCurrentChange(currentPage) {
-      let vm = this
+    async onCurrentChange(currentPage) {
       this.loading = true
-      this.$store
-        .dispatch('user/getUsers', {
-          start: ((currentPage - 1) * vm.pageSize).toString(),
-          offset: vm.pageSize.toString(),
+      try {
+        let respData = await apiGetUsers({
+          start: ((currentPage - 1) * this.pageSize).toString(),
+          offset: this.pageSize.toString(),
         })
-        .then((respData) => {
-          vm.updateUserList(respData)
-          vm.loading = false
-        })
-        .catch((err) => {
-          console.error(err)
-          vm.loading = false
-        })
+        this.updateUserList(respData)
+        this.loading = false
+      } catch (err) {
+        console.error(err)
+        this.loading = false
+      }
     },
     onLogout() {
       removeUserToken()
