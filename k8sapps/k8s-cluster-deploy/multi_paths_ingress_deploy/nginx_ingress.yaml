@@ -1,16 +1,31 @@
-# Create by ZhengJin, at 2020-9-19
-# only for k8s version=1.19
+# Create by ZhengJin, at 2020-9-19 (k8s version=1.19)
+#
+# Proxy rules (https://kubernetes.github.io/ingress-nginx/examples/rewrite/):
+#
+# default: class:"nginx"  path:/echo
+#   /echo => /echo ; /echo/test => /echo/test
+#
+# rewrite-target:/  path:/echo
+#   /echo => / ; /echo/test => /
+#
+# rewrite-target:/api$1  path:/echo(.*)
+#   /echo => /api ; /echo/test => /api/test
 #
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-demo
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # nginx.ingress.kubernetes.io/rewrite-target: /
+    # nginx.ingress.kubernetes.io/rewrite-target: /api$1
 spec:
   rules:
   - host: k8s.ingressdemo.com
     http:
       paths:
       - path: /echo
+      # - path: /echo(.*)
         pathType: Prefix 
         backend:
           service:
