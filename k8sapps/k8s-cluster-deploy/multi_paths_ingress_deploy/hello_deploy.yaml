@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: hello-ingress
+  name: hello-ingress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-ingress
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: hello-ingress
+    spec:
+      containers:
+      - image: gcr.io/google-samples/hello-app:2.0
+        name: hello-ingress
+        ports:
+        - containerPort: 8080
+        resources: {}
+status: {}

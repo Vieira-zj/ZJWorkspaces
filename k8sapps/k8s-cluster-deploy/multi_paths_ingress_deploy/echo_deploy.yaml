@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: echo-ingress
+  name: echo-ingress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: echo-ingress
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: echo-ingress
+    spec:
+      containers:
+      - image: cilium/echoserver
+        name: echo-ingress
+        ports:
+        - containerPort: 8080
+        resources: {}
+status: {}

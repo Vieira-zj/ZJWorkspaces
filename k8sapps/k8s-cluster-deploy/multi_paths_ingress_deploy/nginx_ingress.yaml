@@ -1,0 +1,26 @@
+# Create by ZhengJin, at 2020-9-19
+# only for k8s version=1.19
+#
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-demo
+spec:
+  rules:
+  - host: k8s.ingressdemo.com
+    http:
+      paths:
+      - path: /echo
+        pathType: Prefix 
+        backend:
+          service:
+            name: echo-ingress
+            port:
+              number: 8080
+      - path: /hello
+        pathType: Prefix
+        backend:
+          service:
+            name: hello-ingress
+            port:
+              number: 8080
