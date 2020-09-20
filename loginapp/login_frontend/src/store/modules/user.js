@@ -1,4 +1,4 @@
-import { apiLogin, apiEditUser, apiIsSuperUser } from '@/api/user'
+import { apiLogin, apiIsSuperUser } from '@/api/user'
 import { getUserToken } from '@/utils/auth'
 
 const state = {
@@ -41,7 +41,7 @@ const actions = {
       apiIsSuperUser()
         .then(respData => {
           console.log('get user auth success:', JSON.stringify(respData.user))
-          // 刷新保存的数据
+          // 刷新vuex中保存的数据
           commit('setAuthToken')
           commit('setLogonUserName', respData.user.name)
           commit('setIsSuperUser', respData.user.issuperuser === 'y' ? true : false)

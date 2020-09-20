@@ -173,8 +173,12 @@ export default {
       }
     },
     onCancel() {
-      let last = this.$store.state.history.lastPage
-      this.$router.back(last)
+      let last = this.$store.state.history.historyLastPage
+      if (last) {
+        this.$router.push(last)
+      } else {
+        this.$router.back(-1)
+      }
     },
     onLogout() {
       removeUserToken()

@@ -75,7 +75,9 @@ export default {
     }
   },
   mounted() {
-    this.$refs.username.focus()
+    if (!this.registerform.userName) {
+      this.$refs.username.focus()
+    }
   },
   methods: {
     async onSubmit() {
@@ -102,6 +104,7 @@ export default {
         this.$router.push('/register2/' + user.name)
       } catch (err) {
         // request aop 中已处理
+        console.error(err)
       }
     },
     onCancel() {

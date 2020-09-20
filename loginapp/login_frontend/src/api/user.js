@@ -13,7 +13,6 @@ export function apiGetUser (name) {
     url: process.env.VUE_APP_BASE_API + "/getuser",
     method: "get",
     params: { name }
-
   })
 }
 

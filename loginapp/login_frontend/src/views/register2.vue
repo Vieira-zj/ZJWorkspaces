@@ -64,9 +64,6 @@ export default {
     }
   },
   methods: {
-    onNext() {
-      this.$router.push('/login')
-    },
     onBeforeUpload(file) {
       this.uploadHeaders['Specified-User'] = this.$route.params.name
       this.uploadHeaders['X-Test'] = 'uploadfile_' + toUnicode(file.name)
@@ -75,6 +72,9 @@ export default {
       console.log('upload file success:', JSON.stringify(response))
       this.imgProps.url =
         process.env.VUE_APP_BASE_API + '/downloadpic/' + response.filename
+    },
+    onNext() {
+      this.$router.push('/login')
     },
   },
 }

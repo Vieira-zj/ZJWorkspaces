@@ -25,27 +25,26 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 Configs:
 
 - build: compile and package configs by webpack for diff env.
-- config/index.js: application global basic configs.
-- config/dev.env.js: global env variables.
+- config/index.js: webpack global basic configs.
+- config/dev.env.js: app global env variables.
 - index.html: webpack html entry point.
 - src/main.js: vue app entry point.
 
 Views:
 
 - login.vue: 登录页
-- register*: 新用户注册页
+- register*.vue: 新用户注册页
 - user-edit.vue: 用户信息编辑页
 - user-list.vue: 用户列表页
 
 Src:
 
-- api: 封装后端rest api接口
+- api/*.js: 封装后端rest api接口
 - router/index.js: 路由和路由aop逻辑
-- utils/request.js: 封装axios api访问和请求aop逻辑
+- utils/request.js: 封装axios和请求aop逻辑
 
-## issue
+## issues
 
 1. 路由监听使用 `watch '$route.path'` 或 router hook `beforeEach`
-
 2. 页面刷新后，vuex中保存的数据丢失
 

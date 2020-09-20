@@ -1,10 +1,14 @@
 const state = {
-  lastPage: ''
+  historyLastPage: '',
+  usersListPageIndex: 0
 }
 
 const mutations = {
-  setLastPage (state, from) {
-    state.lastPage = from
+  setHistoryLastPage (state, from) {
+    state.historyLastPage = from
+  },
+  setUsersListPageIndex (state, currentPage) {
+    state.usersListPageIndex = currentPage
   }
 }
 

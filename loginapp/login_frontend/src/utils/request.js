@@ -4,9 +4,9 @@ import { getUserToken } from './auth'
 
 const request = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
-  timeout: 5000,
   // 允许携带cookie, 解决跨域cookie丢失问题
   withCredentials: true,
+  timeout: 5000,
 })
 
 // request interceptor

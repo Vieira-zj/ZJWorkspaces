@@ -50,13 +50,15 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
   // console.log('router:', from.path, to.path)
-  store.commit('history/setLastPage', from.path)
+  store.commit('history/setHistoryLastPage', from.path)
   document.title = getPageTitle(to.meta.title)
 
   const token = getUserToken()
   if (token) {
-    // fix, after page refreshed, vuex store data is clear
-    await store.dispatch('user/getIsSuperUser')
+    if (!Boolean(store.state.user.authToken)) {
+      // fix, after page refreshed, vuex store data is clear
+      await store.dispatch('user/getIsSuperUser')
+    }
     next()
   } else if (to.path == '/login' || to.path.startsWith('/register')) {
     next()

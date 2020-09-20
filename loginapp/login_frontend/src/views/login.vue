@@ -83,7 +83,12 @@ export default {
     }
   },
   mounted() {
-    this.$refs.username.focus()
+    if (!this.loginform.username) {
+      this.$refs.username.focus()
+    }
+    if (!this.loginform.password) {
+      this.$refs.password.focus()
+    }
   },
   methods: {
     getPrimary(flag) {
