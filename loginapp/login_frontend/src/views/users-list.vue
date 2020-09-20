@@ -92,8 +92,8 @@ export default {
   methods: {
     async updateUserList() {
       let respData = await apiGetUsers({
-        start: ((this.currentPage - 1) * this.pageSize).toString(),
-        offset: this.pageSize.toString(),
+        offset: ((this.currentPage - 1) * this.pageSize).toString(),
+        limit: this.pageSize.toString(),
       })
       console.log('load users success')
 

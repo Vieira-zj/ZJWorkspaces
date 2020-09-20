@@ -101,13 +101,13 @@ class UserService(object):
         if not self._isTokenValid(token):
             return httputils.build_forbidden_json_response(resp)
 
-        if not common.valiate_dict_require_keys(req_obj, "start", "offset"):
+        if not common.valiate_dict_require_keys(req_obj, "offset", "limit"):
             return httputils.build_bad_request_json_response(
-                resp, "require start or offset!"
+                resp, "require offset or limit!"
             )
 
         row_count, users = self._users.selectMultipleUsers(
-            int(req_obj["start"]), int(req_obj["offset"])
+            int(req_obj["offset"]), int(req_obj["limit"])
         )
         resp = httputils.build_ok_json_response(resp, count=str(row_count), users=users)
 

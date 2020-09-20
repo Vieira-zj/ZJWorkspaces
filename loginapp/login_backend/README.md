@@ -1,8 +1,8 @@
-# login_backend
+# login-backend
 
 > login demo backend base on Flask and pymysql.
 
-## db
+## DB
 
 Create database and init users data in mysql.
 
@@ -30,14 +30,14 @@ UPDATE users SET picture = "";
 DROP TABLE users;
 ```
 
-## project 目录
+## Project 目录
 
 - app.py: api接口层
 - services: 服务层
 - models: 数据层，使用mysql数据库
 - utils: 工具类
 
-## apis specification
+## API Specification
 
 - `/`
 
@@ -114,7 +114,7 @@ test:
 
 ```sh
 curl -v -XPOST "http://127.0.0.1:12340/getusers" -H "Authorization: bmFtZTEwfHRlc3QxMA==" \
-  -H "Content-Type: application/json" -d '{"start": "10", "offset": "5"}' | jq .
+  -H "Content-Type: application/json" -d '{"offset": "10", "limit": "5"}' | jq .
 ```
 
 response:
@@ -242,5 +242,34 @@ response:
 
 ```text
 HTTP/1.0 200 OK
+```
+
+## Todos
+
+### 接口数据使用template.
+
+- 请求数据：
+
+```json
+{
+  "meta": {
+  },
+  "data": {
+  }
+}
+```
+
+- 返回数据：
+
+```json
+{
+  "code:": 0,
+  "status": "",
+  "message": "",
+  "meta": {
+  },
+  "data": {
+  }
+}
 ```
 

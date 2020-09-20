@@ -1,4 +1,4 @@
-# login_frontend
+# login-frontend
 
 > login demo frontend base on Vue and ElementUI.
 
@@ -20,7 +20,7 @@ npm run build --report
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
-## project
+## Project 目录
 
 Configs:
 
@@ -43,7 +43,7 @@ Src:
 - router/index.js: 路由和路由aop逻辑
 - utils/request.js: 封装axios和请求aop逻辑
 
-## issues
+## Issues
 
 1. 路由监听使用 `watch '$route.path'` 或 router hook `beforeEach`
 2. 页面刷新后，vuex中保存的数据丢失
