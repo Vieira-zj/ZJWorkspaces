@@ -16,8 +16,8 @@ export default {
     'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
   color: #606266;
 }
-#logout_link:hover {
+/* #logout_link:hover {
   color: #409eff;
   cursor: pointer;
-}
+} */
 </style>

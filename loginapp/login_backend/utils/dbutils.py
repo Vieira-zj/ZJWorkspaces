@@ -1,6 +1,13 @@
 # coding: utf-8
 import os
+import logging
 import pymysql
+
+logger = logging.getLogger(__name__)
+
+is_product = os.getenv("FLASK_ENV") == "prod"
+mysql_host = "db" if is_product else "localhost"
+mysql_port = 3306 if is_product else 13306
 
 
 class DBUtils(object):
@@ -9,8 +16,8 @@ class DBUtils(object):
     """
 
     _db = pymysql.connect(
-        host=os.getenv("MYSQL"),
-        port=13306,
+        host=mysql_host,
+        port=mysql_port,
         user="root",
         password="example",
         database="test",
@@ -20,6 +27,7 @@ class DBUtils(object):
 
     @classmethod
     def getDBConnection(cls):
+        logger.info("connect to mysql: [%s:%d]" % (mysql_host, mysql_port))
         return cls._db
 
     @classmethod

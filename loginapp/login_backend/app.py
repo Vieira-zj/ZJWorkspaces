@@ -14,6 +14,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 app = Flask(__name__)
 app.config["upload_dir"] = os.path.join(os.getcwd(), "upload_files")
 app.config["host"] = "0.0.0.0"
@@ -73,8 +74,8 @@ def download_pic(filename):
 
 if __name__ == "__main__":
 
-    is_product = True if os.getenv("FLASK_ENV") == "prod" else False
-    is_debug = True if os.getenv("IS_DEBUG") and os.getenv("IS_DEBUG") == "y" else False
+    is_product = os.getenv("FLASK_ENV") == "prod"
+    is_debug = not is_product
 
     try:
         if is_product:

@@ -8,6 +8,7 @@ from flask import make_response
 
 logger = logging.getLogger(__name__)
 
+is_product = os.getenv("FLASK_ENV") == "prod"
 # front_endpoint = "*"
 front_endpoint = "http://localhost:8080"
 
@@ -44,7 +45,7 @@ def log_request_data(request, is_file=False):
 def create_response_allow(resp=None):
     if resp is None:
         resp = make_response()
-    if os.getenv("FLASK_ENV") != "prod":
+    if not is_product:
         resp.headers["Access-Control-Allow-Origin"] = front_endpoint
         resp.headers["Access-Control-Allow-Credentials"] = "true"  # cookie
     return resp
@@ -53,7 +54,7 @@ def create_response_allow(resp=None):
 def create_option_response_allow(resp=None):
     if resp is None:
         resp = make_response()
-    if os.getenv("FLASK_ENV") != "prod":
+    if not is_product:
         resp.headers["Access-Control-Allow-Origin"] = front_endpoint
         resp.headers[
             "Access-Control-Allow-Headers"

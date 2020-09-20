@@ -85,8 +85,7 @@ export default {
   mounted() {
     if (!this.loginform.username) {
       this.$refs.username.focus()
-    }
-    if (!this.loginform.password) {
+    } else if (!this.loginform.password) {
       this.$refs.password.focus()
     }
   },
