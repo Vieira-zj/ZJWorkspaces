@@ -12,7 +12,7 @@
                  @click.native="onLogout">退出</el-link>
       </div>
     </div>
-    <div id="users">
+    <div id="table-container">
       <div style="margin-bottom: 20px">
         <span>
           <el-link type="primary">用户列表</el-link>
@@ -134,14 +134,16 @@ export default {
 </script>
 
 <style scoped>
-#users {
-  position: absolute;
-  top: 10%;
-  left: 25%;
+#table-container {
+  position: relative;
   width: 800px;
+  max-width: 100%;
+  padding: 120px 35px 0;
+  margin: 0 auto;
 }
+
 #paging {
   text-align: center;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 </style>

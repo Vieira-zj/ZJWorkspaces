@@ -14,11 +14,12 @@
                  @click.native="onLogout">退出</el-link>
       </div>
     </div>
-    <div id="user-form">
-      <h1 style="text-align: center;">用 户 信 息</h1>
-      <el-form ref="editform"
+    <div id="form-container">
+      <el-form id="user-form"
+               ref="editform"
                :model="editform"
                label-width="80px">
+        <h1 style="text-align: center;">用 户 信 息</h1>
         <el-form-item label="用户头像">
           <!-- <img src="../assets/user01.jpeg"
                width="100px"
@@ -68,8 +69,8 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary"
-                     @click="onSubmit">提交</el-button>
-          <el-button @click="onCancel">取消</el-button>
+                     @click="onSubmit">提 交</el-button>
+          <el-button @click="onCancel">取 消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -189,11 +190,18 @@ export default {
 </script>
 
 <style scoped>
+#form-container {
+  min-height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
 #user-form {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  margin: -150px 0 0 -200px;
-  width: 300px;
+  position: relative;
+  width: 380px;
+  max-width: 100%;
+  padding: 120px 35px 0;
+  margin: 0 auto;
+  overflow: hidden;
 }
 </style>

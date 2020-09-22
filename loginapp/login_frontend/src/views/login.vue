@@ -5,11 +5,12 @@
         <el-breadcrumb-item>登录</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div id="login">
-      <h1 style="text-align: center;">登 录 页 面</h1>
-      <el-form ref="loginform"
+    <div id="login-container">
+      <el-form id="login-form"
+               ref="loginform"
                :model="loginform"
                :rules="rules">
+        <h1 style="text-align: center;">登 录 页 面</h1>
         <el-form-item style="text-align: center;">
           <el-link :type="getPrimary(isID)"
                    @click="isID = true">
@@ -129,11 +130,24 @@ export default {
 </script>
 
 <style scoped>
-#login {
-  position: absolute;
+#login-container {
+  min-height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+#login-form {
+  /* position: absolute;
   top: 30%;
   left: 50%;
   margin: -150px 0 0 -200px;
-  width: 300px;
+  width: 300px; */
+
+  position: relative;
+  width: 380px;
+  max-width: 100%;
+  padding: 140px 35px 0;
+  margin: 0 auto; /* 上下0 左右auto (居中) */
+  overflow: hidden;
 }
 </style>
