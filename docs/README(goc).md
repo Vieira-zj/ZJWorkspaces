@@ -1,8 +1,10 @@
 # goc覆盖率工具介绍
 
-目的：获得功能测试后的代码覆盖率。（单元测试使用go原生的代码覆盖率工具即可。）
+目的：获得功能测试后的代码覆盖率，检查哪些模块的覆盖率较低，或者当前feature所提交的代码哪些没有被覆盖。
 
-原理：使用开源的goc工具来获取代码覆盖率。Github: <https://github.com/qiniu/goc>
+> 单元测试使用go原生的代码覆盖率工具即可。
+
+原理：使用开源工具goc来获取代码覆盖率。Github: <https://github.com/qiniu/goc>
 
 优点：
 
@@ -56,14 +58,21 @@ goc init --center=http://goccenter.ns.ing
 Only output coverage data of the files matching the patterns.
 
 ```sh
-# include ping.go and user.go
-goc profile --coverfile="echoserver/handlers/ping.go","user*" \
+# include ping.go and users.go
+goc profile --coverfile="handlers/ping.go","users*" \
   --center=http://goccenter.ns.ing --address=http://127.0.0.1:7778 -o coverprofile.cov
 
 # include go files in "handlers" dir
-goc profile --coverfile="handlers/*" \
+goc profile --coverfile="handlers/.*" \
   --center=goccenter.ns.ing --address=http://127.0.0.1:7778 -o coverprofile.cov
 ```
+
+## go coverage report
+
+覆盖率结果支持分支覆盖，代码染色结果支持路径覆盖。
+
+1. `-func` 函数级别
+2. `-html` 行级别
 
 ## Create cobertura results
 
@@ -75,6 +84,8 @@ gocover-cobertura < coverprofile.cov > cobertura.xml
 # create cobertura html report
 ./run.sh
 ```
+
+Html测试报告支持分支覆盖。
 
 ## 例子：多个pod副本的覆盖率收集
 
@@ -121,16 +132,22 @@ go tool cover -html=coverprofile.cov -o coverage.html
 
 ## 被测试服务部署改造
 
-参考`deploy/`目录。
+1. `go build`的编译参数通过`goc build --buildflags`传入，如下：
+
+```sh
+goc build --buildflags="-mod=vendor -a -installsuffix cgo" --center=http://goccenter.ns.ing:37777 --agentport :7778 .
+```
+
+2. 如果项目代码库中依赖 vendor 目录，在使用`go tool cover`生成覆盖率报告前，需要设置环境变量`GOFLAGS="-mod=vendor"`。可通过`go env`查看当前`GOFLAGS`环境变量值。
 
 ## Echoserver APIs
 
-```text
+```sh
 curl "http://echoserver.ns.ing/"
 curl "http://echoserver.ns.ing/ping"
-
 curl "http://echoserver.ns.ing/users/"
 
 curl "http://echoserver.ns.ing/test?base=3"
+curl "http://echoserver.ns.ing/cover?cond1=true&cond2=false"
 ```
 
