@@ -1,4 +1,4 @@
-# Create at 2020-08-13, build mysql + admin instance.
+# Create at 2020-08-13, build mysql + admin + soar instance.
 # Use root/example as user/password credentials
 #
 version: '3.1'
@@ -20,5 +20,16 @@ services:
     image: adminer
     container_name: adminer
     restart: always
+    depends_on:
+      - db
     ports:
       - 8089:8080
+
+  soar-web:
+    image: becivells/soar-web
+    container_name: soar-web
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 5077:5077
