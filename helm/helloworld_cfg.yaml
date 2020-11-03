@@ -1,0 +1,14 @@
+image:
+  tag: "1.19.3-alpine"
+
+serviceAccount:
+  create: false
+
+ingress:
+  enabled: true
+  annotations: 
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: nginx.default.k8s
+      paths: ["/"]
