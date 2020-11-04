@@ -8,6 +8,7 @@ dockerapps/data/prometheus/
 dockerapps/data/granfna/
 
 dockerapps/configs/https_conf/ssl/
+k8sapps/k8s-cluster-deploy/https_deploy/tls/
 
 .DS_Store
 #dockerapps/.DS_Store
