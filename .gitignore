@@ -7,6 +7,8 @@ dockerapps/data/alertmanager/
 dockerapps/data/prometheus/
 dockerapps/data/granfna/
 
+dockerapps/configs/https_conf/ssl/
+
 .DS_Store
 #dockerapps/.DS_Store
 #dockerapps/configs/.DS_Store
