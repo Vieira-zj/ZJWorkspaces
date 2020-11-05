@@ -1,0 +1,21 @@
+# Create at 2020-11-05, build pv + pvc + pod env.
+#
+# Refer: https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+#
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: task-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/data"
+  claimRef:
+    namespace: default
+    name: task-pv-claim
