@@ -1,2 +1,5 @@
+.DS_Store
+
 *.tgz
 helm_debug.txt
+
