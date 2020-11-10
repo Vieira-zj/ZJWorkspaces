@@ -1,18 +1,21 @@
+image:
+  tag: 7.9.4-community
+
 ingress:
   enabled: true
   hosts:
-    - name: http://sonar.airpay-qa-testdev.i.test.airpay.in.th
+    - name: sonar.airpay-qa-testdev.i.test.airpay.in.th
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/proxy-body-size: "8m"    
 
 resources:
   limits:
+    cpu: 1000m
+    memory: 2048Mi
+  requests:
     cpu: 500m
     memory: 512Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
 
 # persistence:
 #   enabled: true
