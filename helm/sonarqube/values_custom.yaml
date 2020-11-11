@@ -17,7 +17,7 @@ resources:
     cpu: 500m
     memory: 512Mi
 
-# persistence:
-#   enabled: true
+persistence:
+  enabled: false
 #   storageClass: manual
 #   size: 10Gi
