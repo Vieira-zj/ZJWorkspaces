@@ -17,7 +17,12 @@ resources:
     cpu: 500m
     memory: 512Mi
 
+# use default "standard" storageclass (minikube default-storageclass addson is enabled)
 persistence:
-  enabled: false
-#   storageClass: manual
-#   size: 10Gi
+  enabled: true
+  size: 5Gi
+
+postgresql:
+  persistence:
+    enabled: true
+    size: 10Gi
