@@ -11,7 +11,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/tmp/sonar/postgresql"
+    path: "/data/postgresql"
   claimRef:
     namespace: default
     name: postgresql-pv-claim

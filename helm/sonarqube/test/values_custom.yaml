@@ -20,6 +20,10 @@ resources:
     cpu: 500m
     memory: 512Mi
 
+# for sonar pv, we should pre-create host dir with 777 access (related to "hostPath").
+# persistence:
+#   enabled: true
+
 postgresql:
   volumePermissions:
     enabled: true
