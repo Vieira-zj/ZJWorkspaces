@@ -5,11 +5,18 @@ metadata:
   namespace: default
 spec:
   containers:
-    - name: busybox:1.30
+    - name: pod-debug
+      image: busybox:1.32
       command: ["sh", "-c", "while true; do echo 'busybox is running ...'; sleep 5; done;"]
       volumeMounts:
         - mountPath: "/data/postgresql"
           name: task-pv-storage
+      resources:
+        limits:
+          cpu: 100m
+          memory: 128Mi
+  # securityContext:
+  #   fsGroup: 2000
   volumes:
     - name: task-pv-storage
       persistentVolumeClaim:
