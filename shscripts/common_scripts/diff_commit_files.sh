@@ -77,8 +77,25 @@ function diff_go_file_by_func {
     done
 }
 
+function update_git_configs_in_batch {
+    local email_addr='jin.zheng@xxxxx.com'
+    local repo_root_dir=${HOME}/Workspaces/shopee_repos
+    local repos=$(ls ${repo_root_dir})
+    for repo in ${repos}; do
+        repo_path=${repo_root_dir}/${repo}
+        echo "Update user name and email info for repo ${repo_path}"
+        cd ${repo_path}
+        git config user.name 'jin.zheng'
+        git config user.email ${email_addr}
+        # show configs
+        # git config --list
+    done
+}
+
+update_git_config_in_batch
+
 # before
 # get_go_files_between_commits 25c381 f0c4e1a
-diff_go_file_by_func
+# diff_go_file_by_func
 
 echo "Diff Done"
