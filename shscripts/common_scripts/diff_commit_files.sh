@@ -6,58 +6,57 @@ set -u
 # 2. diff these go src files by func;
 
 project_root="${HOME}/Workspaces/shopee_repos/airpay_push_server"
-branch="master"
-tmp_old_dir="/tmp/test/old"
-tmp_new_dir="/tmp/test/new"
-is_copy="1"
-diff_bin="/tmp/test/funcdiff"
+branch='master'
+hash_new='0e0b2c'
+hash_old='5169a8'
+tmp_new_dir='/tmp/test/new'
+tmp_old_dir='/tmp/test/old'
+out_diff_dir='/tmp/test/diff'
+diff_bin='/tmp/test/funcdiff'
+sep='\t\t\t\t'
 
-function before {
+function before_diff {
     set +e
-    rm -rf ${tmp_old_dir}
-    mkdir -p ${tmp_old_dir}
-    rm -rf ${tmp_new_dir}
-    mkdir -p ${tmp_new_dir}
+    for dir in ${tmp_old_dir} ${tmp_new_dir} ${out_diff_dir}; do
+        rm -rf ${dir}
+        mkdir -p ${dir}
+    done
     set -e
 }
 
 function code_init {
-    git checkout ${branch}
-    git pull origin ${branch}
+    git checkout ${branch} > /dev/null
+    git pull origin ${branch} > /dev/null
 }
 
 function get_go_files_between_commits {
-    local hash1=$1
-    local hash2=$2
-
     cd ${project_root}
     code_init
-    local files=$(git diff ${hash1} ${hash2} --stat | grep go | awk -F '|' '{print $1}' | awk -F '/' '{print $NF}')
-    echo "[${hash1}]-[${hash2}] commit files:"
-    echo "${files}"
+    local files=$(git diff ${hash_new} ${hash_old} --stat \
+      | grep -v -E "\.pb\.go|vendor" | grep '\.go' | grep -E "\+|-" \
+      | awk -F '|' '{print $1}' | awk -F '/' '{print $NF}')
 
-    set -x
-    if [[ ${is_copy} == "1" ]]; then
-        git reset ${hash1} --hard
-        for file in ${files}; do
-            f_path=$(find . -name ${file} -type f)
-            cp ${f_path} ${tmp_old_dir}
-        done
+    git reset ${hash_new} --hard > /dev/null
+    for file in ${files}; do
+        f_path=$(find . -name ${file} -type f)
+        cp ${f_path} ${tmp_new_dir}
+    done
 
-        code_init
-        git reset ${hash2} --hard
-        for file in ${files}; do
-            f_path=$(find . -name ${file} -type f)
-            if [[ -f ${f_path} ]]; then
-                cp ${f_path} ${tmp_new_dir}
-            fi
-        done
-    fi
     code_init
+    git reset ${hash_old} --hard > /dev/null
+    for file in ${files}; do
+        f_path=$(find . -name ${file} -type f)
+        if [[ -f ${f_path} ]]; then
+            cp ${f_path} ${tmp_old_dir}
+        fi
+    done
+    code_init
+    echo -e "\nDiff files for OldCommit:[${hash_old}] - NewCommit:[${hash_new}]:\n${files}"
 }
 
 function diff_go_file_by_func {
-    local files=$(ls ${tmp_old_dir} ${tmp_new_dir} | grep go | uniq)
+    local files=$(ls ${tmp_old_dir} ${tmp_new_dir} | grep "\.go" | sort | uniq)
+    echo -e "\nOldCommit:[${hash_old}] NewCommit:[${hash_new}] Diff" | awk '{printf "%-60s%-60s%-60s\n", $1, $2, $3}'
     for file in ${files}; do
         old_file="${tmp_old_dir}/${file}"
         if [[ ! -f ${old_file} ]]; then
@@ -67,12 +66,16 @@ function diff_go_file_by_func {
         if [[ ! -f ${new_file} ]]; then
             new_file="null"
         fi
-        echo ""
-        echo "old:${old_file}, new:${new_file}"
 
         if [[ ${old_file} != "null" && ${new_file} != "null" ]]; then
-            cmd="${diff_bin} -s ${old_file} -t ${new_file}"
-            ${cmd}
+            cmd="${diff_bin} -s ${new_file} -t ${old_file}"
+            diff_file=${out_diff_dir}/${file}.diff
+            diff_count=$(${cmd} | tee ${diff_file} | awk -F ':' '{print $2}' | grep diff | wc -l | sed 's/ //g')
+            if [[ ${diff_count} -gt 0 ]]; then
+                echo "${old_file} ${new_file} DiffFuncCount:${diff_count}" | awk '{printf "%-60s%-60s%-60s\n", $1, $2, $3}'
+            fi
+        else
+            echo "${old_file} ${new_file}" | awk '{printf "%-60s%-60s\n", $1, $2}'
         fi
     done
 }
@@ -92,10 +95,10 @@ function update_git_configs_in_batch {
     done
 }
 
-update_git_config_in_batch
+before_diff
+get_go_files_between_commits
+diff_go_file_by_func
 
-# before
-# get_go_files_between_commits 25c381 f0c4e1a
-# diff_go_file_by_func
+# update_git_config_in_batch
 
 echo "Diff Done"
