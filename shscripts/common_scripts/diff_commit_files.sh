@@ -7,13 +7,12 @@ set -u
 
 project_root="${HOME}/Workspaces/shopee_repos/airpay_push_server"
 branch='master'
-hash_new='0e0b2c'
-hash_old='5169a8'
+hash_new='28a644' #'0e0b2c'
+hash_old='c87001' #'5169a8'
 tmp_new_dir='/tmp/test/new'
 tmp_old_dir='/tmp/test/old'
 out_diff_dir='/tmp/test/diff'
 diff_bin='/tmp/test/funcdiff'
-sep='\t\t\t\t'
 
 function before_diff {
     set +e
@@ -31,32 +30,37 @@ function code_init {
 
 function get_go_files_between_commits {
     cd ${project_root}
+    # git clone
+
     code_init
-    local files=$(git diff ${hash_new} ${hash_old} --stat \
+    # 排除文件 pb.go _test.go vendor
+    # 文件重命名修改不算在内
+    local go_files=$(git diff ${hash_new} ${hash_old} --stat \
       | grep -v -E "\.pb\.go|vendor" | grep '\.go' | grep -E "\+|-" \
       | awk -F '|' '{print $1}' | awk -F '/' '{print $NF}')
 
     git reset ${hash_new} --hard > /dev/null
-    for file in ${files}; do
+    for file in ${go_files}; do
         f_path=$(find . -name ${file} -type f)
         cp ${f_path} ${tmp_new_dir}
     done
 
     code_init
     git reset ${hash_old} --hard > /dev/null
-    for file in ${files}; do
+    for file in ${go_files}; do
         f_path=$(find . -name ${file} -type f)
         if [[ -f ${f_path} ]]; then
             cp ${f_path} ${tmp_old_dir}
         fi
     done
     code_init
-    echo -e "\nDiff files for OldCommit:[${hash_old}] - NewCommit:[${hash_new}]:\n${files}"
+    echo -e "\nDiff go files for OldCommit:[${hash_old}] - NewCommit:[${hash_new}]:\n${go_files}"
 }
 
 function diff_go_file_by_func {
     local files=$(ls ${tmp_old_dir} ${tmp_new_dir} | grep "\.go" | sort | uniq)
     echo -e "\nOldCommit:[${hash_old}] NewCommit:[${hash_new}] Diff" | awk '{printf "%-60s%-60s%-60s\n", $1, $2, $3}'
+
     for file in ${files}; do
         old_file="${tmp_old_dir}/${file}"
         if [[ ! -f ${old_file} ]]; then
@@ -70,6 +74,7 @@ function diff_go_file_by_func {
         if [[ ${old_file} != "null" && ${new_file} != "null" ]]; then
             cmd="${diff_bin} -s ${new_file} -t ${old_file}"
             diff_file=${out_diff_dir}/${file}.diff
+            # wc 返回结果要去掉空格
             diff_count=$(${cmd} | tee ${diff_file} | awk -F ':' '{print $2}' | grep diff | wc -l | sed 's/ //g')
             if [[ ${diff_count} -gt 0 ]]; then
                 echo "${old_file} ${new_file} DiffFuncCount:${diff_count}" | awk '{printf "%-60s%-60s%-60s\n", $1, $2, $3}'
