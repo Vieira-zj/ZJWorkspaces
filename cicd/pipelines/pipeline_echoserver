@@ -1,0 +1,435 @@
+import groovy.transform.Field
+
+@Field String APP_NAME = 'echoserver'
+@Field String GROUP = 'group-qa'
+@Field Map CONTEXT_MAP = [:]
+@Field String JUNIT_XML = 'target/junit.xml'
+@Field String SONAR_URL = 'http://sonar.qa.io/web/sonar/'
+
+/*
+Hooks
+*/
+
+def beforeInit() {
+    println 'Before Init Hook'
+}
+
+def beforeBuild() {
+    println 'Before Build Hook'
+
+    // custom image
+    // def imageID = "harbor.qa.io/echoserver:git-8c6b9f08b77"
+    // CONTEXT_MAP.put("imageName", imageID)
+}
+
+def beforeDeploy() {
+    println 'Before Deploy hook'
+    def NAMESPACE = "${GROUP}-testdev"
+    CONTEXT_MAP.put("deployNamespace", NAMESPACE)
+    CONTEXT_MAP.put("podPort", "58081")
+    CONTEXT_MAP.put("monitorPort", "50009")
+}
+
+/*
+Main
+*/
+
+pipeline {
+    agent {
+        node { label 'slave' }
+    }
+
+    stages {
+        stage('Init') {
+            steps {
+                beforeInit()
+                propertiesInit()
+                contextInit()
+            }
+        }
+        stage('Pull') {
+            steps {
+                gitPullAndInit()
+            }
+        }
+        stage('Code Scan') {
+            steps {
+                codeStaticScan()
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                unitTestAndCoverage()
+                junit JUNIT_XML
+                archiveArtifacts artifacts: '**/target/*', followSymlinks: false
+            }
+        }
+        stage('Build') {
+            steps {
+                beforeBuild()
+                dockerImageBuild()
+            }
+        }
+        stage('Deploy') {
+            steps {
+                beforeDeploy()
+                appDeploy()
+            }
+        }
+        stage('Verify') {
+            steps {
+                echo 'Verify deploy service...'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'always'
+        }
+        success {
+            echo 'successful'
+            emailext subject: "Job ${JOB_NAME} (${BUILD_NUMBER}) success", to: 'qa@xxxxx.com', body: "Jenkins pipeline URL: ${BUILD_URL}\n" + 
+                "Sonarqube URL: ${SONAR_URL}\n" + "UnitTest Results: " + getUnitTestResults()
+        }
+        failure {
+            echo 'failed'
+        }
+        unstable {
+            echo 'unstable'
+        }
+        changed {
+            echo 'run only if the state of the Pipeline has changed'
+            echo 'For example, if the Pipeline was previously failing but is now successful'
+        }
+    }
+}
+
+/*
+Stage Init
+*/
+
+def propertiesInit() {
+    println 'Properties Init...'
+    properties([
+        parameters([
+            [
+                $class     : 'ChoiceParameter',
+                choiceType : 'PT_RADIO',
+                description: '本次操作：发布新版本、重启服务、回滚到上一个版本、更新 Jeknins 构建参数配置',
+                filterable : false,
+                name       : 'ACTION',
+                script     : [
+                    $class       : 'GroovyScript',
+                    fallbackScript: [
+                        classpath: [],
+                        sandbox  : true,
+                        script   :
+                        'return ["error"]'
+                    ],
+                    script       : [
+                        classpath: [],
+                        sandbox  : true,
+                        script   :
+                        'return ["release:selected", "restart", "rollout"]'
+                    ]
+                ]
+            ],
+            choice(choices: ['bs1', 'bs2', 'bs3'], description: '应用业务', name: 'APPTYPE'),
+            choice(choices: ['dev', 'test', 'uat', 'live'], description: '部署环境', name: 'ENVIRONMENT'),
+            string(defaultValue: '1', description: '副本数（dev和test环境为1）', name: 'REPLICAS'),
+            choice(choices: ['en', 'cn'], description: '国家', name: 'REGION'),
+            booleanParam(defaultValue: false, name: 'CANARY', description: '是否灰度'),
+            booleanParam(defaultValue: false, name: 'TAG_RELEASE', description: '是否用 tag 发布'),
+            booleanParam(defaultValue: false, name: 'COVERAGE', description: '是否覆盖率打包（集成测试）'),
+            gitParameter(name: 'TAG', type: 'PT_TAG', defaultValue: 'release-nonexist', sortMode: 'DESCENDING_SMART',
+                quickFilterEnabled: true, description: '如果正式发布，必须采用 tag 进行构建'),
+            gitParameter(name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'deploy', sortMode: 'DESCENDING_SMART',
+                quickFilterEnabled: true, description: '本次构建采用的分支'),
+        ])
+    ])
+    println 'Jenkins Parameters: ' + params
+}
+
+def contextInit() {
+    println 'Context Init...'
+    def REGISTRY_CRED = 'harbor-qa'
+    def APPTYPE = params.APPTYPE
+    def REGION = params.REGION
+    def DEPLOY_NAMESPACE = "${APPTYPE}-${GROUP}-${REGION}-${ENVIRONMENT}"
+
+    CONTEXT_MAP.put("action", params.ACTION)
+    CONTEXT_MAP.put("env", params.ENVIRONMENT)
+    CONTEXT_MAP.put("appType", params.APPTYPE)
+    CONTEXT_MAP.put("region", params.REGION)
+    CONTEXT_MAP.put("isCover", params.COVERAGE)
+    CONTEXT_MAP.put("isCanary", params.CANARY)
+    CONTEXT_MAP.put("tagRelease", params.TAG_RELEASE)
+    CONTEXT_MAP.put("branch", params.BRANCH)
+    CONTEXT_MAP.put("deployNamespace", DEPLOY_NAMESPACE)
+    CONTEXT_MAP.put("registryCred", REGISTRY_CRED)
+    println 'Context Map: ' + CONTEXT_MAP
+}
+
+/*
+Stage Pull
+*/
+
+def gitPullAndInit() {
+    println 'Git pull and init context...'
+    def scmUrl = scm.getUserRemoteConfigs()[0].getUrl()
+    def scmCred = scm.getUserRemoteConfigs()[0].getCredentialsId()
+    println "scmUrl=${scmUrl}, scmCred=${scmCred}"
+
+    // git pull source code
+    def branch = params.BRANCH
+    def srcRepo = checkout([$class: 'GitSCM',
+        branches: [[name: "${branch}"]],
+        doGenerateSubmoduleConfigurations: false,
+        extensions: [],
+        gitTool: 'Default',
+        userRemoteConfigs: [[url: "${scmUrl}", credentialsId: "${scmCred}"
+        ]],
+    ])
+    def gitCommit = srcRepo.GIT_COMMIT
+    def gitBranch = srcRepo.GIT_BRANCH
+    def shortGitCommit = "${gitCommit[0..10]}"
+
+    def imageTag = ''
+    if (params.TAG_RELEASE) {
+        imageTag = params.TAG
+    } else {
+        imageTag = "git-${shortGitCommit}"
+    }
+
+    def DOCKER_GROUP = 'docker-qa'
+    def imageName = "harbor.qa.io/${DOCKER_GROUP}/${APP_NAME}:${imageTag}"
+    CONTEXT_MAP.put("dockerGroup", DOCKER_GROUP)
+    CONTEXT_MAP.put("imageName", imageName)
+
+    // git pull jenkins pipeline infra lib
+    def infraPipelineUrl= 'https://gitlab.qa.com/infra/jenkins_pipeline'
+    dir('.cli') {
+        checkout([$class                           : 'GitSCM',
+                  branches                         : [[name: 'master']],
+                  doGenerateSubmoduleConfigurations: false,
+                  extensions                       : [],
+                  gitTool                          : 'Default',
+                  submoduleCfg                     : [],
+                  userRemoteConfigs                : [[url: infraPipelineUrl, credentialsId: scmCred]]
+        ])
+    }
+
+    def resources = readYaml file: '.cli/resources/be/limit.yml'
+    def _env = resources.default.containsKey(ENVIRONMENT) ? ENVIRONMENT : 'test'
+
+    def defaultReplicas = resources.default[_env].replicas
+    def defaultCPU = resources.default[_env].requests.cpu
+    def defaultMEM = resources.default[_env].requests.memory
+    def defaultLimitCPU = resources.default[_env].limits.cpu
+    def defaultLimitMEM = resources.default[_env].limits.memory
+
+    if (Integer.valueOf("${replicas}") > 32) {
+        error 'REPLICAS out of limit'
+    }
+    if (defaultCPU > 8 || defaultLimitCPU > 16) {
+        error 'CPU or LIMIT_CPU out of limit 16'
+    }
+    if (defaultMEM > 16 || defaultLimitMEM > 64) {
+        error 'MEM or LIMIT_MEM out of limit 64'
+    }
+
+    CONTEXT_MAP.put('cpu', defaultCPU)
+    CONTEXT_MAP.put('limitCpu', defaultLimitCPU)
+    CONTEXT_MAP.put('mem', defaultMEM)
+    CONTEXT_MAP.put('limitMem', defaultLimitMEM)
+
+    if ('dev'.equals(CONTEXT_MAP.env) || 'test'.equals(CONTEXT_MAP.env)) {
+        CONTEXT_MAP.put('replicas', defaultReplicas)
+    }
+    println 'Context Map: ' + CONTEXT_MAP
+}
+
+/*
+Stage Code Scan
+*/
+
+def codeStaticScan() {
+    println 'Code Static Scan start...'
+    def curDir = sh([returnStdout: true, script: "pwd"]).trim()
+    def curDate = getCurDate()
+    runCmd = "docker run --name scanner -i --rm -v ${curDir}:/usr/src/echoserver sonarsource/sonar-scanner-cli sonar-scanner"
+    paramCmd1 = "-Dsonar.projectKey=echoserver -Dsonar.projectName=echoserver -Dsonar.projectVersion=\"v1.0.${curDate}.${BUILD_NUMBER}\""
+    // paramCmd2 = '-Dsonar.host.url="http://sonar.k8s.qa.io" -Dsonar.projectBaseDir="/usr/src/echoserver"'
+    paramCmd3 = "-Dsonar.host.url=\"${SONAR_URL}\" -Dsonar.projectBaseDir=\"/usr/src/echoserver\" -Dsonar.login=c2dedcec7bd667deb94d23c889df851a4375e733"
+ 
+    cmd = "${runCmd} ${paramCmd1} ${paramCmd3}"
+    sh cmd
+}
+
+/*
+Stage Unit Test
+*/
+
+def unitTestAndCoverage() {
+    println 'Unit Test and Code Coverage start...'
+    def imageName = 'harbor.qa.io/gopython:1.13'
+    def curDir = sh([returnStdout: true, script: "pwd"]).trim()
+    def workDir = '/go/src/echoserver'
+    def reportsDir = 'target'
+    def tmpFile = 'cover.out'
+    def junitReport = "${reportsDir}/junit.xml"
+    def coverReport = "${reportsDir}/cover.txt"
+    def coverHtmlReport = "${reportsDir}/cover.html"
+
+    def cmdRm = "sudo rm -rf ${reportsDir}"
+    def cmdDocker = "docker run --name unittest --rm -t -v ${curDir}:${workDir} ${imageName} sh -c"
+    def cmdInit = "cd ${workDir} && mkdir ${reportsDir} && go mod tidy"
+    def cmdTest = "go test -v -timeout 30s echoserver/handlers -cover -coverprofile ${tmpFile} 2>&1 | bin/go-junit-report > ${junitReport}"
+    def cmdCover = "go tool cover -func=${tmpFile} -o ${coverReport}"
+    def cmdCoverHtml = "go tool cover -html=${tmpFile} -o ${coverHtmlReport}"
+
+    def cmd = "${cmdRm} && ${cmdDocker} \"${cmdInit} && ${cmdTest} && ${cmdCover} && ${cmdCoverHtml}\""
+    sh cmd
+
+    println 'Unit Test and Code Coverage results:'
+    sh "cat ${junitReport} ${coverReport}"
+}
+
+/*
+Stage Build
+*/
+
+def dockerImageBuild() {
+    println 'Build docker image and Push to repo...'
+    def dockerfilePath = 'deploy/Dockerfile'
+    if (CONTEXT_MAP.isCover) {
+        dockerfilePath = 'deploy/goc.Dockerfile'
+    }
+    if (CONTEXT_MAP.containsKey('dockerfilePath')) {
+        dockerfilePath = map.dockerfilePath
+    }
+
+    println "Docker build for ${dockerfilePath}"
+    def harborUrl = 'https://harbor.qa.io'
+    def region = CONTEXT_MAP.region
+    def env = CONTEXT_MAP.env
+    def registryCred = CONTEXT_MAP.registryCred
+    def imageName = CONTEXT_MAP.imageName
+    def dockerBuildArgs = "--build-arg APP_NAME=${APP_NAME} --build-arg REGION=${region} --build-arg ENVIRONMENT=${env} --network=host -f ${dockerfilePath} ."
+
+    docker.withRegistry(harborUrl, registryCred) {
+        if (!dockerImageExists(imageName)) {
+            docker.build(imageName, dockerBuildArgs).push()
+        }
+    }
+}
+
+def dockerImageExists(imageName) {
+    def cmd = "bash -c '(DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect ${imageName} > /dev/null 2>&1 && echo found) || echo notfound'"
+    found = sh([returnStdout: true, script: cmd]).trim()
+    return found == 'found' ? true : false
+}
+
+/*
+Stage Deploy
+*/
+
+def appDeploy() {
+    println 'Deploying app into K8S...'
+    println "BuildId=${env.BUILD_ID}, Job=${env.JOB_NAME}, URL=${env.JENKINS_URL}"
+
+    expandDeployTemplate()
+    k8sCredInit()
+
+    println 'Start Deploy ...'
+    def deployConfig = 'deploy/deploy.yaml'
+    sh 'cat ${deployConfig}'
+    kubernetesDeploy(kubeconfigId: CONTEXT_MAP.kubeCred,
+                         configs: deployConfig,
+                         enableConfigSubstitution: true,
+    )
+    checkDeployService()
+}
+
+def expandDeployTemplate() {
+    env.APP_NAME = APP_NAME
+    env.POD_PORT = CONTEXT_MAP.podPort
+    env.MONITOR_PORT = CONTEXT_MAP.monitorPort
+    env.APPTYPE = CONTEXT_MAP.appType
+    env.ENVIRONMENT = CONTEXT_MAP.env
+    env.NAMESPACE = CONTEXT_MAP.deployNamespace
+    env.REGION = CONTEXT_MAP.region
+    env.GROUP = GROUP
+    env.REPLICAS = CONTEXT_MAP.replicas
+    env.IMAGE_NAME = CONTEXT_MAP.imageName
+    env.CPU = CONTEXT_MAP.cpu
+    env.MEM = CONTEXT_MAP.mem + 'Gi'
+    env.LIMIT_CPU = CONTEXT_MAP.limitCpu
+    env.LIMIT_MEM = CONTEXT_MAP.limitMem + 'Gi'
+    env.DEPLOY_NAME = APP_NAME
+    env.PHASE = '"release"'
+    println 'Environment:'
+    sh 'printenv'
+
+    sh './bin/envexpand -i deploy/deploy.tpl -o deploy/deploy.yaml'
+    println 'Deploy yaml:'
+    sh 'cat deploy/deploy.yaml'
+}
+
+def k8sCredInit() {
+    def kubeCred = createKubeCred()
+    CONTEXT_MAP.put('jenkinsHome', '/home/jenkins')
+    CONTEXT_MAP.put('kubeCred', kubeCred)
+    CONTEXT_MAP.put('kubeFolder', '/home/jenkins/.kube')
+    CONTEXT_MAP.put('kubeConfigFile', "${CONTEXT_MAP.kubeFolder}/${CONTEXT_MAP.kubeCred}")
+}
+
+def createKubeCred() {
+    def kubeCredShort = "${CONTEXT_MAP.env}-${CONTEXT_MAP.region}-kubeconfig"
+    def kubeCredLong = CONTEXT_MAP.appType + "-${kubeCredShort}"
+
+    def kubeCred = ''
+    def env = CONTEXT_MAP.env
+    if ('dev'.equals(env)) {
+        kubeCred = kubeCredLong
+    } else if ('test'.equals(env)) {
+        kubeCred = kubeCredShort
+    }
+    // check kube cred
+    // sh 'ls -l /home/jenkins/.kube'
+    println "kubeCred: " + kubeCred
+
+    try {
+        withCredentials([kubeconfigContent(credentialsId: "${kubeCred}", variable: 'kubeconfig')]) {}
+        return kubeCred
+    } catch (Exception ex) {
+        error "not exsit kube credential: " + kubeCred + ", change to use " + kubeCredShort
+    }
+}
+
+def checkDeployService() {
+    withCredentials([kubeconfigContent(credentialsId: "${CONTEXT_MAP.kubeCred}", variable: 'kubeconfig')]) {
+        sh """#!/bin/bash
+        mkdir -p ~/.kube && echo "$kubeconfig" > ~/.kube/config
+        for i in \$(seq 1 5); do
+            sleep 3
+            kubectl -n ${CONTEXT_MAP.deployNamespace} get pod -o wide | grep ${APP_NAME}
+        done
+        """
+    }
+}
+
+/*
+Common
+*/
+
+def getUnitTestResults() {
+    cmd = "head -n 3 ${JUNIT_XML}| tail -n 1 |sed -e 's/<testsuite//' -e 's/>//'"
+    return sh([returnStdout: true, script: cmd]).trim()
+}
+
+def getCurDate() {
+    def now = new Date()
+    return now.format("yyMMdd", TimeZone.getTimeZone('UTC'))
+}
