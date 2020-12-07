@@ -1,0 +1,10 @@
+.python-version
+.vscode/
+
+__pycache__/
+.pytest_cache
+*.pyc
+
+confidential/
+outputs/
+pytest.log
