@@ -17,7 +17,7 @@ def api_test():
             http.close()
 
 
-def cfg_test():
+def load_config_test():
     cfg = Config()
     print(f"configs: env={cfg.env}, host={cfg.env_config.host}")
 
@@ -25,11 +25,11 @@ def cfg_test():
     assert cfg == cfg2
 
 
-def test_load_meta():
+def load_meta_test():
     PyTestTool.print_all_pytest_cases_metadata()
 
 
-def test_load_data():
+def load_data_test():
     sheet_id = '1tSfLMHEh9LO5ZtKBq-3iSkBkCVHE-do0ERZ-iDlA8Cw'
     range_name = 'DP-DB-TestData!A:F'
 
@@ -40,8 +40,8 @@ def test_load_data():
 
 if __name__ == '__main__':
 
-    cfg_test()
+    load_config_test()
     # api_test()
 
-    test_load_meta()
-    # test_load_data()
+    # load_meta_test()
+    # load_data_test()

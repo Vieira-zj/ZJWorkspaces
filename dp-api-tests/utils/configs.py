@@ -36,6 +36,10 @@ class Config(object):
         return int(self._main_cfg_dict['http']['timeout'])
 
     @property
+    def http_max_retries(self):
+        return int(self._main_cfg_dict['http']['max_retries'])
+
+    @property
     def log_level(self) -> int:
         log_level = self._main_cfg_dict['log']['loglevel'].lower()
         if log_level == 'error':

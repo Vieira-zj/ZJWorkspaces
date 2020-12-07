@@ -1,5 +1,6 @@
 import logging
 import requests
+from requests.adapters import HTTPAdapter
 
 from utils.configs import Config
 
@@ -26,11 +27,14 @@ class HttpConnection(object):
     _default_timeout = _cfg.http_timeout
 
     def __init__(self, access_token='', is_retcode_check=True):
+        self._is_retcode_check = is_retcode_check
+
         self._sess = requests.session()
+        self._sess.mount(
+            'https://', HTTPAdapter(max_retries=self._cfg.http_max_retries))
         if len(access_token) > 0:
             self._default_headers['authorization'] = 'Bearer ' + access_token
         self._sess.headers.update(self._default_headers)
-        self._is_retcode_check = is_retcode_check
 
     @property
     def session(self):
