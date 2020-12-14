@@ -1,0 +1,29 @@
+# Refer: https://vocon-it.com/2018/12/20/kubernetes-local-persistent-volumes/
+# Pod will be scheduled to node10 to use local persistent volumes.
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debug-deploy
+  namespace: airpay-qa-testdev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: debug-box
+  template:
+    metadata:
+      labels:
+        app: debug-box
+    spec:
+      containers:
+      - name: debug-box
+        image: busybox:1.30
+        command: ["sh", "-c", "while true; do echo 'busybox is running ...' >> /data/logs/busybox.log; sleep 5; done;"]
+        volumeMounts:
+          - name: persistent-storage
+            mountPath: /data/logs
+      volumes:
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: qa-testdev-claim
