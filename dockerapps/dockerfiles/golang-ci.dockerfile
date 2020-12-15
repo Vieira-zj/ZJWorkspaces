@@ -28,15 +28,17 @@ RUN ln -s /usr/bin/python3 /usr/bin/python \
     && pip install -i https://pypi.garenanow.com/ diff-cover
 
 # create golang env
-RUN cd /tmp && curl -O https://dl.google.com/go/go1.14.13.linux-amd64.tar.gz \
-    && tar xvf go1.14.13.linux-amd64.tar.gz \
-    && sudo chown -R root:root ./go && mv go /usr/lib/go-1.14 \
-    && ln -s /usr/lib/go-1.14 /usr/lib/go \
-    && ln -s /usr/lib/go-1.14/bin/go /usr/bin/go \
+# available go versions: go1.12.5, go1.13.5, go1.14.9. default: go1.14.13
+ENV GO_VERSION=go1.14.13
+RUN cd /tmp && curl -O https://dl.google.com/go/${GO_VERSION}.linux-amd64.tar.gz \
+    && tar xvf ${GO_VERSION}.linux-amd64.tar.gz \
+    && sudo chown -R root:root ./go && mv go /usr/lib/${GO_VERSION} \
+    && ln -s /usr/lib/${GO_VERSION} /usr/lib/go \
+    && ln -s /usr/lib/${GO_VERSION}/bin/go /usr/bin/go \
     && rm -r /tmp/*
 
 ENV GOPATH=/root/go
-ENV GOROOT=/usr/lib/go-1.14
+ENV GOROOT=/usr/lib/go
 
 # add tools bin
 COPY bin /usr/local/bin
