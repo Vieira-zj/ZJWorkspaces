@@ -1,0 +1,88 @@
+echo 'zhengjin, here'
+# The original version is saved in .bash_profile.pysave
+# ENV VARS
+export LANG="en_US.UTF-8"
+# PYTHON
+export PYPATH="${HOME}/Library/Python/3.8/bin"
+export PYPROJECT="${HOME}/Workspaces/zj_repos/zj_py3_project"
+PATH=$PATH:$PYPATH
+# GO
+export GOROOT="/usr/local/go"
+PATH=${PATH}:"${GOROOT}/bin"
+# note: it should set only one value in GOPATH
+export GOPATH="${HOME}/Workspaces/.go"
+export GOBIN=${GOPATH}/bin
+PATH=$PATH:$GOBIN
+# JAVA
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home"
+export CLASS_PATH="$JAVA_HOME/lib"
+export MAVEN_HOME="${HOME}/Workspaces/mvn_repository"
+export ANDROID_HOME="/Users/zhengjin/Library/Android/sdk"
+export SONARQUBE_HOME="${HOME}/cicd/sonarqube_home"
+PATH=${PATH}:${JAVA_HOME}/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+# HADOOP
+#export HADOOP_COMMON_HOME="/usr/local/Cellar/hadoop"
+#export HADOOP_HDFS_HOME=${HADOOP_COMMON_HOME}
+#export HADOOP_MAPRED_HOME=${HADOOP_COMMON_HOME}
+#export HADOOP_YARN_HOME=${HADOOP_COMMON_HOME}
+#export HADOOP_CONF_DIR=${HADOOP_COMMON_HOME}/etc/hadoop
+#export YARN_CONF_DIR=${HADOOP_CONF_DIR}
+#export HADOOP_LIBEXEC_DIR=${HADOOP_COMMON_HOME}/libexec
+#export HADOOP_OPTS="$HADOOP_OPTS -Djava.library.path=$HADOOP_HOME/lib/"
+#export HADOOP_COMMON_LIB_NATIVE_DIR="$HADOOP_HOME/lib/native64/"
+#MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+# ENV PATH
+#PATH="$PATH:/usr/local/opt/coreutils/libexec/gnubin"
+#PATH=/usr/local/mongodb/bin:$PATH
+#PATH=/usr/local/sbin:$PATH # mtr-packet
+export PATH
+# ENV ALIAS
+alias ll='ls -lah'
+alias ..='cd ..'
+alias c='clear'
+#alias ps?='ps aux | grep'
+alias grep='grep -i --color=always'
+alias ts='date +%s'
+alias tree='tree -N -L'
+alias superc='supervisorctl -c /usr/local/etc/supervisord.ini'
+alias py='python3'
+alias gob_linux='GOOS=linux GOARCH=amd64 go build'
+alias dk='docker'
+alias dkimgs='docker images | sort'
+alias dkc='docker-compose -f'
+alias kc='kubectl'
+alias kcgetall='kubectl get --all-namespaces'
+alias ministart='minikube start --vm-driver=virtualbox --kubernetes-version=1.18.0'
+# TERMINAL
+#enables colorin the terminal bash shell export
+export CLICOLOR=1
+#setsup thecolor scheme for list export
+export LSCOLORS=gxfxcxdxbxegedabagacad
+#sets up theprompt color (currently a green similar to linux terminal)
+#export PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$'
+#enables colorfor iTerm
+export TERM=xterm-256color
+# TEST ENV SET
+# TODO:
+# ENV FN
+trimlast() {
+    input1=$1
+    len=${#input1}
+    echo ${input1:0:${len}}
+}
+echoenv() { echo "TEST_ENV=$TEST_ENV"; echo "TEST_ZONE=$TEST_ZONE";}
+setenv() { export TEST_ENV=$1; echo "TEST_ENV=$TEST_ENV";}
+setzone() { export TEST_ZONE=$1; echo "TEST_ZONE=$TEST_ZONE";}
+findStr() { grep "$1" ./*;}
+findStrAll() { grep -r "$1" ./;}
+tarc() { tar czvf "$(trimlast $1).tar.gz" "$1";}
+tarx() { tar xzvf $1;}
+tarl() { tar tvf $1;}
+toupper() { echo $1 | tr 'a-z' 'A-Z';}
+tolower() { echo $1 | tr 'A-Z' 'a-z';}
+ssh_airpay() { ssh airpay_bastion_sg;}
+scp_airpay() { scp $1 airpay_bastion_sg:/home/ld-sgdev/jin_zheng;}
+dkip() { docker inspect --format '{{ .NetworkSettings.IPAddress }}' $1;}
+dklogin() { docker exec -it $1 sh;}
+kubelist() { kubectl get pods -n spock-public -o=custom-columns=NameSpace:.metadata.namespace,NAME:.metadata.name,CONTAINERS:.spec.containers[*].name|grep -E "name|$1";}
+cpcs1() { scp $1 qboxserver@10.200.20.21:~/zhengjin/;}
