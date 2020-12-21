@@ -1,16 +1,21 @@
 #
-# Created at 2019-01-26, test deploy one pod includes 2 containers "busybox" and "alpine". 
+# Created at 2020-12-21, test deploy init and sidecar container.
 #
 apiVersion: v1
 kind: Pod
 metadata:
-  name: containers-pod 
-  namespace: mini-test-ns
+  name: sidecar-test
+  namespace: k8s-test-ns
   labels:
-    app: containers-pod
+    app: sidecar-test
     env: test
 spec:
-  restartPolicy: Always 
+  restartPolicy: Always
+  initContainers:
+  - name: init-busybox
+    image: busybox:1.30
+    imagePullPolicy: IfNotPresent
+    command: ["sh", "-c", "sleep 3; echo \"init process done.\""]
   containers:
   - name: busybox
     image: busybox:1.30
@@ -19,7 +24,8 @@ spec:
   - name: alpine
     image: alpine:3.9
     imagePullPolicy: IfNotPresent
+    # lifecycle:
+    #   type: Sidecar
     command: ["sh"]
-    args: ["-c", "while true; do echo $(date +'%Y-%m-%d_%H:%M:%S') 'alpine is running ...'; sleep 8; done;"]
-
+    args: ["-c", "while true; do echo $(date +'%Y-%m-%d_%H:%M:%S') 'alpine is running ...'; sleep 5; done;"]
 ---
