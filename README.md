@@ -1,2 +1,3 @@
 # zj_workspace
-My workspace stores working scripts and doc files.
+
+> The workspace includes working appplications, deploy scripts and tools.
