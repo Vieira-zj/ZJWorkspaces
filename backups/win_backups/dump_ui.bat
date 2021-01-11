@@ -12,4 +12,4 @@ adb shell uiautomator dump
 adb pull %dump_path% %userhome%window_dump.uix
 adb shell rm %dump_path%
 
-echo "dump ui done."
+echo "Android dump ui done."
