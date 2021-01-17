@@ -56,6 +56,7 @@
           <i class="el-icon-position"></i>
           <i class="el-icon-connection"></i>
           <i class="el-icon-eleme"></i>
+          <google-login />
           <el-link style="float: right;"
                    href="#/register1">注册账户</el-link>
         </el-form-item>
@@ -66,9 +67,13 @@
 
 <script>
 import { validateName, validatePassword } from '@/utils/auth'
+import googleLogin from '@/components/google-login'
 
 export default {
   name: 'login',
+  components: {
+    googleLogin,
+  },
   data() {
     return {
       loginform: {

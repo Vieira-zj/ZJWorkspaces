@@ -5,12 +5,14 @@
     "source.fixAll.eslint": true
   },
 
-  "eslint.validate": ["html", "javascript", "vue"],
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "[vue]": {
+    "editor.defaultFormatter": "octref.vetur"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
 
   "prettier.singleQuote": true,
@@ -30,5 +32,7 @@
       "singleQuote": true,
       "semi": false
     }
-  }
+  },
+
+  "eslint.validate": ["html", "javascript", "vue"]
 }
