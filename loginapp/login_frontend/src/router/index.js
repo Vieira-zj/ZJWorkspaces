@@ -19,31 +19,31 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: () => import('@/views/login'),
-      meta: { title: 'login' }
+      meta: { title: '登录' }
     },
     {
       path: '/users',
       name: 'users',
       component: () => import('@/views/usersList'),
-      meta: { title: 'users' }
+      meta: { title: '用户列表' }
     },
     {
       path: '/register1',
       name: 'register1',
       component: () => import('@/views/register1'),
-      meta: { title: 'register' }
+      meta: { title: '注册' }
     },
     {
       path: '/register2/:name',
       name: 'register2',
       component: () => import('@/views/register2'),
-      meta: { title: 'register' }
+      meta: { title: '注册' }
     },
     {
       path: '/edit/:name',
       name: 'edit',
       component: () => import('@/views/userEdit'),
-      meta: { title: 'edit' }
+      meta: { title: '用户信息' }
     }
   ]
 })

@@ -5,6 +5,7 @@
         <el-breadcrumb-item to="/login">登录</el-breadcrumb-item>
         <el-breadcrumb-item>注册</el-breadcrumb-item>
       </el-breadcrumb>
+      <breadcrumb v-show="false" />
     </div>
     <div id="form-container">
       <el-form id="register-form"
@@ -55,9 +56,13 @@
 import { validateName, validatePassword } from '@/utils/auth'
 import { showErrorMessage } from '@/utils/global'
 import { apiNewUser } from '@/api/user'
+import breadcrumb from '@/components/breadcrumb'
 
 export default {
   name: 'registerStep1',
+  components: {
+    breadcrumb,
+  },
   data() {
     return {
       registerform: {

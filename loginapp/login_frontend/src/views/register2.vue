@@ -4,6 +4,7 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>登录</el-breadcrumb-item>
       </el-breadcrumb>
+      <breadcrumb v-show="false" />
     </div>
     <div id="form-container">
       <el-form id="img-form"
@@ -51,9 +52,13 @@
 
 <script>
 import { toUnicode } from '@/utils/global'
+import breadcrumb from '@/components/breadcrumb'
 
 export default {
   name: 'registerStep2',
+  components: {
+    breadcrumb,
+  },
   data() {
     return {
       imgProps: {
