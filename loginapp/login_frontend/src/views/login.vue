@@ -67,7 +67,7 @@
 
 <script>
 import { validateName, validatePassword } from '@/utils/auth'
-import googleLogin from '@/components/google-login'
+import googleLogin from '@/components/googleLogin'
 
 export default {
   name: 'login',

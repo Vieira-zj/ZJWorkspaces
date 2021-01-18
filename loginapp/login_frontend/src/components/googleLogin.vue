@@ -24,18 +24,22 @@
 
 <script>
 export default {
+  name: 'google_oAuth_login',
   methods: {
     loginWithGoogle() {
       this.$gAuth
         .signIn()
         .then((googleUser) => {
           let profile = googleUser.getBasicProfile()
+          // console.log('User profile:', profile)
           console.log('ID: ' + profile.getId())
           console.log('Full Name: ' + profile.getName())
           console.log('Email: ' + profile.getEmail())
 
-          let id_token = googleUser.getAuthResponse().id_token
-          console.log('ID Token: ' + id_token)
+          let auth_resp = googleUser.getAuthResponse()
+          // console.log('auth resp:', auth_resp)
+          console.log('ID Token: ' + auth_resp.id_token)
+          console.log('Access Token: ' + auth_resp.access_token)
         })
         .catch((error) => {
           console.log(error)

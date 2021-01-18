@@ -34,8 +34,8 @@ Views:
 
 - login.vue: 登录页
 - register*.vue: 新用户注册页
-- user-edit.vue: 用户信息编辑页
-- user-list.vue: 用户列表页
+- userEdit.vue: 用户信息编辑页
+- userList.vue: 用户列表页
 
 Src:
 

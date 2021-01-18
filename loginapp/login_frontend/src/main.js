@@ -5,14 +5,16 @@ import App from './App'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-import GoogleAuth from '@/utils/google.js'
+import GoogleAuth from '@/utils/google_oAuth.js'
 
 import store from './store'
 import router from './router'
 
 Vue.config.productionTip = false
+
 Vue.use(ElementUI)
 
+// refer: https://github.com/Jebasuthan/Vue-Facebook-Google-oAuth
 const gauthOption = {
   clientId: '1012509776989-786crbf1nm70mvmj7cu31nmbh5t9p2tm.apps.googleusercontent.com',
   scope: 'profile email',

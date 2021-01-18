@@ -24,7 +24,7 @@ const router = new Router({
     {
       path: '/users',
       name: 'users',
-      component: () => import('@/views/users-list'),
+      component: () => import('@/views/usersList'),
       meta: { title: 'users' }
     },
     {
@@ -42,7 +42,7 @@ const router = new Router({
     {
       path: '/edit/:name',
       name: 'edit',
-      component: () => import('@/views/user-edit'),
+      component: () => import('@/views/userEdit'),
       meta: { title: 'edit' }
     }
   ]
