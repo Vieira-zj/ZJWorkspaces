@@ -1,31 +1,26 @@
-# Create at 2020-11-04, build nginx + https env.
+# Create at 2020-11-04, build tls nginx ingress env.
 #
-# Create cert:
-# openssl genrsa -out tls.key 2048
-# openssl req -new -x509 -key tls.key -days 256 -out tls.crt -subj /C=CN/ST=GuangDong/L=Guangzhou/O=DevOps/CN=nginx.default.k8s
-#
-# Create secret:
-# kubectl create secret tls nginx-ingress-secret --cert=tls.crt --key=tls.key
+# host name "zj.ssltest.com" is matched from tls.crt.
 #
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ingress-nginx-tls
-  namespace: default
+  name: testingress-tls
+  namespace: k8s-test
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
   tls:
   - hosts:
-    - nginx.default.k8s
-    secretName: nginx-ingress-secret
+      - zj.ssltest.com
+    secretName: testsecret-tls
   rules:
-  - host: nginx.default.k8s
+  - host: zj.ssltest.com
     http:
       paths:
-      - path:
+      - path: /
         backend:
-          serviceName: nginx-svc
+          serviceName: testnginx-svc
           servicePort: 8080
 
 ---
@@ -33,13 +28,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-svc
-  namespace: default
+  name: testnginx-svc
+  namespace: k8s-test
 spec:
   selector:
     app: nginx
     release: canary
-  type: ClusterIP
+  type: ClusterIP # NodePort
   ports:
   - name: http
     targetPort: 80
@@ -50,8 +45,8 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deploy
-  namespace: default
+  name: testnginx-deploy
+  namespace: k8s-test
 spec:
   replicas: 1
   selector:
