@@ -1,11 +1,15 @@
 #!groovy
+/*
+Pipeline: run code scan, unit test and code coverage on Test branch.
+Trigger: auto trigger after feature merged to Test branch.
+*/
 import groovy.transform.Field
 
 @Field String APP_NAME = 'echoserver'
-@Field String GROUP = 'group-qa'
+@Field String GROUP = 'xxxxx-qa'
 @Field Map CONTEXT_MAP = [:]
 @Field String JUNIT_XML = 'target/junit.xml'
-@Field String SONAR_URL = 'http://sonar.qa.io/web/sonar/'
+@Field String SONAR_URL = 'http://test.xxxxx.io/web/sonar/'
 
 /*
 Hooks
@@ -19,16 +23,16 @@ def beforeBuild() {
     println 'Before Build Hook'
 
     // custom image
-    // def imageID = "harbor.qa.io/echoserver:git-8c6b9f08b77"
+    // def imageID = "harbor.xxxxxmobile.com/xxxxx/echoserver:git-8c6b9f08b77"
     // CONTEXT_MAP.put("imageName", imageID)
 }
 
 def beforeDeploy() {
     println 'Before Deploy hook'
-    def NAMESPACE = "${GROUP}-testdev"
+    def NAMESPACE = "${GROUP}-testdev-tmp"
     CONTEXT_MAP.put("deployNamespace", NAMESPACE)
-    CONTEXT_MAP.put("podPort", "58081")
-    CONTEXT_MAP.put("monitorPort", "50009")
+    CONTEXT_MAP.put("podPort", "38081")
+    CONTEXT_MAP.put("monitorPort", "30009")
 }
 
 /*
@@ -85,23 +89,13 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'always'
-        }
         success {
             echo 'successful'
-            emailext subject: "Job ${JOB_NAME} (${BUILD_NUMBER}) success", to: 'qa@xxxxx.com', body: "Jenkins pipeline URL: ${BUILD_URL}\n" + 
+            emailext subject: "Job ${JOB_NAME} (${BUILD_NUMBER}) success", to: 'jin.zheng@xxxxx.com', body: "Jenkins pipeline URL: ${BUILD_URL}\n" + 
                 "Sonarqube URL: ${SONAR_URL}\n" + "UnitTest Results: " + getUnitTestResults()
         }
         failure {
             echo 'failed'
-        }
-        unstable {
-            echo 'unstable'
-        }
-        changed {
-            echo 'run only if the state of the Pipeline has changed'
-            echo 'For example, if the Pipeline was previously failing but is now successful'
         }
     }
 }
@@ -117,7 +111,7 @@ def propertiesInit() {
             [
                 $class     : 'ChoiceParameter',
                 choiceType : 'PT_RADIO',
-                description: '本次操作：发布新版本、重启服务、回滚到上一个版本、更新 Jeknins 构建参数配置',
+                description: 'Operator: deploy, restart or rollback',
                 filterable : false,
                 name       : 'ACTION',
                 script     : [
@@ -136,17 +130,15 @@ def propertiesInit() {
                     ]
                 ]
             ],
-            choice(choices: ['bs1', 'bs2', 'bs3'], description: '应用业务', name: 'APPTYPE'),
-            choice(choices: ['dev', 'test', 'uat', 'live'], description: '部署环境', name: 'ENVIRONMENT'),
-            string(defaultValue: '1', description: '副本数（dev和test环境为1）', name: 'REPLICAS'),
-            choice(choices: ['en', 'cn'], description: '国家', name: 'REGION'),
-            booleanParam(defaultValue: false, name: 'CANARY', description: '是否灰度'),
-            booleanParam(defaultValue: false, name: 'TAG_RELEASE', description: '是否用 tag 发布'),
-            booleanParam(defaultValue: false, name: 'COVERAGE', description: '是否覆盖率打包（集成测试）'),
+            choice(choices: ['apa', 'is'], description: 'Application type', name: 'APPTYPE'),
+            choice(choices: ['dev', 'test', 'uat', 'staging', 'live', ], description: 'Deploy environment', name: 'ENVIRONMENT'),
+            string(defaultValue: '1', description: 'Pod replicas number (default 1 in test env)', name: 'REPLICAS'),
+            choice(choices: ['th', 'vn', 'id'], description: 'Deploy region', name: 'REGION'),
+            booleanParam(defaultValue: false, name: 'COVERAGE', description: 'Deploy with coverage (for integration test)'),
             gitParameter(name: 'TAG', type: 'PT_TAG', defaultValue: 'release-nonexist', sortMode: 'DESCENDING_SMART',
-                quickFilterEnabled: true, description: '如果正式发布，必须采用 tag 进行构建'),
+                quickFilterEnabled: true, description: 'If deploy release, must add tag'),
             gitParameter(name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'deploy', sortMode: 'DESCENDING_SMART',
-                quickFilterEnabled: true, description: '本次构建采用的分支'),
+                quickFilterEnabled: true, description: 'Deploy branch for current build'),
         ])
     ])
     println 'Jenkins Parameters: ' + params
@@ -154,7 +146,7 @@ def propertiesInit() {
 
 def contextInit() {
     println 'Context Init...'
-    def REGISTRY_CRED = 'harbor-qa'
+    def REGISTRY_CRED = 'harbor-xxxxx-dev'
     def APPTYPE = params.APPTYPE
     def REGION = params.REGION
     def DEPLOY_NAMESPACE = "${APPTYPE}-${GROUP}-${REGION}-${ENVIRONMENT}"
@@ -203,13 +195,13 @@ def gitPullAndInit() {
         imageTag = "git-${shortGitCommit}"
     }
 
-    def DOCKER_GROUP = 'docker-qa'
-    def imageName = "harbor.qa.io/${DOCKER_GROUP}/${APP_NAME}:${imageTag}"
+    def DOCKER_GROUP = 'xxxxx'
+    def imageName = "harbor.xxxxxmobile.com/${DOCKER_GROUP}/${APP_NAME}:${imageTag}"
     CONTEXT_MAP.put("dockerGroup", DOCKER_GROUP)
     CONTEXT_MAP.put("imageName", imageName)
 
     // git pull jenkins pipeline infra lib
-    def infraPipelineUrl= 'https://gitlab.qa.com/infra/jenkins_pipeline'
+    def infraPipelineUrl= 'https://git.xxxxx.com/service/backend/infra/jenkins_pipeline'
     dir('.cli') {
         checkout([$class                           : 'GitSCM',
                   branches                         : [[name: 'master']],
@@ -261,7 +253,7 @@ def codeStaticScan() {
     def curDate = getCurDate()
     runCmd = "docker run --name scanner -i --rm -v ${curDir}:/usr/src/echoserver sonarsource/sonar-scanner-cli sonar-scanner"
     paramCmd1 = "-Dsonar.projectKey=echoserver -Dsonar.projectName=echoserver -Dsonar.projectVersion=\"v1.0.${curDate}.${BUILD_NUMBER}\""
-    // paramCmd2 = '-Dsonar.host.url="http://sonar.k8s.qa.io" -Dsonar.projectBaseDir="/usr/src/echoserver"'
+    // paramCmd2 = '-Dsonar.host.url="http://sonar.xxxxx-qa-testdev.i.test.xxxxx.in.th" -Dsonar.projectBaseDir="/usr/src/echoserver"'
     paramCmd3 = "-Dsonar.host.url=\"${SONAR_URL}\" -Dsonar.projectBaseDir=\"/usr/src/echoserver\" -Dsonar.login=c2dedcec7bd667deb94d23c889df851a4375e733"
  
     cmd = "${runCmd} ${paramCmd1} ${paramCmd3}"
@@ -272,9 +264,9 @@ def codeStaticScan() {
 Stage Unit Test
 */
 
-def unitTestAndCoverage() {
+def unitTestAndCoverageOld() {
     println 'Unit Test and Code Coverage start...'
-    def imageName = 'harbor.qa.io/gopython:1.13'
+    def imageName = 'harbor.xxxxxmobile.com/xxxxx/gopython:1.13'
     def curDir = sh([returnStdout: true, script: "pwd"]).trim()
     def workDir = '/go/src/echoserver'
     def reportsDir = 'target'
@@ -297,6 +289,20 @@ def unitTestAndCoverage() {
     sh "cat ${junitReport} ${coverReport}"
 }
 
+def unitTestAndCoverage() {
+    println 'Unit Test and Code Coverage start...'
+    def imageName = 'harbor.xxxxxmobile.com/xxxxx/gopython:1.13'
+    def curDir = sh([returnStdout: true, script: "pwd"]).trim()
+    def workDir = '/go/src/echoserver'
+    def reportsDir = 'target'
+
+    def cmdRm = "sudo rm -rf ${reportsDir}"
+    def cmdDocker = "docker run --name unittest --rm -t -v ${curDir}:${workDir} ${imageName} sh -c"
+    def cmdRun = "cd ${workDir} && mkdir ${reportsDir} && go mod tidy && ./run.sh"
+    def cmd = "${cmdRm} && ${cmdDocker} \"${cmdRun}\""
+    sh cmd
+}
+
 /*
 Stage Build
 */
@@ -312,7 +318,7 @@ def dockerImageBuild() {
     }
 
     println "Docker build for ${dockerfilePath}"
-    def harborUrl = 'https://harbor.qa.io'
+    def harborUrl = 'https://harbor.xxxxxmobile.com'
     def region = CONTEXT_MAP.region
     def env = CONTEXT_MAP.env
     def registryCred = CONTEXT_MAP.registryCred

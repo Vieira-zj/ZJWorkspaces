@@ -1,0 +1,313 @@
+#!groovy
+def GIT_URL                     = 'ssh://gitlab@git.xxxxx.com:1212/core-services/xxxxx_server.git'
+def GIT_BRANCH_MASTER           = 'master'
+def GIT_BRANCH_TEST_STAGING     = 'test_staging'
+def GIT_BRANCH_LIVE_STAGING     = 'live_staging'
+def PROJECT_DIR                 = 'project'
+def OUTPUT_DIR                  = 'output'
+def TMP_DIR                     = '/tmp/xxxxx_jenkins/'
+def RELEASE_TAG_FILE            = TMP_DIR + 'release_tag'
+def NODE_TEST                  = 'xxxxx'
+def PRJ_PREPARE_JIRA            = 'apa_deploy_server_jiraV2'
+def PRJ_REBASE_BRANCHES         = 'apa_deploy_server_rebase_for_releaseV2'
+def PRJ_GET_RELEASE_JOBS        = 'apa_deploy_server_get_release_jobV2'
+def PRJ_TEST_STAGING_TEST       = 'beepay_server_test'
+def PRJ_TEST_STAGING_DEPLOY     = 'beepay_server_staging_test_'
+def PRJ_LIVE_STAGING_DEPLOY     = 'beepay_deploy_server_staging'
+def PRJ_LIVE_STAGING_EMAIL      = 'apa_deploy_server_staging_emailV2'
+def PRJ_PRODUCTION_DEPLOY       = 'beepay_deploy_server'
+def PRJ_PUSH_UAT_BRANCH         = 'apa_deploy_server_push_uatV2'
+def PRJ_LIVE_EMAIL              = 'apa_deploy_server_emailV2'
+def PRJ_SEND_WECHAT             = 'apa_deploy_wechat_server_jiraV2'
+def DEBUG                       = false
+def REBASE_BRANCHES             = false
+def SKIP_TEST                   = false
+def RELEASE_TAG                 = ''
+def JIRA_RELEASE_TICKET         = ''
+def JENKINS_JOBS                = []
+def CONFIRM_TEST_STAGING        = false
+def CONFIRM_LIVE_STAGING        = false
+def CONFIRM_PRODUCTION          = false
+def TEST_STAGING_MESSAGE_FILE   = 'test_staging_message'
+def TEST_STAGING_MESSAGE        = ''
+def LIVE_STAGING_MESSAGE_FILE   = 'live_staging_message'
+def LIVE_STAGING_MESSAGE        = 'live_staging_message'
+def PRODUCTION_MESSAGE_FILE     = 'production_message'
+def PRODUCTION_MESSAGE          = ''
+def DEPLOY_PUSH_SERVER          = false
+def DEPLOY_JOB                  = ''
+def DEPLOY_FAIL                 = []
+def RELEASE_JOB_FILE            = ''
+def RELEASE_UAT_JOB_FILE        = ''
+def CAN_DEPLOY_LIVE             = false
+def ERROR_MSG                   = ''
+def MSG                         = ''
+
+stage('Master release ticket') {
+    // FIX_VERSION = FIX_VERSION.replaceAll(/\s/, "")
+    FIX_VERSION = FIX_VERSION.replaceAll("[^a-zA-Z0-9_.-]+", "")
+    def user_input = input(message: 'Please input release tag', parameters: [string(defaultValue: FIX_VERSION, description: 'Please input the release tag for this release' , name: 'RELEASE_TAG'),booleanParam(defaultValue: false, description: 'create release ticket?', name: 'yes')], submitterParameter: 'SUBMITTER_RELEASE_TAG')
+    RELEASE_TAG = user_input['RELEASE_TAG']
+    CREATE_RELEASE_TICKET = user_input['yes']
+    println 'RELEASE_TAG: ' + RELEASE_TAG
+    println 'TICKETS_TO_RELEASE: ' + TICKETS_TO_RELEASE
+    println 'FIX_VERSION: ' + FIX_VERSION
+    currentBuild.displayName = currentBuild.displayName + '-' + RELEASE_TAG + '-' + REGION
+    if (CREATE_RELEASE_TICKET) {
+        jira_job = build job: PRJ_PREPARE_JIRA, parameters: [
+            string(name: 'RELEASE_TAG', value: RELEASE_TAG),
+            string(name: 'TICKETS_TO_RELEASE', value: TICKETS_TO_RELEASE),
+            string(name: 'JIRA_ASSIGNEE', value: JIRA_ASSIGNEE),
+            string(name: 'REGION', value: REGION),
+            string(name: 'DEPLOY_BY_PM_TASK', value: DEPLOY_BY_PM_TASK),
+            string(name: 'FIX_VERSION', value: FIX_VERSION),
+            string(name: 'PROJECT', value: PROJECT),
+            string(name: 'APPROVERS', value: APPROVERS)
+        ], quietPeriod: 0
+    }
+
+    node(NODE_TEST) {
+        step([$class: 'CopyArtifact', filter: 'release_jira.txt', projectName: PRJ_PREPARE_JIRA])
+        JIRA_RELEASE_TICKET = readFile('release_jira.txt').trim()
+    }
+    println 'JIRA_RELEASE_TICKET: ' + JIRA_RELEASE_TICKET
+}
+
+stage('Rebase branches') {
+    def user_input = input(message: 'Auto rebase all branches in release ticket?', parameters: [booleanParam(defaultValue: false, description: '', name: 'yes')], submitterParameter: 'SUBMITTER_REBASE_BRANCH')
+    REBASE_BRANCHES = user_input['yes']
+    while (REBASE_BRANCHES) {
+        println 'Do Auto Rebase'
+        build job: PRJ_REBASE_BRANCHES, parameters: [
+            string(name: 'JIRA_RELEASE_TICKET', value: JIRA_RELEASE_TICKET),
+            string(name: 'RELEASE_TAG', value: RELEASE_TAG),
+            string(name: 'PROJECT', value: PROJECT)
+        ], quietPeriod: 0, propagate: false
+        user_input = input(message: 'Auto rebase all branches in release ticket?', parameters: [booleanParam(defaultValue: false, description: '', name: 'yes')], submitterParameter: 'SUBMITTER_REBASE_BRANCH')
+        REBASE_BRANCHES = user_input['yes']
+    }
+}
+
+stage('Remove invalid jira') {
+    def user_input = input(message: 'remove invalid jira?', parameters: [booleanParam(defaultValue: false, description: '', name: 'yes')], submitterParameter: 'SUBMITTER_REBASE_BRANCH')
+    REMOVE = user_input['yes']
+    if (REMOVE) {
+        println 'remove invalid jira'
+        build job: 'apa_remove_invalid_jira', parameters: [
+            string(name: 'JIRA_RELEASE_TICKET', value: JIRA_RELEASE_TICKET),
+            string(name: 'RELEASE_TAG', value: RELEASE_TAG),
+        ], quietPeriod: 0, propagate: false
+
+        println 'Create release_job file'
+        build job: PRJ_GET_RELEASE_JOBS, parameters: [
+            string(name: 'JIRA_RELEASE_TICKET', value: JIRA_RELEASE_TICKET),
+            string(name: 'RELEASE_TAG', value: RELEASE_TAG),
+        ], quietPeriod: 0, propagate: false
+    }
+
+    node(NODE_TEST) {
+        RELEASE_UAT_JOB_FILE = TMP_DIR + 'release_uat_job' + RELEASE_TAG
+        RELEASE_JOB_FILE = TMP_DIR + 'release_job' + RELEASE_TAG
+        out = sh(script:"ls $RELEASE_JOB_FILE", returnStatus:true)
+        if(out == 0) {
+            println "file is exist"
+        } else if(out == 2) {
+            println 'Create release_job file'
+            build job: PRJ_GET_RELEASE_JOBS, parameters: [
+                string(name: 'JIRA_RELEASE_TICKET', value: JIRA_RELEASE_TICKET),
+                string(name: 'RELEASE_TAG', value: RELEASE_TAG),
+            ], quietPeriod: 0, propagate: false
+        }
+        JENKINS_UAT_JOBS = readFile(RELEASE_UAT_JOB_FILE).split(',')
+        println 'JENKINS_UAT_JOBS: '+ JENKINS_UAT_JOBS
+        JENKINS_JOBS = readFile(RELEASE_JOB_FILE).split(',')
+        println 'JENKINS_JOBS: '+ JENKINS_JOBS
+    }
+    println 'JENKINS_JOBS: '+ JENKINS_JOBS
+    println 'remove invalid jira'
+}
+
+stage('Push UAT') {
+    def user_input = input(message: 'merge feature to uat branch?', parameters: [booleanParam(defaultValue: false, description: '', name: 'yes')], submitterParameter: 'SUBMITTER_PUSH_UAT_BRANCH')
+    PUSH_UAT = user_input['yes']
+    if (!DEBUG) {
+        while (PUSH_UAT) {
+            build job: PRJ_PUSH_UAT_BRANCH, parameters: [
+                string(name: 'JIRA_RELEASE_TICKET', value: JIRA_RELEASE_TICKET),
+                string(name: 'RELEASE_TAG', value: RELEASE_TAG),
+                string(name: 'ENVIRONMENT', value: 'uat'),
+                string(name: 'PROJECT', value: PROJECT)
+            ], quietPeriod: 0, propagate: false
+            user_input = input(message: 'merge feature to uat branch?', parameters: [booleanParam(defaultValue: false, description: '', name: 'yes')], submitterParameter: 'SUBMITTER_PUSH_UAT_BRANCH')
+            PUSH_UAT = user_input['yes']
+        }
+    }
+}
+
+def deploy_one_to_livestaging(JOB, REGION, WAIT, ENV) {
+	result = build job: JOB, parameters: [
+	    string(name: 'APPTYPE', value: 'apa'),
+        string(name: 'ENVIRONMENT', value: ENV),
+        string(name: 'REGION', value: REGION),
+        string(name: 'BRANCH', value: 'uat')
+    ], quietPeriod: 0, propagate: false, wait: WAIT
+    return result
+}
+
+def deploy_all_livestaging(NEED_DEPLOY, REGION, ENV) {
+    def branches = [:]
+    def result = [:]
+    def build_success = []
+    def build_fail = []
+    for(int i=0; i<NEED_DEPLOY.size(); i++) {
+        def JOB = NEED_DEPLOY[i]
+        println("deploy $JOB")
+        branches[JOB] = {
+            try {
+                result[JOB] = deploy_one_to_livestaging(JOB, REGION, true, ENV)
+                if(result[JOB].currentResult == "SUCCESS") {
+                    build_success.add("BUILD SUCCESS: [$JOB]")
+                } else {
+                    build_fail.add("BUILD FAIL: [$JOB] ${result[JOB].currentResult}")
+                }
+            } catch(Exception ex) {
+                build_fail.add("BUILD FAIL: [$JOB] and have error: ${ex.getMessage()}")
+                println("BUILD FAIL: [$JOB], Catching the exception:" + ex)
+            }
+        }
+    }
+    timestamps {
+        parallel branches
+    }
+    println build_success.join('\n')
+    println build_fail.join('\n')
+    build_result = build_success + build_fail
+    return build_result.join('\n')
+}
+
+stage('Deploy to uat') {
+    def continue_input = input(message: 'ready to deploy uat?', parameters: [booleanParam(defaultValue: false, description: '', name: 'yes')], submitterParameter: 'SUBMITTER_PUSH_UAT_BRANCH')
+    PUSH_UAT = continue_input['yes']
+    node(NODE_TEST) {
+        RELEASE_UAT_JOB_FILE = TMP_DIR + 'release_uat_job' + RELEASE_TAG
+        RELEASE_JOB_FILE = TMP_DIR + 'release_job' + RELEASE_TAG
+        out=sh(script:"ls $RELEASE_JOB_FILE", returnStatus:true)
+        if(out == 0) {
+            println "file is exist"
+        } else if(out == 2) {
+            println 'Create release_job file'
+            build job: PRJ_GET_RELEASE_JOBS, parameters: [
+                string(name: 'JIRA_RELEASE_TICKET', value: JIRA_RELEASE_TICKET),
+                string(name: 'RELEASE_TAG', value: RELEASE_TAG),
+            ], quietPeriod: 0, propagate: false
+        }
+        JENKINS_UAT_JOBS = readFile(RELEASE_UAT_JOB_FILE).split(',')
+        println 'JENKINS_UAT_JOBS: '+ JENKINS_UAT_JOBS
+        JENKINS_JOBS = readFile(RELEASE_JOB_FILE).split(',')
+        println 'JENKINS_JOBS: '+ JENKINS_JOBS
+    }
+    println 'JENKINS_JOBS: '+ JENKINS_JOBS
+    ENV = 'uat'
+    NEED_DEPLOY = new ArrayList(Arrays.asList(JENKINS_UAT_JOBS))
+    def user_input = input(message: 'Confirm project to deploy new uat', parameters: [choice(name: 'project', choices: NEED_DEPLOY, description: ''),booleanParam(defaultValue: false, description: '', name: 'deploy_all'),booleanParam(defaultValue: false, description: '', name: 'yes')])
+    DEPLOY_UAT = user_input['yes']
+    DEPLOY_JOB = user_input['project']
+    DEPLOY_ALL = user_input['deploy_all']
+    println 'choice ' + DEPLOY_JOB
+    if (DEPLOY_ALL && DEPLOY_UAT) {
+        MSG = deploy_all_livestaging(NEED_DEPLOY, REGION, ENV)
+        try {
+            build job: 'apa_deploy_check_jira_status', parameters: [string(name: 'BUILD_RESULT', value: MSG),string(name: 'RELEASE_TAG', value: RELEASE_TAG),string(name: 'REGION', value: REGION),string(name: 'ENV', value: ENV),string(name: 'FEATURES', value: 'notify_deploy_result')], quietPeriod: 0, propagate: false
+        } catch(Exception ex) {
+            println("Catching the exception:" + ex)
+        }
+    } else if (DEPLOY_UAT) {
+        while (DEPLOY_UAT && NEED_DEPLOY.size()>0) {
+            println "deploying $DEPLOY_JOB to uat"
+            try{
+                deploy_one_to_livestaging(DEPLOY_JOB, REGION, false, ENV)
+            } catch(Exception ex) {
+                println("BUILD FAIL: [$JOB], Catching the exception:" + ex)
+            }
+            NEED_DEPLOY.remove(DEPLOY_JOB)
+            if(NEED_DEPLOY.size()>0) {
+                println "waitting input uat"
+                user_input = input(message: 'Confirm project to deploy new uat', parameters: [choice(name: 'project', choices: NEED_DEPLOY, description: ''),booleanParam(defaultValue: false, description: '', name: 'yes')])
+                DEPLOY_UAT = user_input['yes']
+                DEPLOY_JOB = user_input['project']
+                println 'choice ' + DEPLOY_JOB
+            }
+        }
+    }
+}
+
+stage('deploy to livestaging') {
+    ENV = 'livestaging'
+    NEED_DEPLOY = new ArrayList(Arrays.asList(JENKINS_UAT_JOBS))
+    def user_input = input(message: 'Confirm project to deploy new livestaging', parameters: [choice(name: 'project', choices: NEED_DEPLOY, description: ''),booleanParam(defaultValue: false, description: '', name: 'deploy_all'),booleanParam(defaultValue: false, description: '', name: 'yes')])
+    DEPLOY_UAT = user_input['yes']
+    DEPLOY_JOB = user_input['project']
+    DEPLOY_ALL = user_input['deploy_all']
+    println 'choice ' + DEPLOY_JOB
+    if (DEPLOY_ALL && DEPLOY_UAT) {
+        MSG = deploy_all_livestaging(NEED_DEPLOY, REGION, ENV)
+        try {
+            build job: 'apa_deploy_check_jira_status', parameters: [string(name: 'BUILD_RESULT', value: MSG),string(name: 'RELEASE_TAG', value: RELEASE_TAG),string(name: 'REGION', value: REGION),string(name: 'ENV', value: ENV),string(name: 'FEATURES', value: 'notify_deploy_result')], quietPeriod: 0, propagate: false
+        } catch(Exception ex) {
+            println("Catching the exception:" + ex)
+        }
+    }else if (DEPLOY_UAT) {
+        while (DEPLOY_UAT && NEED_DEPLOY.size()>0) {
+            println "deploying $DEPLOY_JOB to livestaging"
+            try {
+                deploy_one_to_livestaging(DEPLOY_JOB, REGION, false, ENV)
+            } catch(Exception ex) {
+                println("BUILD FAIL: [$JOB], Catching the exception:" + ex)
+            }
+            NEED_DEPLOY.remove(DEPLOY_JOB)
+            if (NEED_DEPLOY.size()>0) {
+                println "waitting input livestaging"
+                user_input = input(message: 'Confirm project to deploy new livestaging', parameters: [choice(name: 'project', choices: NEED_DEPLOY, description: ''),booleanParam(defaultValue: false, description: '', name: 'yes')])
+                DEPLOY_UAT = user_input['yes']
+                DEPLOY_JOB = user_input['project']
+                println 'choice ' + DEPLOY_JOB
+            }
+        }
+    }
+}
+
+stage('change jira to staging') {
+    user_input = input(message: 'do you want to jira status to staging?', parameters: [booleanParam(defaultValue: true, description: '', name: 'yes')], submitterParameter: 'SUBMITTER_PUSH_UAT_BRANCH')
+    CHANGE = user_input['yes']
+    if (CHANGE) {
+        build job: 'beepay_deploy_change_jira_status', parameters: [
+            string(name: 'JIRA_RELEASE_TICKET', value: JIRA_RELEASE_TICKET),
+            string(name: 'CHANGE_TO', value: 'change_to_staging'),
+        ], quietPeriod: 0, propagate: false
+    }
+}
+
+stage('send email and wechat') {
+    user_input = input(message: 'do you want to send uat email?', parameters: [booleanParam(defaultValue: true, description: '', name: 'send_email')], submitterParameter: 'SUBMITTER_PUSH_UAT_BRANCH')
+    SEND_EMAIL = user_input['send_email']
+    if (SEND_EMAIL) {
+        build job: PRJ_LIVE_STAGING_EMAIL, parameters: [
+            string(name: 'PROJECT', value: PROJECT),
+            string(name: 'REGION', value: REGION),
+            string(name: 'RELEASE_TAG', value: RELEASE_TAG)
+        ], quietPeriod: 0, propagate: false
+    }
+
+    user_input = input(message: 'do you want to send send wechat?', parameters: [booleanParam(defaultValue: false, description: '', name: 'send_wechat')], submitterParameter: 'SUBMITTER_PUSH_UAT_BRANCH')
+    SEND_WECHAT = user_input['send_wechat']
+    if (SEND_WECHAT) {
+        println 'JIRA_RELEASE_TICKET: '+JIRA_RELEASE_TICKET
+        build job: PRJ_SEND_WECHAT, parameters: [
+                    string(name: 'REGION', value: REGION),
+                    string(name: 'RELEASE_TAG', value: RELEASE_TAG),
+                    string(name: 'OPTIONS', value: 'uat_test_msg'),
+                    string(name: 'PROJECT', value: PROJECT),
+                    string(name: 'JIRA_RELEASE_TICKET', value: JIRA_RELEASE_TICKET)
+                ], quietPeriod: 0
+    }
+}

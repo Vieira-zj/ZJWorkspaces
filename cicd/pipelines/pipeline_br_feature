@@ -1,0 +1,168 @@
+#!groovy
+/*
+Pipeline: run delta code scan, unit test and code coverage when merge Feature branch to Test.
+Trigger: auto trigger for Feature to Test branch merge request.
+*/
+import groovy.transform.Field
+
+@Field String APP_NAME = 'echoserver'
+@Field Map CONTEXT_MAP = [:]
+
+/*
+Main
+*/
+
+pipeline {
+    agent {
+        node { label 'slave' }
+    }
+
+    stages {
+        stage('Init') {
+            steps {
+                propertiesInit()
+                contextInit()
+            }
+        }
+        stage('Pull') {
+            steps {
+                gitPullAndInit()
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                unitTestAndCoverage()
+                archiveArtifacts artifacts: '**/target/*', followSymlinks: false
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'successful'
+            emailext subject: "Job ${JOB_NAME} (${BUILD_NUMBER}) success", to: 'jin.zheng@xxxxx.com', body: "Jenkins pipeline URL: ${BUILD_URL}\n" + 
+                "Sonarqube URL: ${SONAR_URL}\n" + "UnitTest Results: " + getUnitTestResults()
+        }
+        failure {
+            echo 'failed'
+        }
+    }
+}
+
+/*
+Stage Init
+*/
+
+def propertiesInit() {
+    println 'Properties Init...'
+    properties([
+        parameters([
+            gitParameter(name: 'BRANCH', type: 'PT_BRANCH', defaultValue: 'deploy', sortMode: 'DESCENDING_SMART',
+                quickFilterEnabled: true, description: 'Feature branch for current build'),
+            string(name: 'BASE_BRANCH', defaultValue: 'remotes/origin/master', description: 'Delta updates of base branch'),
+            string(name: 'GO_PACKAGES', defaultValue: 'echoserver/handlers,echoserver/samples', description: 'Go modules for unit test, devided by (,)')
+        ]),
+    ])
+    println 'Jenkins Parameters: ' + params
+}
+
+def contextInit() {
+    println 'Context Init...'
+    CONTEXT_MAP.put("branch", params.BRANCH)
+    CONTEXT_MAP.put("baseBranch", params.BASE_BRANCH)
+    CONTEXT_MAP.put("goPkgs", params.GO_PACKAGES)
+    println 'Context Map: ' + CONTEXT_MAP
+}
+
+/*
+Stage Pull
+*/
+
+def gitPullAndInit() {
+    println 'Git pull and init context...'
+    def scmUrl = scm.getUserRemoteConfigs()[0].getUrl()
+    def scmCred = scm.getUserRemoteConfigs()[0].getCredentialsId()
+    println "scmUrl=${scmUrl}, scmCred=${scmCred}"
+
+    def branch = CONTEXT_MAP.branch
+    def srcRepo = checkout([$class: 'GitSCM',
+        branches: [[name: "${branch}"]],
+        doGenerateSubmoduleConfigurations: false,
+        extensions: [],
+        gitTool: 'Default',
+        userRemoteConfigs: [[url: "${scmUrl}", credentialsId: "${scmCred}"
+        ]],
+    ])
+    def gitCommit = srcRepo.GIT_COMMIT
+    def gitBranch = srcRepo.GIT_BRANCH
+    def shortGitCommit = "${gitCommit[0..10]}"
+    println 'Context Map: ' + CONTEXT_MAP
+}
+
+/*
+Stage Unit Test
+*/
+
+def unitTestAndCoverageOld() {
+    println 'Unit Test and Code Coverage start...'
+    def imageName = 'ietty/gopython:latest'
+    def curDir = sh([returnStdout: true, script: "pwd"]).trim()
+    def workDir = '/go/src/echoserver'
+    def goPkgs = 'echoserver/handlers echoserver/samples'
+    def baseBranch=CONTEXT_MAP.baseBranch
+
+    def reportsDir = 'target'
+    def utOutput = "${reportsDir}/ut.out"
+    def utCover = "${reportsDir}/ut.cov"
+    def coverOutput = "${reportsDir}/cover_all.out"
+    def coverHtmlOutput = "${reportsDir}/cover_all.html"
+    def xmlCover = "${reportsDir}/ut_cover.xml"
+    def diffCoverOutput = "${reportsDir}/cover_diff.out"
+    def diffCoverHtml = "${reportsDir}/cover_diff.html"
+
+    def cmdRm = "sudo rm -rf ${reportsDir}"
+    def cmdDocker = "docker run --name unittest --rm -t -e GOROOT=/lib/go-1.13 -v ${curDir}:${workDir} ${imageName} sh -xc"
+    def cmdInit = "pip install diff-cover && cd ${workDir} && mkdir ${reportsDir} && go mod tidy"
+    def cmdTest = "go test -v -timeout 10s ${goPkgs} -cover -coverprofile ${utCover} > ${utOutput}"
+    def cmdCover = "go tool cover -func=${utCover} -o ${coverOutput}"
+    def cmdCoverHtml = "go tool cover -html=${utCover} -o ${coverHtmlOutput}"
+    def cmdGocov="bin/gocov convert ${utCover} | bin/gocov-xml > ${xmlCover}"
+    def cmdDiff="diff-cover ${xmlCover} --compare-branch=${baseBranch} --html-report=${diffCoverHtml} > ${diffCoverOutput}"
+
+    def cmd = "${cmdRm}; ${cmdDocker} \"${cmdInit} && ${cmdTest} && ${cmdCover} && ${cmdCoverHtml} && ${cmdGocov} && ${cmdDiff}\""
+    // def cmd = "${cmdDocker} \"cd ${workDir} && go mod tidy && go list ./..."
+    sh cmd
+
+    println 'Unit Test and Code Coverage results:'
+    sh "ls target; cat ${utOutput} ${coverOutput} ${diffCoverOutput}"
+}
+
+def unitTestAndCoverage() {
+    println 'Unit Test and Code Coverage start...'
+    def imageName = 'ietty/gopython:latest'
+    def curDir = sh([returnStdout: true, script: 'pwd']).trim()
+    def workDir = '/go/src/echoserver'
+    def reportsDir = 'target'
+    def goPkgs = CONTEXT_MAP.goPkgs
+    def baseBranch=CONTEXT_MAP.baseBranch
+
+    def cmdRm = "sudo rm -rf ${reportsDir}"
+    def cmdDocker = "docker run --name unittest --rm -t -e GOROOT=/lib/go-1.13 -v ${curDir}:${workDir} ${imageName} sh -xc"
+    def cmdRun = "pip install diff-cover && cd ${workDir} && mkdir ${reportsDir} && go mod tidy && ./run.sh ${goPkgs} ${baseBranch}"
+    def cmd = "${cmdRm}; ${cmdDocker} \"${cmdRun}\""
+    sh cmd
+}
+
+/*
+Common
+*/
+
+def getUnitTestResults() {
+    cmd = "head -n 3 ${JUNIT_XML}| tail -n 1 |sed -e 's/<testsuite//' -e 's/>//'"
+    return sh([returnStdout: true, script: cmd]).trim()
+}
+
+def getCurDate() {
+    def now = new Date()
+    return now.format('yyMMdd', TimeZone.getTimeZone('UTC'))
+}
