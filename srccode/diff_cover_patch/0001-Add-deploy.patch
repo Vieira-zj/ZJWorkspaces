@@ -1,0 +1,68 @@
+From bc94d6367de31504336b42eed26a805479be47b4 Mon Sep 17 00:00:00 2001
+From: zhengjin <zivieira@163.com>
+Date: Thu, 10 Dec 2020 10:53:14 +0800
+Subject: [PATCH 1/2] Add deploy.
+
+---
+ .gitignore                     |  3 +++
+ Makefile                       | 11 +++++++++++
+ diff_cover/__init__.py         |  2 +-
+ diff_cover/report_generator.py |  1 +
+ 4 files changed, 16 insertions(+), 1 deletion(-)
+ create mode 100644 Makefile
+
+diff --git a/.gitignore b/.gitignore
+index 750898a..d149e41 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -42,3 +42,6 @@ report.html
+ .project
+ .pydevproject
+ .python-version
++
++# Custom
++.vscode/
+\ No newline at end of file
+diff --git a/Makefile b/Makefile
+new file mode 100644
+index 0000000..53f971c
+--- /dev/null
++++ b/Makefile
+@@ -0,0 +1,11 @@
++.PHONY: help
++
++help:
++	@echo "init     : pip install -r requirements/requirements.txt  初始化开发环境"
++	@echo "publish  : python setup.py sdist upload -r internal      发布到公司pypi.garenanow.com私有仓库"
++
++init:  # 初始化环境
++	pip install -r requirements/requirements.txt
++
++publish:  # 发布
++	python setup.py sdist upload -r internal
+diff --git a/diff_cover/__init__.py b/diff_cover/__init__.py
+index 415665d..013ca3b 100644
+--- a/diff_cover/__init__.py
++++ b/diff_cover/__init__.py
+@@ -1,5 +1,5 @@
+ # This file is imported in setup.py and cannot use any external dependencies
+ 
+-VERSION = "4.0.1"
++VERSION = "4.0.1.1"
+ DESCRIPTION = "Automatically find diff lines that need test coverage."
+ QUALITY_DESCRIPTION = "Automatically find diff lines with quality violations."
+diff --git a/diff_cover/report_generator.py b/diff_cover/report_generator.py
+index 581b0dc..a60923c 100644
+--- a/diff_cover/report_generator.py
++++ b/diff_cover/report_generator.py
+@@ -356,6 +356,7 @@ class TemplateReportGenerator(BaseReportGenerator):
+             }
+         )
+ 
++        print('zhengjin:', stats)
+         return stats
+ 
+ 
+-- 
+2.28.0
+

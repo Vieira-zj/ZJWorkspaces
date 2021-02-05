@@ -1,0 +1,236 @@
+diff --git a/.gitignore b/.gitignore
+index 750898a..d149e41 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -42,3 +42,6 @@ report.html
+ .project
+ .pydevproject
+ .python-version
++
++# Custom
++.vscode/
+\ No newline at end of file
+diff --git a/Makefile b/Makefile
+new file mode 100644
+index 0000000..53f971c
+--- /dev/null
++++ b/Makefile
+@@ -0,0 +1,11 @@
++.PHONY: help
++
++help:
++	@echo "init     : pip install -r requirements/requirements.txt  初始化开发环境"
++	@echo "publish  : python setup.py sdist upload -r internal      发布到公司pypi.garenanow.com私有仓库"
++
++init:  # 初始化环境
++	pip install -r requirements/requirements.txt
++
++publish:  # 发布
++	python setup.py sdist upload -r internal
+diff --git a/diff_cover/__init__.py b/diff_cover/__init__.py
+index 415665d..43cebb5 100644
+--- a/diff_cover/__init__.py
++++ b/diff_cover/__init__.py
+@@ -1,5 +1,5 @@
+ # This file is imported in setup.py and cannot use any external dependencies
+ 
+-VERSION = "4.0.1"
++VERSION = "4.0.1.8"
+ DESCRIPTION = "Automatically find diff lines that need test coverage."
+ QUALITY_DESCRIPTION = "Automatically find diff lines with quality violations."
+diff --git a/diff_cover/diff_cover_tool.py b/diff_cover/diff_cover_tool.py
+index 0b9a7c5..5e64229 100644
+--- a/diff_cover/diff_cover_tool.py
++++ b/diff_cover/diff_cover_tool.py
+@@ -180,12 +180,30 @@ def generate_coverage_report(
+         if css_url is not None:
+             css_url = os.path.relpath(css_file, os.path.dirname(html_report))
+         reporter = HtmlReportGenerator(coverage, diff, css_url=css_url)
+-        with open(html_report, "wb") as output_file:
++
++        items = os.path.splitext(html_report)
++        html_report_notcover = items[0] + '_notcover' + items[1]
++        with open(html_report_notcover, "wb") as output_file:
+             reporter.generate_report(output_file)
+         if css_file is not None:
+             with open(css_file, "wb") as output_file:
+                 reporter.generate_css(output_file)
+ 
++        # ZJ UPDATE: build a report with all diff lines (violation_lines + measured_lines).
++        reporter = HtmlReportGenerator(coverage, diff, css_url=css_url, is_all=True)
++        html_report_alldiff = items[0] + '_alldiff' + items[1]
++        with open(html_report_alldiff, "wb") as output_file:
++            reporter.generate_report(output_file)
++        if css_file is not None:
++            with open(css_file, "wb") as output_file:
++                reporter.generate_css(output_file)
++
++        # ZJ UPDATE: build a report includes both all_diff and not_cover report.
++        html_report = items[0] + '_report' + items[1]
++        with open(html_report, "wb") as output_file:
++            reporter.generate_merged_report(output_file, os.path.basename(
++                html_report_alldiff), os.path.basename(html_report_notcover))
++
+     elif json_report is not None:
+         reporter = JsonReportGenerator(coverage, diff)
+         with open(json_report, "wb") as output_file:
+diff --git a/diff_cover/report_generator.py b/diff_cover/report_generator.py
+index 581b0dc..697d663 100644
+--- a/diff_cover/report_generator.py
++++ b/diff_cover/report_generator.py
+@@ -40,7 +40,7 @@ class BaseReportGenerator:
+ 
+     __metaclass__ = ABCMeta
+ 
+-    def __init__(self, violations_reporter, diff_reporter):
++    def __init__(self, violations_reporter, diff_reporter, is_all):
+         """
+         Configure the report generator to build a report
+         from `violations_reporter` (of type BaseViolationReporter)
+@@ -51,6 +51,8 @@ class BaseReportGenerator:
+         self._diff_violations_dict = None
+ 
+         self._cache_violations = None
++        # ZJ UPDATE: flag generate all diff report.
++        self._is_all = is_all
+ 
+     @abstractmethod
+     def generate_report(self, output_file):
+@@ -123,6 +125,16 @@ class BaseReportGenerator:
+ 
+         return sorted(diff_violations.lines)
+ 
++    def measured_lines(self, src_path):
++        """
++        ZJ UPDATE: get list of measured lines.
++        """
++        diff_violations = self._diff_violations().get(src_path)
++
++        if diff_violations is None:
++            return []
++        return sorted(diff_violations.measured_lines)
++
+     def total_num_lines(self):
+         """
+         Return the total number of lines in the diff for
+@@ -200,6 +212,12 @@ class BaseReportGenerator:
+         violation_lines = self.violation_lines(src_path)
+         violations = sorted(self._diff_violations()[src_path].violations)
+ 
++        # ZJ UPDATE: add measured lines.
++        measured_lines = self.measured_lines(src_path)
++        if self._is_all and len(measured_lines) > 0:
++            violation_lines.extend(measured_lines)
++            sorted(violation_lines)
++
+         return {
+             "percent_covered": self.percent_covered(src_path),
+             "violation_lines": violation_lines,
+@@ -214,6 +232,10 @@ TEMPLATE_ENV.filters["pluralize"] = pluralize_dj
+ 
+ 
+ class JsonReportGenerator(BaseReportGenerator):
++
++    def __init__(self, violations_reporter, diff_reporter):
++        super().__init__(violations_reporter, diff_reporter, False)
++
+     def generate_report(self, output_file):
+         json_report_str = json.dumps(self.report_dict())
+ 
+@@ -236,8 +258,8 @@ class TemplateReportGenerator(BaseReportGenerator):
+     # that they want to include source file snippets.
+     INCLUDE_SNIPPETS = False
+ 
+-    def __init__(self, violations_reporter, diff_reporter, css_url=None):
+-        super().__init__(violations_reporter, diff_reporter)
++    def __init__(self, violations_reporter, diff_reporter, css_url=None, is_all=False):
++        super().__init__(violations_reporter, diff_reporter, is_all)
+         self.css_url = css_url
+ 
+     def generate_report(self, output_file):
+@@ -255,6 +277,21 @@ class TemplateReportGenerator(BaseReportGenerator):
+ 
+             output_file.write(report)
+ 
++    def generate_merged_report(self, output_file, file_all_diff, file_not_cover):
++        """
++        ZJ UPDATE: generate a report contains both not cover lines and all diff lines reports.
++        """
++
++        if self.TEMPLATE_NAME is not None:
++            template = TEMPLATE_ENV.get_template("html_coverage_report_all.html")
++            report = template.render(
++                {"file_all_diff": file_all_diff, "file_not_cover": file_not_cover})
++
++            if isinstance(report, str):
++                report = report.encode("utf-8")
++
++            output_file.write(report)
++
+     def generate_css(self, output_file):
+         """
+         Generate an external style sheet file.
+@@ -293,6 +330,9 @@ class TemplateReportGenerator(BaseReportGenerator):
+         # Include snippet style info if we're displaying
+         # source code snippets
+         if self.INCLUDE_SNIPPETS:
++            # ZJ UPDATE: set bg color for all diff lines.
++            if self._is_all:
++                Snippet.VIOLATION_COLOR = '#fafad2'
+             snippet_style = Snippet.style_defs()
+         else:
+             snippet_style = None
+@@ -300,6 +340,10 @@ class TemplateReportGenerator(BaseReportGenerator):
+         context = super().report_dict()
+         context.update({"css_url": self.css_url, "snippet_style": snippet_style})
+ 
++        # ZJ UPDATE: set report page title.
++        report_title = 'Diff Coverage (All)' if self._is_all else 'Diff Coverage (Not Cover)'
++        context['report_title'] = report_title
++
+         return context
+ 
+     @staticmethod
+diff --git a/diff_cover/templates/html_coverage_report.html b/diff_cover/templates/html_coverage_report.html
+index fd61ff3..92b2e10 100644
+--- a/diff_cover/templates/html_coverage_report.html
++++ b/diff_cover/templates/html_coverage_report.html
+@@ -2,11 +2,11 @@
+ <html>
+     <head>
+         <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+-        <title>Diff Coverage</title>
++        <title>{{ report_title }}</title>
+         {% include 'snippet_style.html' %}
+     </head>
+     <body>
+-        <h1>Diff Coverage</h1>
++        <h1>{{ report_title }}</h1>
+         <p>Diff: {{ diff_name }}</p>
+         {% if src_stats %}
+         <ul>
+diff --git a/diff_cover/templates/html_coverage_report_all.html b/diff_cover/templates/html_coverage_report_all.html
+new file mode 100644
+index 0000000..3ca47b9
+--- /dev/null
++++ b/diff_cover/templates/html_coverage_report_all.html
+@@ -0,0 +1,18 @@
++<!DOCTYPE html>
++<html xmlns="http://www.w3.org/1999/xhtml">
++
++<head>
++	<meta charset="utf-8" />
++	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
++	<title>Diff Coverage Report</title>
++</head>
++<body>
++	<div style="text-align: center;">
++		<h1>Diff Coverage Report</h1>	
++	</div>
++	<div id="container" style="margin-top: 50px; text-align: center;">
++		<iframe width="45%" height="900" id="iframeLeft" frameborder="0" src="{{ file_all_diff }}"></iframe>
++		<iframe width="45%" height="900" id="iframeRight" frameborder="0" src="{{ file_not_cover }}"></iframe>
++	</div>
++</body>
++</html>
+\ No newline at end of file
