@@ -1,4 +1,6 @@
-# Two backend services are deployed behind the front Envoy, each with a sidecar Envoy.
+# Refer:
+# docs: https://www.envoyproxy.io/docs/envoy/latest/start/sandboxes/cache
+# github: https://github.com/envoyproxy/envoy/blob/main/examples/cache
 #
 version: "3.7"
 services:
@@ -7,6 +9,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-frontenvoy
+    image: envoy/front-proxy:v1.1
     networks:
       - envoymesh
     ports:
@@ -16,6 +19,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-service
+    image: envoy/be-service:v1.1
     volumes:
       - ./responses.yaml:/etc/responses.yaml
     networks:
@@ -27,6 +31,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-service
+    image: envoy/be-service:v1.1
     volumes:
       - ./responses.yaml:/etc/responses.yaml
     networks:
