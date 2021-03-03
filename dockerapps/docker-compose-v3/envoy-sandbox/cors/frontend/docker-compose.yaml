@@ -1,0 +1,29 @@
+# Refer: https://github.com/envoyproxy/envoy/blob/main/examples/cors/frontend
+#
+version: "3.7"
+services:
+
+  front-envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontenvoy
+    image: envoy/front-proxy:v1.3
+    networks:
+      - envoymesh
+    ports:
+      - "8000:8000"
+
+  frontend-service:
+    build:
+      context: .
+      dockerfile: Dockerfile-service
+    image: envoy/fe-service:v1.0
+    volumes:
+      - ./service-envoy.yaml:/etc/service-envoy.yaml
+    networks:
+      envoymesh:
+        aliases:
+          - frontendservice
+
+networks:
+  envoymesh: {}
