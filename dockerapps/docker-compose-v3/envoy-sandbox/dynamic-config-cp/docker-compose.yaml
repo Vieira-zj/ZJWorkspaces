@@ -1,0 +1,33 @@
+# Refer: https://github.com/envoyproxy/envoy/blob/main/examples/dynamic-config-cp
+#
+version: "3.7"
+services:
+
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile-proxy
+    image: envoy/front-proxy:v1.5
+    depends_on:
+      - service1
+      - service2
+    ports:
+      - 10000:10000
+      - 19000:19000
+
+  service1:
+    image: jmalloc/echo-server
+    hostname: service1
+
+  service2:
+    image: jmalloc/echo-server
+    hostname: service2
+
+  go-control-plane:
+    build:
+      context: .
+      dockerfile: Dockerfile-control-plane
+    image: envoy/control-plane:v1.0
+    command: bin/example -debug
+    healthcheck:
+      test: nc -zv localhost 18000
