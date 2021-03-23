@@ -95,14 +95,191 @@ next hotfix after regular: rm-v1.3.1-hotfix
 
 ## 发布工具
 
-功能：
+### 功能
 
 1. 通过 jira webhook, 检查jira单及关联mr的状态
 2. 通过 gitlab webhook 和 pipeline, 检查mr及关联的jira单状态
 3. 通过 gitlab api 执行mr及tag操作
-4. 服务依赖关系及checklist检查
+4. 服务依赖关系及发布checklist检查
 5. 通过 jenkins api 执行服务发布pipeline
 6. 通知与报告
+
+### Data and Models
+
+Data flow:
+
+1. `release cycle -> dev tasks -> linked with release ticket`
+2. `dev task -> MR`
+3. `dev task -> user story`
+
+> Release Ticket use as db, and track the whole Cutoff, Code freeze and Deploy process.
+
+Data models:
+
+```python
+# user story
+{
+  "user_story_id": "jira-id",
+  "status": "staging",
+  "linked_dev_tasks": [
+    {
+      "dev_task_id": "jira-id1",
+      "in_commits_pool": True,
+    },
+    {
+      "dev_task_id": "jira-id2",
+      "in_commits_pool": False,
+    },
+  ],
+  "verify_pass": false,
+  "verify_failed_message": "child dev task [jira-id] verify failed.",
+}
+
+# dev task
+{
+  "dev_task_id": "jira-id",
+  "user_story_id": "jira-id",
+  "status": "staging",
+  "linked_master_mrs": [
+    "mr_id1",
+    "mr_id2",
+  ],
+  "region": "all,vn,th",
+  "type": "BE,FE,Android,IOS",
+  "release_cycle": "2021.01.v1",
+  "release_status": "InScope-Merged",
+  "has_it": true,
+  "has_uat": true,
+  "is_blocked_by": [
+    "jira-id1",
+    "jira-id2",
+  ],
+  "release_checklist": [
+    "db",
+  ],
+  "verify_pass": true,
+  "verify_failed_message": "no it/uat results.",
+}
+
+# mr
+{
+  "mr_id": "id",
+  "url": "request_url",
+  "status": "merged",
+  "repo": "repo_url",
+  "src_branch": "feature",
+  "dst_branch": "master",
+  "linked_dev_task": "jira-id",
+  "verify_pass": true,
+  "verify_failed_message": "mr title format error.",
+}
+
+# release cycle
+{
+  "value": "2021.01.v2",
+  "phrase": "Scope Cutoff",
+  "start_date": "2020-06-04",
+  "release_date": "2020-06-01",
+  "user_stroies": {  # dict
+    "user_story_id1": UserStory1,
+    "user_story_id2": UserStory2,
+  },
+  "dev_tasks": {
+    "dev_task_id1": DevTask1,
+    "dev_task_id2": DevTask2,
+  },
+  "git_mrs": {
+    "mr_id1": GitMRs1,
+    "mr_id2": GitMRs2,
+  },
+  "deploy_be_services": [
+    "service_name2",
+    "service_name1",
+  ],
+  "deploy_fe_services": [
+    "service_name4",
+    "service_name3",
+  ],
+  "ordered_deploy_be_services": [
+    "service_name1",
+    "service_name2",
+  ],
+  "ordered_deploy_fe_services": [
+    "service_name3",
+    "service_name4",
+  ],
+}
+
+# service
+{
+  "service_name": "name",
+  "repo_url": "url",
+  "deploy_pipeline": "pipeline",
+  "dependencies": [
+    "service_name1",
+    "service_name2",
+  ],
+}
+
+# services dict
+{
+  "service_name1": Service1,
+  "service_name2": Service2,
+}
+```
+
+### Rest APIs of workflow
+
+Pre-Cutoff:
+
+1. `release_cycle/create`
+  - reg and irreg release cycle will be available
+  - master tickets for regular and irregular release cycle will be created
+2. `release_cycle/regular/start`
+3. `release_cycle/emergency/start`
+
+Scope cutoff:
+
+4. `cutoff/prescreening`
+5. `cutoff/execute`
+  - move "Pending - Failed Verification" tickets to "Rejected - Failed Verification"
+  - remove release cycle
+  - generate cut off report
+6. `ticket/get`
+  - to obtain all in-scope tickets
+  - to regenerate cut off report
+
+Code freeze:
+
+7. `code_freeze/prescreening`
+  - "In-scope - Pending Merge" tickets that have not linked to a master branch MR
+  - report contains all tickets that have sign off but it's not signed off by official QA (Eg: signed off by dev themselves)
+  - report contains extra merge, open merge, update status issues
+8. `code_freeze/execute`
+  - move "In-scope - Pending Merge" tickets to "Rejected - Miss Out Merge"
+  - generate code freeze report
+9. `scope/get_repo`
+  - report contains all repos that contain code changes
+
+Staging deploy:
+
+10. `scope/tag_repo`
+  - create auto mr from master to staging for all repos
+  - generate auto tag once auto MR is merged
+11. `release_cycle/regular/start`
+  - enable the next release cycle
+  - devs to start merging following weeks MR
+
+Live deploy:
+
+12. `scope/get_repo`
+13. `scope/tag_repo`
+  - from staging to release
+14. `ticket/update_to_released`
+  - move ticket status from Regression/Delivering to Done
+  - move release status from "In-scope - Merged" to "Released"
+15. `release_cycle/emergency/start`
+  - enable next week emergency release cycle
 
 ## golang cicd 流程
 
