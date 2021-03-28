@@ -2,7 +2,7 @@
 
 ## 分支模型
 
-### 旧分支模型
+### 旧分支模型 - feature发布
 
 - dev: 开发调试、自测
 - test: 开发完成后合入、集成测试
@@ -15,8 +15,6 @@
   - release合回master分支，添加tag并执行发布
   - 对于紧急版本，直接从master分支拉出feature分支进行开发，完成后合入master分支，发布
 
-> 版本发布：包括多个repo的多个feature. 多个服务按顺序发布，无依赖的服务可并行发布。
-
 优点：
 
 1. 因为可插入临时需求，能够保证要上线的需求发布到uat环境，后端和移动端有明确的需求输入
@@ -28,7 +26,7 @@
 2. 没有预发布环境来执行全量回归测试
 3. QA介入较多，如推动开发解决代码合入冲突
 
-### 新分支模型
+### 新分支模型 - 版本发布
 
 - dev: 开发调试、自测
 - test: 开发完成后合入，集成测试
@@ -44,6 +42,8 @@
 - release: 从staging分支合入，添加tag, 基于版本发布
 
 > 理论上 master, stating, release 分支一致。
+>
+> 版本发布：包括多个repo的多个feature. 多个服务按顺序发布，无依赖的服务可并行发布。
 
 优点：
 
@@ -97,84 +97,104 @@ next hotfix after regular: rm-v1.3.1-hotfix
 
 ### 功能
 
-1. 通过 jira webhook, 检查jira单及关联mr的状态
-2. 通过 gitlab webhook 和 pipeline, 检查mr及关联的jira单状态
-3. 通过 gitlab api 执行mr及tag操作
-4. 服务依赖关系及发布checklist检查
-5. 通过 jenkins api 执行服务发布pipeline
-6. 通知与报告
+1. 调用 jira api, 收集jira单信息及状态更新，梳理 user story, epic, task 和 mr 关系
+2. 通过 jira webhook, 检查jira单及关联mr的状态
+3. 通过 gitlab api 收集mr信息，执行mr合入及tag操作
+4. 通过 gitlab webhook 和 pipeline, 检查mr及关联的jira单状态
+5. 服务依赖关系及发布checklist检查
+6. 通过 jenkins api 执行服务发布pipeline
+7. 通知与报告
+  - jira单状态检查 `user story => task => mr`
+  - 服务部署顺序 `service (repo) => task => mr`
 
 ### Data and Models
 
 Data flow:
 
-1. `release cycle -> dev tasks -> linked with release ticket`
-2. `dev task -> MR`
-3. `dev task -> user story`
+- `release cycle -> dev tasks -> linked with release ticket`
+- `dev task -> MR -> repo -> service`
+- `dev task -> user story`
 
 > Release Ticket use as db, and track the whole Cutoff, Code freeze and Deploy process.
 
 Data models:
 
 ```python
+# ref data
+# service
+{
+  "name": "name",
+  "repo_url": "url",
+  "module": "module-name",
+  "deploy_pipelines": [
+    "pipeline1", "pipeline2",
+  ]
+  "dependencies": [
+    "service_name1", "service_name2",
+  ],
+}
+
+# services
+[
+  Service1,
+  Service2,
+]
+
+# run data
 # user story
 {
   "user_story_id": "jira-id",
   "status": "staging",
-  "linked_dev_tasks": [
-    {
-      "dev_task_id": "jira-id1",
-      "in_commits_pool": True,
-    },
-    {
-      "dev_task_id": "jira-id2",
-      "in_commits_pool": False,
-    },
+  "linked_tasks": [
+    "jira-id1", "jira-id2",
   ],
-  "verify_pass": false,
-  "verify_failed_message": "child dev task [jira-id] verify failed.",
+  "verify_pass": False,
+  "verify_failed_message": "child task [jira-id] verify failed.",
 }
 
-# dev task
+# task
 {
-  "dev_task_id": "jira-id",
+  "task_id": "jira-id",
   "user_story_id": "jira-id",
+  "master_release_ticket": "jira-id",
   "status": "staging",
-  "linked_master_mrs": [
-    "mr_id1",
-    "mr_id2",
+  # 只关注目标分支为master的mr
+  "linked_mrs": [
+    "mr-id1", "mr-id2",
   ],
   "region": "all,vn,th",
   "type": "BE,FE,Android,IOS",
   "release_cycle": "2021.01.v1",
   "release_status": "InScope-Merged",
-  "has_it": true,
-  "has_uat": true,
+  "has_it": True,
+  "has_uat": True,
   "is_blocked_by": [
-    "jira-id1",
-    "jira-id2",
+    "jira-id1", "jira-id2",
   ],
   "release_checklist": [
     "db",
   ],
-  "verify_pass": true,
+  "verify_pass": False,
   "verify_failed_message": "no it/uat results.",
 }
 
 # mr
 {
-  "mr_id": "id",
-  "url": "request_url",
+  "mr_id": "mr-id",
+  "url": "request-url",
   "status": "merged",
-  "repo": "repo_url",
+  "repo": "repo-url",
   "src_branch": "feature",
   "dst_branch": "master",
-  "linked_dev_task": "jira-id",
-  "verify_pass": true,
+  "linked_task": [
+    "jira-id1", "jira-id2",
+  ],
+  "service": "service-name",
+  "verify_pass": False,
   "verify_failed_message": "mr title format error.",
 }
 
-# release cycle
+# release cycle 一个发布流程
 {
   "value": "2021.01.v2",
   "phrase": "Scope Cutoff",
@@ -184,47 +204,38 @@ Data models:
     "user_story_id1": UserStory1,
     "user_story_id2": UserStory2,
   },
-  "dev_tasks": {
-    "dev_task_id1": DevTask1,
-    "dev_task_id2": DevTask2,
+  "tasks": {
+    "task_id1": Task1,
+    "task_id2": Task2,
   },
   "git_mrs": {
     "mr_id1": GitMRs1,
     "mr_id2": GitMRs2,
   },
   "deploy_be_services": [
-    "service_name2",
-    "service_name1",
+    "module1": [
+      { "service": BeService2, "region": "vn,th"},
+      { "service": BeService1, "region": "vn"},
+    ],
   ],
   "deploy_fe_services": [
-    "service_name4",
-    "service_name3",
+    "admin": [
+      { "service": FeService2, "region": "all"},
+      { "service": FeService1, "region": "all"},
+    ]
   ],
   "ordered_deploy_be_services": [
-    "service_name1",
-    "service_name2",
+    "module1": [
+      { "service": BeService1, "region": "vn"},
+      { "service": BeService2, "region": "vn,th"},
+    ],
   ],
   "ordered_deploy_fe_services": [
-    "service_name3",
-    "service_name4",
+    "admin": [
+      { "service": FeService1, "region": "all"},
+      { "service": FeService2, "region": "all"},
+    ]
   ],
-}
-
-# service
-{
-  "service_name": "name",
-  "repo_url": "url",
-  "deploy_pipeline": "pipeline",
-  "dependencies": [
-    "service_name1",
-    "service_name2",
-  ],
-}
-
-# services dict
-{
-  "service_name1": Service1,
-  "service_name2": Service2,
 }
 ```
 
@@ -240,45 +251,45 @@ Pre-Cutoff:
 
 Scope cutoff:
 
-4. `cutoff/prescreening`
-5. `cutoff/execute`
+1. `cutoff/prescreening`
+2. `cutoff/execute`
   - move "Pending - Failed Verification" tickets to "Rejected - Failed Verification"
   - remove release cycle
   - generate cut off report
-6. `ticket/get`
+3. `ticket/get`
   - to obtain all in-scope tickets
   - to regenerate cut off report
 
 Code freeze:
 
-7. `code_freeze/prescreening`
+1. `code_freeze/prescreening`
   - "In-scope - Pending Merge" tickets that have not linked to a master branch MR
   - report contains all tickets that have sign off but it's not signed off by official QA (Eg: signed off by dev themselves)
   - report contains extra merge, open merge, update status issues
-8. `code_freeze/execute`
+2. `code_freeze/execute`
   - move "In-scope - Pending Merge" tickets to "Rejected - Miss Out Merge"
   - generate code freeze report
-9. `scope/get_repo`
+3. `scope/get_repo`
   - report contains all repos that contain code changes
 
 Staging deploy:
 
-10. `scope/tag_repo`
+1. `scope/tag_repo`
   - create auto mr from master to staging for all repos
   - generate auto tag once auto MR is merged
-11. `release_cycle/regular/start`
+2. `release_cycle/regular/start`
   - enable the next release cycle
   - devs to start merging following weeks MR
 
 Live deploy:
 
-12. `scope/get_repo`
-13. `scope/tag_repo`
+1. `scope/get_repo`
+2. `scope/tag_repo`
   - from staging to release
-14. `ticket/update_to_released`
+3. `ticket/update_to_released`
   - move ticket status from Regression/Delivering to Done
   - move release status from "In-scope - Merged" to "Released"
-15. `release_cycle/emergency/start`
+4. `release_cycle/emergency/start`
   - enable next week emergency release cycle
 
 ## golang cicd 流程
@@ -293,14 +304,14 @@ Jenkins pipeline:
 
 1. 代码扫描
 2. 单元测试 -> 单测覆盖率
-3. API测 -> 集成测试覆盖率
+3. API测试 -> 集成测试覆盖率
 4. 服务部署完成后的线上检查
 
 输出：
 
-- `junit.xml`: 单元测试结果。
-- `ut_cover.out`: 全量的函数覆盖率报告。
-- `ut_cover.html`: 全量的行覆盖率报告。
+- `junit.xml`: 单元测试结果
+- `ut_cover.out`: 全量的函数覆盖率报告
+- `ut_cover.html`: 全量的行覆盖率报告
 
 ### Feature 分支
 
@@ -311,16 +322,16 @@ Jenkins pipeline:
 检查点：
 
 1. 单元测试
-2. 增量代码 -> go反向调用链分析（精准测试）
-3. 增量覆盖率
+2. 增量代码 -> 增量覆盖率
+3. go反向调用链分析（精准测试）
 
 输出：
 
-- `diff_cover.out`: 增量的函数覆盖率报告。
+- `diff_cover.out`: 增量的函数覆盖率报告
 
 ![img](images/diff_cover_func_rpt.png)
 
-- `diff_cover_report.html`: 增量的行覆盖率报告。
+- `diff_cover_report.html`: 增量的行覆盖率报告
 
 ![img](images/diff_cover_html_rpt.png)
 
