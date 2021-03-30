@@ -1,4 +1,4 @@
-# Ingress-nginx灰度发布
+# Ingress-nginx 灰度发布
 
 ## Echo service 部署
 
@@ -36,11 +36,52 @@ nginx.ingress.kubernetes.io/canary: "true"
 nginx.ingress.kubernetes.io/canary-weight: "50"
 ```
 
-2. deploy echo service v2 and check
+2. deploy echo service v2
 
 ```sh
 kc create -f echoservice_v2_deploy.yml
+```
 
+3. check ingress
+
+```sh
+kc describe ing/echoserverv1 -n k8s-test
+# Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
+# Name:             echoserverv1
+# Namespace:        k8s-test
+# Address:          192.168.99.103
+# Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
+# Rules:
+#   Host           Path  Backends
+#   ----           ----  --------
+#   k8s.echo.test
+#                  /   echoserverv1:8080 (172.17.0.4:8080)
+# Annotations:     kubernetes.io/ingress.class: nginx
+# Events:          <none>
+
+kc describe ing/echoserverv2 -n k8s-test
+# Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
+# Name:             echoserverv2
+# Namespace:        k8s-test
+# Address:          192.168.99.103
+# Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
+# Rules:
+#   Host           Path  Backends
+#   ----           ----  --------
+#   k8s.echo.test
+#                  /   echoserverv2:8080   172.17.0.6:8080)
+# Annotations:     kubernetes.io/ingress.class: nginx
+#                  nginx.ingress.kubernetes.io/canary: true
+#                  nginx.ingress.kubernetes.io/canary-by-header: x-canary
+#                  nginx.ingress.kubernetes.io/canary-weight: 50
+# Events:          <none>
+```
+
+> Note: hosts of 2 ingress are the same `k8s.echo.test`.
+
+4. check canary deploy
+
+```sh
 for i in {1..10}; do curl -sS http://k8s.echo.test/ | grep hostname; done
 # Hostname: echoserverv2-6c5c89d468-7jvth
 # Hostname: echoserverv2-6c5c89d468-7jvth
