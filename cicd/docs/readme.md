@@ -93,7 +93,25 @@ next hotfix after regular: rm-v1.3.1-hotfix
     - 从uat分支 cherrypick 要发布的需求到staging分支。（FIX: cherrypick 可能会导致mr合入顺序不一致，引起额外的代码冲突）
     - 保证uat分支与release分支同步
 
-## 发布工具
+## UAT 发布pipeline
+
+Jenkins pipeline定义：
+
+`jenkins pipeline -> stages + grovvy -> jenkins job -> python script`
+
+Pipeline stages:
+- create release ticket
+- feature branch rebase
+- tickets verify and remove
+- merge to uat
+- deploy to uat (parallel)
+- send notification
+
+Jenkins pipeline优化：
+
+`jenkins pipeline -> stages + grovvy + sh -> python script`
+
+## Live 发布工具
 
 ### 功能
 
@@ -292,7 +310,7 @@ Live deploy:
 4. `release_cycle/emergency/start`
   - enable next week emergency release cycle
 
-## golang cicd 流程
+## Golang cicd 流程
 
 ### 主干分支
 
@@ -335,7 +353,7 @@ Jenkins pipeline:
 
 ![img](images/diff_cover_html_rpt.png)
 
-diffcover工具生成的增量覆盖率报告只显示未被覆盖的行，参考 `srccode/diff_cover_patch` 同时显示 所有增量代码+未被覆盖的行。
+`diffcover`工具生成的增量覆盖率报告只显示未被覆盖的行，参考 `srccode/diff_cover_patch` 同时显示 增量代码+未被覆盖的行。
 
-> 增量覆盖率数据基于 单测+全量覆盖率数据+diffcover工具 生成。
+> 增量覆盖率数据基于 单测+全量覆盖率数据+diffcover 生成。
 
