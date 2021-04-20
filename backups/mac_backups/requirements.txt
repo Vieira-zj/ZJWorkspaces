@@ -87,7 +87,7 @@ prompt-toolkit==3.0.3
 protobuf==3.11.3
 ptyprocess==0.6.0
 public==2018.11.20
-py==1.7.0
+py==1.10.0
 py4j==0.10.7
 pycodestyle==2.4.0
 Pygments==2.5.2
