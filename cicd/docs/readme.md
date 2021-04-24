@@ -5,7 +5,7 @@
 ### 旧分支模型 - feature发布
 
 - dev: 开发调试、自测
-- test: 开发完成后合入、集成测试
+- test: 开发完成后合入，集成测试
 - uat: 双周，基于版本统一合入，local验收测试
   - 脚本检查jira单及mr（踢出不合规需求），合入版本需求
   - uat发布过程人工介入，可插入临时需求
@@ -41,7 +41,7 @@
 - staging: 从master分支合入，预发布环境，执行全量回归测试
 - release: 从staging分支合入，添加tag, 基于版本发布
 
-> 理论上 master, stating, release 分支一致。
+> 理论上 master, stating, release 主干分支一致。
 >
 > 版本发布：包括多个repo的多个feature. 多个服务按顺序发布，无依赖的服务可并行发布。
 
@@ -82,16 +82,13 @@ next hotfix after regular: rm-v1.3.1-hotfix
 
 2. 多个服务的多个feature发布
   - 需求与代码冻结（临时增减上线需求）
-  - 服务发布顺序
+  - 保证服务发布顺序
 
-3. 当前dev需要把feature分别合入到uat和master分支，有两次合入操作
-  - 完成uat的需求不一定会合入到master分支
-    - 前提：完成uat的需求大概率会合入到master分支
-    - 将不合入到uat的需求去掉，之后将uat合入master分支
-    - 合入顺序：feature -> uat <-> master <-> staging <-> release（开发只需一次合入操作）
-  - local uat signoff 时间不确定
-    - 从uat分支 cherrypick 要发布的需求到staging分支。（FIX: cherrypick 可能会导致mr合入顺序不一致，引起额外的代码冲突）
-    - 保证uat分支与release分支同步
+3. 当前dev需要解决两次代码冲突，feature分别合入到uat和master分支的冲突（原因：完成uat的需求不一定会合入到master分支，及 local uat signoff 时间不确定）
+  - 保证uat与master分支同步
+  - 从流程上保证uat测试按计划完成，并合入到master分支
+
+> 从uat分支 cherrypick 要发布的需求到master分支。问题：由于mr顺序问题，cherrypick 可能引起代码冲突。
 
 ## UAT 发布pipeline
 
@@ -100,14 +97,15 @@ Jenkins pipeline定义：
 `jenkins pipeline -> stages + grovvy -> jenkins job -> python script`
 
 Pipeline stages:
-- create release ticket
-- feature branch rebase
-- tickets verify and remove
-- merge to uat
-- deploy to uat (parallel)
-- send notification
 
-Jenkins pipeline优化：
+- create release ticket: 创建 release ticket 跟踪发布流程
+- feature branch rebase: jira单检查，feture分支rebase操作，报告
+- tickets verify and remove: 去掉检查不通过的jira单
+- merge to uat: 把目标分支为master的mr合入到uat分支，代码冲突报告
+- deploy to uat: 并行执行服务发布pipeline
+- send notification: 通知及报告
+
+Jenkins pipeline 优化：
 
 `jenkins pipeline -> stages + grovvy + sh -> python script`
 
@@ -115,15 +113,31 @@ Jenkins pipeline优化：
 
 ### 功能
 
-1. 调用 jira api, 收集jira单信息及状态更新，梳理 user story, epic, task 和 mr 关系
-2. 通过 jira webhook, 检查jira单及关联mr的状态
-3. 通过 gitlab api 收集mr信息，执行mr合入及tag操作
+1. 调用 jira api, 收集jira单信息及数据更新，梳理 epic, story, task 和 mr 关系
+2. 通过 gitlab api 收集mr信息，执行mr合入及tag操作
+3. 通过 jira webhook, 基于用户输入，检查jira单及关联mr的状态
 4. 通过 gitlab webhook 和 pipeline, 检查mr及关联的jira单状态
-5. 服务依赖关系及发布checklist检查
+5. 发布checklist检查及服务发布顺序梳理
 6. 通过 jenkins api 执行服务发布pipeline
 7. 通知与报告
   - jira单状态检查 `user story => task => mr`
-  - 服务部署顺序 `service (repo) => task => mr`
+  - 服务部署 `service (repo) => task => mr`
+
+### 架构
+
+1. jira, git, jenkins 工具库
+2. 数据模块
+3. webhook服务
+4. 发布流程控制
+5. 发布模块
+6. 通知与报告
+7. 前端展示
+
+重点：
+
+1. 数据模块：包括jira和mr数据拉取及缓存，支持快速查询，并提供不同维度的数据给前端展示及报告
+2. webhook服务：异步、高并发
+3. 发布模块：如何基于checklist和依赖关系来梳理服务发布顺序，发布过程监控及线上服务检查
 
 ### Data and Models
 
@@ -131,7 +145,7 @@ Data flow:
 
 - `release cycle -> dev tasks -> linked with release ticket`
 - `dev task -> MR -> repo -> service`
-- `dev task -> user story`
+- `dev task -> story`
 
 > Release Ticket use as db, and track the whole Cutoff, Code freeze and Deploy process.
 
@@ -159,7 +173,7 @@ Data models:
 ]
 
 # run data
-# user story
+# story
 {
   "user_story_id": "jira-id",
   "status": "staging",
@@ -267,7 +281,7 @@ Pre-Cutoff:
 2. `release_cycle/regular/start`
 3. `release_cycle/emergency/start`
 
-Scope cutoff:
+Scope Cutoff:
 
 1. `cutoff/prescreening`
 2. `cutoff/execute`
@@ -278,7 +292,7 @@ Scope cutoff:
   - to obtain all in-scope tickets
   - to regenerate cut off report
 
-Code freeze:
+Code Freeze:
 
 1. `code_freeze/prescreening`
   - "In-scope - Pending Merge" tickets that have not linked to a master branch MR
@@ -290,7 +304,7 @@ Code freeze:
 3. `scope/get_repo`
   - report contains all repos that contain code changes
 
-Staging deploy:
+Staging Deploy:
 
 1. `scope/tag_repo`
   - create auto mr from master to staging for all repos
@@ -299,7 +313,7 @@ Staging deploy:
   - enable the next release cycle
   - devs to start merging following weeks MR
 
-Live deploy:
+Live Deploy:
 
 1. `scope/get_repo`
 2. `scope/tag_repo`
