@@ -57,7 +57,7 @@
 
 1. 基于版本发布，服务发布顺序问题，及多个服务发布时处理问题复杂
 
-### tag 版本号
+### Tag 版本号
 
 常规版本格式：`{module}-v{major}.{minor}.{patch}`
 Hotfix and Ad hoc 紧急版本格式：`{module}-v{major}.{minor}.{patch}-{type}`
@@ -90,7 +90,7 @@ next hotfix after regular: rm-v1.3.1-hotfix
 
 > 从uat分支 cherrypick 要发布的需求到master分支。问题：由于mr顺序问题，cherrypick 可能引起代码冲突。
 
-## UAT 发布pipeline
+## UAT 发布
 
 Jenkins pipeline定义：
 
@@ -99,9 +99,9 @@ Jenkins pipeline定义：
 Pipeline stages:
 
 - create release ticket: 创建 release ticket 跟踪发布流程
-- feature branch rebase: jira单检查，feture分支rebase操作，报告
+- feature branch rebase: jira单检查，feature分支rebase操作，报告
 - tickets verify and remove: 去掉检查不通过的jira单
-- merge to uat: 把目标分支为master的mr合入到uat分支，代码冲突报告
+- merge to uat: 目标分支为master的mr合入到uat分支，代码冲突报告
 - deploy to uat: 并行执行服务发布pipeline
 - send notification: 通知及报告
 
@@ -111,35 +111,32 @@ Jenkins pipeline 优化：
 
 ## Live 发布工具
 
-### 功能
+### 原理
 
 1. 调用 jira api, 收集jira单信息及数据更新，梳理 epic, story, task 和 mr 关系
 2. 通过 gitlab api 收集mr信息，执行mr合入及tag操作
 3. 通过 jira webhook, 基于用户输入，检查jira单及关联mr的状态
 4. 通过 gitlab webhook 和 pipeline, 检查mr及关联的jira单状态
-5. 发布checklist检查及服务发布顺序梳理
+5. 发布checklist项、blocked by 关系检查，确定服务发布顺序
 6. 通过 jenkins api 执行服务发布pipeline
-7. 通知与报告
-  - jira单状态检查 `user story => task => mr`
-  - 服务部署 `service (repo) => task => mr`
 
-### 架构
+### 模块
 
-1. jira, git, jenkins 工具库
-2. 数据模块
-3. webhook服务
-4. 发布流程控制
-5. 发布模块
-6. 通知与报告
-7. 前端展示
+1. jira, git, jenkins 工具库：基于 rest api 拉取数据，执行基本操作
+2. 数据模块：jira和mr数据拉取、结构化及缓存。支持快速查询，并提供不同维度的数据给前端展示及报告
+3. webhook服务：基于用户输入执行jira单及mr状态检查；异步、高并发
+4. 发布流程控制：cutoff 和 code freeze 结点控制，ticket 状态同步、从发布范围中删除等操作
+5. 发布模块：基于checklist和依赖关系梳理服务发布顺序，发布过程监控及线上服务检查
+6. 发布过程记录：包括输入需求、输出 release note、pipeline执行时间/成功率、紧急修复/回滚
+7. 通知与报告：支持channel通知、邮件、google文档
+8. 前端展示
 
-重点：
+### 问题
 
-1. 数据模块：包括jira和mr数据拉取及缓存，支持快速查询，并提供不同维度的数据给前端展示及报告
-2. webhook服务：异步、高并发
-3. 发布模块：如何基于checklist和依赖关系来梳理服务发布顺序，发布过程监控及线上服务检查
+1. 一个jira单包括多个mr（非一对一关系）
+2. epic, story, task 不同层级ticket间的状态同步（如status, fixVersion）
 
-### Data and Models
+## 数据模型：jira ticket / mr / deploy
 
 Data flow:
 
@@ -271,7 +268,7 @@ Data models:
 }
 ```
 
-### Rest APIs of workflow
+## Rest APIs of workflow
 
 Pre-Cutoff:
 
