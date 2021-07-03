@@ -1,8 +1,44 @@
-# DP-DB-API-Tests
+# 接口测试自动化
+
+## 关于接口测试自动化
+
+- 测试用例
+  - 简单case使用 json/yaml 格式，基于 关键字 生成接口测试用例。可通过平台完成用例编写。
+  - 复杂case使用 requests+pytest 完成接口测试用例编写。（不建议使用平台来编写用例。与ide相比，平台提供定制化、垂直化的功能，缺少通用性和灵活性）
+  - 用例编写：分层、Meta信息、前置与后置处理
+
+- 测试数据
+  - excel/json/yaml 格式。
+  - 基于数据定义自动生成反向数据、混沌数据。（Fuzz测试）
+
+- 工具类
+  - httputils 接口请求支持重试。
+
+- 测试执行
+  - pytest 执行维度支持关键字、分组
+  - 容器中执行、并行执行
+  - 执行日志
+  - 简单压测
+
+- 结果断言
+  - 关键字段断言
+  - 录制 baseline json 测试结果，json deep diff
+
+- 测试报告
+  - allure
+
+- 测试平台
+  - 数据准备
+  - json/yaml 用例编写
+  - 测试执行
+  - 测试报告
+  - 运营：用例分析、测试趋势图、bug分析、覆盖率
+
+## DP-DB-API-Tests
 
 > DP db-portal api tests sample.
 
-## 项目结构
+### 项目结构
 
 ```text
 ├── README.md
@@ -38,7 +74,7 @@
     └── http_utils.py
 ```
 
-## 项目准备
+### 项目准备
 
 依赖库
 
@@ -49,7 +85,7 @@
 - pytest-rerunfailures
 - pytest-html
 
-## pytest
+### pytest
 
 pytest cli 常用参数：
 
@@ -90,7 +126,7 @@ pytest 常用装饰器：
 - `@pytest.mark.flaky(reruns=2, reruns_delay=1)`: 重试执行失败的测试用例。
 - `@pytest.mark.timeout(cfg.case_timeout)`: 测试用例执行超时。
 
-## 测试执行 及 测试结果
+### 测试执行 及 测试结果
 
 执行所有的 smoke 测试：
 
@@ -145,7 +181,7 @@ test_user.py::TestUser::test_user_unfrozen PASSED
 /Users/jinzheng/Workspaces/repos/dp-api-tests
 ```
 
-## Allure 测试报告
+### Allure 测试报告
 
 安装 allure 依赖：
 
@@ -189,6 +225,7 @@ allure html 测试报告：
 
 ![img](resources/allure_report_02.png)
 
-## TODOS:
+### TODOS:
 
 - google login 自动化
+
